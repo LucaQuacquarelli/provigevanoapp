@@ -1,0 +1,6 @@
+{
+  "appId": "com.provigevano.app",
+  "appName": "provigevanoapp",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
