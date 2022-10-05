@@ -7,26 +7,30 @@
  *
  */
 
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize) => {
-    const Model = Sequelize.Model
+    const Model = Sequelize.Model;
 
-    class Role extends Model {}
-
+    class Role extends Model { };
     Role.init({
+        id: {
+            type: Sequelize.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
         name: {
             type: Sequelize.CHAR(20),
-            primaryKey: true,
-            allowNull: false
-        }
-
+            allowNull: false,
+        },
     }, {
         sequelize: sequelize,
-        modelName: 'roles',
+        modelName: 'role',
         createdAt: false,
         updatedAt: false
-    })
+    });
 
-    return Role
-}
+    Role.sync({ alter: true });
+
+    return Role;
+};

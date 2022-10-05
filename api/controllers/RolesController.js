@@ -3,7 +3,7 @@ var sequelize = Config.sequelize()
 
 module.exports = (req, res) => {
     var Model = require('../../business-logic/models/index')(sequelize.pro())
-    Model.Language.findAll().then((language) => {
-        res.send(language)
+    Model.Role.findAll().then((role) => {
+        res.send(role)
     })
 }

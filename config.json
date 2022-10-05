@@ -1,12 +1,13 @@
 {
     "api_protocol": "http://",
     "api_url": "pro.vigevano.com",
-    "api_port": "8081",
+    "api_port": "8880",
     "dbms": {
         "database": "pro",
         "username": "root",
         "password": "root",
         "host": "localhost",
+        "port":"8889",
         "dialect": "mysql",
         "logging": false,
         "pool": {

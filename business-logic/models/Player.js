@@ -76,7 +76,7 @@ module.exports = (sequelize) => {
 
     }, {
         sequelize: sequelize,
-        modelName: 'accounts',
+        modelName: 'player',
         createdAt: 'created',
         updatedAt: 'updated'
     })

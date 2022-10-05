@@ -37,5 +37,18 @@
     "eslint-plugin-vue": "^7.0.0",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2"
-  }
+  },
+  "description": "## Project setup ``` npm install ```",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucaQuacquarelli/provigevanoapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LucaQuacquarelli/provigevanoapp/issues"
+  },
+  "homepage": "https://github.com/LucaQuacquarelli/provigevanoapp#readme"
 }

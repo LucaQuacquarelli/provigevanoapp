@@ -1,12 +1,3 @@
-/*
- * Author: Luca QUACQUARELLI
- *
- * Created on Mon Jul 11 2022
- *
- * Copyright (c) 2022 Conduent Business Solutions Italia SPA
- *
- */
-
 const Sequelize = require('sequelize')
 const config = require('../config.json')
 
