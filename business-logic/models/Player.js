@@ -1,18 +1,15 @@
-/*
- * Author: Luca QUACQUARELLI
- *
- * Created on Fri Jul 01 2022
- *
- * Copyright (c) 2022 Conduent Business Solutions Italia SPA
- *
- */
-
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
 
 module.exports = (sequelize) => {
-    const Model = Sequelize.Model
+    const Model = Sequelize.Model;
 
-    class Player extends Model {}
+    class Player extends Model {
+        static associate(models) {
+            this.belongsTo(models.Role);
+            this.belongsTo(models.Level);
+            this.belongsTo(models.Language);
+        }
+    }
 
     Player.init({
         id: {
@@ -21,65 +18,75 @@ module.exports = (sequelize) => {
             allowNull: false,
             defaultValue: Sequelize.UUIDV4
         },
-        google_id: {
-            type: Sequelize.CHAR(100)
-        },
-        facebook_id: {
-            type: Sequelize.CHAR(100)
+        name: {
+            type: Sequelize.CHAR(50),
+            allowNull: false,
+            after: 'id'
         },
         surname: {
             type: Sequelize.CHAR(50),
-            allowNull: false
+            allowNull: true,
+            after: 'name'
         },
-        name: {
+        nick_name: {
             type: Sequelize.CHAR(50),
-            allowNull: false
+            allowNull: true,
+            after: 'surname'
         },
-        email: {
-            type: Sequelize.CHAR(50),
-            allowNull: false
+        birth_date: {
+            type: Sequelize.DATE,
+            allowNull: true,
+            after: 'nick_name'
         },
-        email_confirmation_status: {
-            type: Sequelize.CHAR(20),
-            allowNull: false
-        },
-        password: {
-            type: Sequelize.CHAR(100)
-        },
-        roles_name: {
-            type: Sequelize.CHAR(20),
-            allowNull: false
-        },
-        languages_id: {
-            type: Sequelize.CHAR(2),
-            allowNull: false
-        },
-        locales_id: {
-            type: Sequelize.CHAR(5),
-            allowNull: false
-        },
-        token: {
-            type: Sequelize.CHAR
-        },
-        notify_ticket_issuance: {
+        goalkeeper_provisory: {
             type: Sequelize.BOOLEAN,
-            allowNull: false
+            allowNull: false,
+            defaultValue: false,
+            after: 'birth_date'
+        },
+        level_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            after: 'goalkeeper_provisory',
+            references: {
+                model: 'levels',
+                key: 'id',
+            },
+        },
+        role_id: {
+            type: Sequelize.INTEGER,
+            allowNull: false,
+            after: 'level_id',
+            references: {
+                model: 'roles',
+                key: 'id',
+            },
+        },
+        language_id: {
+            type: Sequelize.CHAR(2),
+            allowNull: false,
+            after: 'level_id',
+            references: {
+                model: 'languages',
+                key: 'id',
+            },
         },
         created: {
             type: Sequelize.DATE,
-            allowNull: false
+            allowNull: false,
         },
         updated: {
             type: Sequelize.DATE,
             allowNull: false
-        }
-
+        },
     }, {
         sequelize: sequelize,
         modelName: 'player',
         createdAt: 'created',
         updatedAt: 'updated'
-    })
+    });
 
-    return Player
-}
+    Player.sync({ alter: true });
+
+    return Player;
+};

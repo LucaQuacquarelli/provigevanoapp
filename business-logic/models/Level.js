@@ -3,12 +3,13 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
     const Model = Sequelize.Model;
 
-    class Role extends Model {
+    class Level extends Model { 
+
         static associate(models) {
             this.hasMany(models.Player);
         }
     };
-    Role.init({
+    Level.init({
         id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
@@ -17,15 +18,21 @@ module.exports = (sequelize) => {
         name: {
             type: Sequelize.CHAR(20),
             allowNull: false,
+            after: 'id'
+        },
+        percentage: {
+            type: Sequelize.TINYINT,
+            allowNull: false,
+            after: 'name'
         },
     }, {
         sequelize: sequelize,
-        modelName: 'role',
+        modelName: 'level',
         createdAt: false,
         updatedAt: false
     });
 
-    Role.sync({ alter: true });
+    Level.sync({ alter: true });
 
-    return Role;
+    return Level;
 };
