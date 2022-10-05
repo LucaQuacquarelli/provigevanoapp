@@ -2,6 +2,7 @@
 node_modules
 /dist
 /config.sh
+/config.json
 
 
 # local env files
