@@ -65,7 +65,7 @@ module.exports = (sequelize) => {
         language_id: {
             type: Sequelize.CHAR(2),
             allowNull: false,
-            after: 'level_id',
+            after: 'role_id',
             references: {
                 model: 'languages',
                 key: 'id',
@@ -85,8 +85,6 @@ module.exports = (sequelize) => {
         createdAt: 'created',
         updatedAt: 'updated'
     });
-
-    Player.sync({ alter: true });
 
     return Player;
 };

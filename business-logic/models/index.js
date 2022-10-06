@@ -5,5 +5,6 @@ module.exports = (sequelize) => {
         Role: require('./Role')(sequelize),
         Level: require('./Level')(sequelize)
     }
+    sequelize.sync({ alter: true });
     return models
 }   

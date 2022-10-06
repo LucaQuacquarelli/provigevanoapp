@@ -32,7 +32,5 @@ module.exports = (sequelize) => {
         updatedAt: false
     });
 
-    Level.sync({ alter: true });
-
     return Level;
 };

@@ -25,7 +25,5 @@ module.exports = (sequelize) => {
         updatedAt: false
     });
 
-    Role.sync({ alter: true });
-
     return Role;
 };

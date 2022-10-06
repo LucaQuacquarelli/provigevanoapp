@@ -26,7 +26,5 @@ module.exports = (sequelize) => {
         updatedAt: false
     });
 
-    Language.sync({ alter: true });
-
     return Language;
 };
