@@ -34,7 +34,7 @@ module.exports = (sequelize) => {
             after: 'surname'
         },
         birth_date: {
-            type: Sequelize.DATE,
+            type: Sequelize.DATEONLY,
             allowNull: true,
             after: 'nick_name'
         },
@@ -69,7 +69,13 @@ module.exports = (sequelize) => {
             references: {
                 model: 'languages',
                 key: 'id',
-            },
+            }
+        },
+        available: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+            after: 'language_id'
         },
         created: {
             type: Sequelize.DATE,
