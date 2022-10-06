@@ -18,13 +18,11 @@ module.exports = (sequelize) => {
         },
         name: {
             type: Sequelize.CHAR(20),
-            allowNull: false,
-            // after: 'id'
+            allowNull: false
         },
         percentage: {
             type: Sequelize.TINYINT,
-            allowNull: false,
-            // after: 'name'
+            allowNull: false
         },
     }, {
         sequelize: sequelize,

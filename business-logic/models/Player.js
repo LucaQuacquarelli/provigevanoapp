@@ -1,5 +1,4 @@
 const Sequelize = require('sequelize');
-// const { v4: uuidv4 } = require('uuid');
 
 module.exports = (sequelize) => {
     const Model = Sequelize.Model;
@@ -18,7 +17,6 @@ module.exports = (sequelize) => {
             primaryKey: true,
             allowNull: false,
             unique: true,
-            // defaultValue: uuidv4() 
         },
         name: {
             type: Sequelize.CHAR(50),
@@ -49,6 +47,8 @@ module.exports = (sequelize) => {
                 model: 'levels',
                 key: 'id',
             },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
         },
         role_id: {
             type: Sequelize.INTEGER,
@@ -57,6 +57,8 @@ module.exports = (sequelize) => {
                 model: 'roles',
                 key: 'id',
             },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
         },
         language_id: {
             type: Sequelize.CHAR(2),
@@ -64,7 +66,9 @@ module.exports = (sequelize) => {
             references: {
                 model: 'languages',
                 key: 'id',
-            }
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'CASCADE'
         },
         available: {
             type: Sequelize.BOOLEAN,
