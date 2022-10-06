@@ -5,14 +5,15 @@ module.exports = (sequelize) => {
 
     class Role extends Model {
         static associate(models) {
-            this.hasMany(models.Player);
+            Role.hasMany(models.Player);
         }
     };
     Role.init({
         id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
-            autoIncrement: true
+            autoIncrement: true,
+            unique: true,
         },
         name: {
             type: Sequelize.CHAR(20),

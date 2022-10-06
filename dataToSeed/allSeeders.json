@@ -1,7 +1,7 @@
 {
     "players" : [
         {
-        "id": 1,
+        "id":"1",
         "name": "Alfredo",
         "surname": "Cognome",
         "nick_name": "Alfre",
@@ -9,12 +9,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 2,
+        "id":"2",
         "name": "Luca Quacquarelli",
         "surname": "Cognome",
         "nick_name": "Luca",
@@ -22,12 +23,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 3,
+        "id":"3",
         "name": "Antonio Marrujo",
         "surname": "Cognome",
         "nick_name": "Toño",
@@ -35,12 +37,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 4,
+        "id":"4",
         "name": "Juan Paredes",
         "surname": "Cognome",
         "nick_name": "Cabezòn",
@@ -48,12 +51,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 5,
+        "id":" 5",
         "name": "Jason Farfàn",
         "surname": "Cognome",
         "nick_name": "Chucky",
@@ -61,12 +65,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 6,
+        "id":"6",
         "name": "Alex Anticona",
         "surname": "Cognome",
         "nick_name": "Alex",
@@ -74,12 +79,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 7,
+        "id":"7",
         "name": "Anthony Mandujano",
         "surname": "Cognome",
         "nick_name": "Chico",
@@ -87,12 +93,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 8,
+        "id":"8",
         "name": "Miguel",
         "surname": "Cognome",
         "nick_name": "El Causa",
@@ -100,12 +107,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 9,
+        "id":"9",
         "name": "Danny Anticona",
         "surname": "Cognome",
         "nick_name": "Danny",
@@ -113,12 +121,13 @@
         "goalkeeper_provisory": false,
         "role_id": 2,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 10,
+        "id": "10",
         "name": "Roger Medina",
         "surname": "Cognome",
         "nick_name": "Di Maria",
@@ -126,12 +135,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 11,
+        "id": "11",
         "name": "Edson",
         "surname": "Cognome",
         "nick_name": "Mudo",
@@ -139,12 +149,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 12,
+        "id": "12",
         "name": "Geovanny",
         "surname": "Cognome",
         "nick_name": "Geova",
@@ -152,12 +163,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 13,
+        "id": "13",
         "name": "Jefferson Yepez",
         "surname": "Cognome",
         "nick_name": "Jeff",
@@ -165,12 +177,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 14,
+        "id": "14",
         "name": "Jesus",
         "surname": "Cognome",
         "nick_name": "Jechu",
@@ -178,12 +191,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 15,
+        "id": "15",
         "name": "Jhayr",
         "surname": "Cognome",
         "nick_name": "Tornillo",
@@ -191,12 +205,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 16,
+        "id": "16",
         "name": "Jorge Castillo",
         "surname": "Cognome",
         "nick_name": "Mandarina",
@@ -204,12 +219,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 17,
+        "id": "17",
         "name": "Leo",
         "surname": "Cognome",
         "nick_name": "Gato",
@@ -217,12 +233,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 18,
+        "id": "18",
         "name": "Remberto Medina",
         "surname": "Cognome",
         "nick_name": "N16",
@@ -230,12 +247,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 19,
+        "id": "19",
         "name": "Richard",
         "surname": "Cognome",
         "nick_name": "Ricky",
@@ -243,12 +261,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 20,
+        "id": "20",
         "name": "Nestor",
         "surname": "Cognome",
         "nick_name": "Chivo",
@@ -256,12 +275,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 21,
+        "id": "21",
         "name": "Ricardo",
         "surname": "Cognome",
         "nick_name": "Grandote",
@@ -269,12 +289,13 @@
         "goalkeeper_provisory": false,
         "role_id": 3,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id":22,
+        "id":"22",
         "name": "Marco",
         "surname": "Cognome",
         "nick_name": "Zurdo",
@@ -282,12 +303,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 23,
+        "id": "23",
         "name": "Karles Leòn",
         "surname": "Cognome",
         "nick_name": "Karles",
@@ -295,12 +317,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 24,
+        "id": "24",
         "name": "Ian",
         "surname": "Cognome",
         "nick_name": "Ian",
@@ -308,12 +331,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id":25,
+        "id":"25",
         "name": "Joao",
         "surname": "Cognome",
         "nick_name": "Joao",
@@ -321,12 +345,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 26,
+        "id": "26",
         "name": "Erick",
         "surname": "Cognome",
         "nick_name": "Chato Erick",
@@ -334,12 +359,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 27,
+        "id": "27",
         "name": "Alexander Fernandez",
         "surname": "Cognome",
         "nick_name": "Gringo",
@@ -347,12 +373,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 28,
+        "id": "28",
         "name": "Johnny",
         "surname": "Cognome",
         "nick_name": "Gordo Johnny",
@@ -360,12 +387,13 @@
         "goalkeeper_provisory": false,
         "role_id": 2,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 29,
+        "id": "29",
         "name": "Fernando",
         "surname": "Cognome",
         "nick_name": "Nando",
@@ -373,12 +401,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 30,
+        "id": "30",
         "name": "Alex",
         "surname": "Cognome",
         "nick_name": "Tio Alex",
@@ -386,12 +415,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id":31,
+        "id":"31",
         "name": "Fernando",
         "surname": "Cognome",
         "nick_name": "Calaca",
@@ -399,12 +429,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 32,
+        "id": "32",
         "name": "Mono",
         "surname": "Cognome",
         "nick_name": "Mono",
@@ -412,12 +443,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id":33,
+        "id":"33",
         "name": "Guillermo",
         "surname": "Cognome",
         "nick_name": "Zurdo Malo",
@@ -425,12 +457,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id":34,
+        "id":"34",
         "name": "Steven",
         "surname": "Cognome",
         "nick_name": "Steven",
@@ -438,12 +471,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 35,
+        "id": "35",
         "name": "Messi",
         "surname": "Cognome",
         "nick_name": "Messi",
@@ -451,12 +485,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 36,
+        "id": "36",
         "name": "Primo de Cabezon",
         "surname": "Cognome",
         "nick_name": "Primo de Cabezon",
@@ -464,12 +499,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 37,
+        "id": "37",
         "name": "Renato",
         "surname": "Cognome",
         "nick_name": "Renato",
@@ -477,12 +513,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 38,
+        "id": "38",
         "name": "Patinho",
         "surname": "Cognome",
         "nick_name": "Patinho",
@@ -490,12 +527,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 39,
+        "id": "39",
         "name": "Fabrizio",
         "surname": "Cognome",
         "nick_name": "Hijo de Patinho",
@@ -503,12 +541,13 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"
     },
     {
-        "id": 40,
+        "id": "40",
         "name": "Colombia",
         "surname": "Cognome",
         "nick_name": "Colombia",
@@ -516,6 +555,7 @@
         "goalkeeper_provisory": false,
         "role_id": 1,
         "level_id": 3,
+        "language_id":"es",
         "available": false,
         "created": "2022-10-20",
         "updated": "2022-10-20"

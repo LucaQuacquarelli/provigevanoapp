@@ -6,24 +6,25 @@ module.exports = (sequelize) => {
     class Level extends Model { 
 
         static associate(models) {
-            this.hasMany(models.Player);
+            Level.hasMany(models.Player);
         }
     };
     Level.init({
         id: {
             type: Sequelize.INTEGER,
             primaryKey: true,
-            autoIncrement: true
+            autoIncrement: true,
+            unique: true,
         },
         name: {
             type: Sequelize.CHAR(20),
             allowNull: false,
-            after: 'id'
+            // after: 'id'
         },
         percentage: {
             type: Sequelize.TINYINT,
             allowNull: false,
-            after: 'name'
+            // after: 'name'
         },
     }, {
         sequelize: sequelize,

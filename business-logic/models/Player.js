@@ -1,13 +1,14 @@
 const Sequelize = require('sequelize');
+// const { v4: uuidv4 } = require('uuid');
 
 module.exports = (sequelize) => {
     const Model = Sequelize.Model;
 
     class Player extends Model {
         static associate(models) {
-            this.belongsTo(models.Role);
-            this.belongsTo(models.Level);
-            this.belongsTo(models.Language);
+            Player.belongsTo(models.Role);
+            Player.belongsTo(models.Level);
+            Player.belongsTo(models.Language);
         }
     }
 
@@ -16,38 +17,40 @@ module.exports = (sequelize) => {
             type: Sequelize.CHAR(36),
             primaryKey: true,
             allowNull: false,
-            defaultValue: Sequelize.UUIDV4
+            unique: true,
+            // defaultValue: uuidv4() 
         },
         name: {
             type: Sequelize.CHAR(50),
             allowNull: false,
-            after: 'id'
+            // after: 'id'
         },
         surname: {
             type: Sequelize.CHAR(50),
             allowNull: true,
-            after: 'name'
+            // after: 'name'
         },
         nick_name: {
             type: Sequelize.CHAR(50),
             allowNull: true,
-            after: 'surname'
+            // after: 'surname',
+            unique: true,
         },
         birth_date: {
             type: Sequelize.DATEONLY,
             allowNull: true,
-            after: 'nick_name'
+            // after: 'nick_name'
         },
         goalkeeper_provisory: {
             type: Sequelize.BOOLEAN,
             allowNull: false,
             defaultValue: false,
-            after: 'birth_date'
+            // after: 'birth_date'
         },
         level_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
-            after: 'goalkeeper_provisory',
+            // after: 'goalkeeper_provisory',
             references: {
                 model: 'levels',
                 key: 'id',
@@ -56,7 +59,7 @@ module.exports = (sequelize) => {
         role_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
-            after: 'level_id',
+            // after: 'level_id',
             references: {
                 model: 'roles',
                 key: 'id',
@@ -65,7 +68,7 @@ module.exports = (sequelize) => {
         language_id: {
             type: Sequelize.CHAR(2),
             allowNull: false,
-            after: 'role_id',
+            // after: 'role_id',
             references: {
                 model: 'languages',
                 key: 'id',
@@ -75,7 +78,7 @@ module.exports = (sequelize) => {
             type: Sequelize.BOOLEAN,
             allowNull: false,
             defaultValue: false,
-            after: 'language_id'
+            // after: 'language_id'
         },
         created: {
             type: Sequelize.DATE,

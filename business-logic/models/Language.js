@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
 
     class Language extends Model {
         static associate(models) {
-            this.hasMany(models.Player);
+            Language.hasMany(models.Player);
         }
     }
 
@@ -14,6 +14,7 @@ module.exports = (sequelize) => {
             type: Sequelize.CHAR(2),
             primaryKey: true,
             allowNull: false,
+            unique: true,
         },
         name: {
             type: Sequelize.CHAR(10),
