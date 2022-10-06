@@ -1,7 +1,7 @@
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
-const allData = require("../../dataToSeed/allSeeders.json");
+const allData = require(`${__dirname}/../dataToSeed/allSeeders.json`);
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**

@@ -5,7 +5,7 @@ const cors = require('cors')
 const config = require('../config.json')
 const Config = require('./Config')
 var sequelize = Config.sequelize()
-var Model = require('../business-logic/models/index')(sequelize.pro())
+var ModelBase = require(`${__dirname}/models/ModelBase`)(sequelize.pro())
 
 const LanguagesController = require('./controllers/LanguagesController')
 const RolesController = require('./controllers/RolesController')

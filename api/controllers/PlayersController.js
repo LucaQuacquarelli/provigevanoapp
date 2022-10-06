@@ -1,10 +1,10 @@
 const Config = require('../Config')
 var sequelize = Config.sequelize()
 const { validationResult } = require('express-validator')
-var Model = require('../../business-logic/models/index')(sequelize.pro())
+var ModelBase = require(`${__dirname}/../models/ModelBase`)(sequelize.pro())
 
 module.exports.index = (req, res) => {
-    Model.Player.findAll().then((player) => {
+    ModelBase.Player.findAll().then((player) => {
         res.send(player)
     })
 }
@@ -17,7 +17,7 @@ module.exports.update = (req, res) => {
             errors: errors.errors
         })
     } else {
-        Model.Player.findAll({
+        ModelBase.Player.findAll({
             attributes: ['id']
         })
         .then((player) => {
