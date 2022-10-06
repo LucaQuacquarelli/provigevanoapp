@@ -6,9 +6,8 @@
         "database": "pro",
         "username": "root",
         "password": "root",
-        "host": "localhost",
-        "port":"8889",
         "dialect": "mysql",
+        "host": "127.0.0.1",
         "logging": false,
         "pool": {
             "max": 1000,
@@ -17,5 +16,6 @@
             "acquire": 60000,
             "evict": 60000
         }
-    }
+    },
+    "dialect": "mysql"
 }
