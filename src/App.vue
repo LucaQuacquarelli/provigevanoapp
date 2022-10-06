@@ -1,4 +1,10 @@
 <template>
+    <router-link to="/">
+        home
+    </router-link>
+    <router-link to="/players">
+        players
+    </router-link>
     <router-view/>
 </template>
 

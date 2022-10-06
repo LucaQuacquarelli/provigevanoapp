@@ -1,12 +1,8 @@
 import { createStore } from 'vuex'
+var config = require('../../config.json')
 
 export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
+    state: {
+        config,
+    }
 })
