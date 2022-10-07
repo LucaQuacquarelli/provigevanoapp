@@ -18,10 +18,13 @@ app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.get('/languages', LanguagesController.index)
-app.get('/roles', RolesController.index)
-app.get('/levels', LevelsController.index)
+/**
+ ** Players endPoints
+ */
 app.get('/players', PlayersController.index)
+app.post('/edit_player/', PlayersController.edit)
+// app.get('/update_player', PlayersController.update)
+// TODO complete this function for Players
 // app.post('/update_player',
 //     body('name').not().isEmpty().trim().escape(),
 //     body('surname').not().isEmpty().trim().escape(),
@@ -29,6 +32,20 @@ app.get('/players', PlayersController.index)
 //     [check('date-of-birth').isISO8601().toDate()],
 //     [check("language_id", "language not supported").isIn(config.app_lang_supported)],
 // PlayersController.update)
-app.get('/update_player', PlayersController.update)
+
+/**
+ ** Levels
+ */
+app.get('/levels', LevelsController.index)
+
+/**
+ **Languages
+ */
+app.get('/languages', LanguagesController.index)
+
+/**
+ **Roles
+ */
+app.get('/roles', RolesController.index)
 
 module.exports = app

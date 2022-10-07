@@ -1,23 +1,34 @@
 <template>
-    <router-link to="/">
+    <ul class="nav justify-content-center  ">
+        <router-link class="nav-item" to="/">
+            <a class="nav-link" aria-current="page">Home</a>
+        </router-link>
+
+        <router-link class="nav-item" to="/players">
+            <a class="nav-link" aria-current="page">Players</a>
+        </router-link>
+    </ul>
+    <router-view />
+
+    <!-- <router-link to="/">
         home
-    </router-link>
-    <router-link to="/players">
+    </router-link> -->
+    <!-- <router-link to="/players">
         players
-    </router-link>
-    <router-view/>
+    </router-link> -->
+    <!-- <router-view /> -->
 </template>
 
 <script>
 export default {
     name: 'ProVigevanoApp'
-}
+};
 </script>
 
 <style lang="scss">
 @import './style/general.scss';
 
-    #app {
-        height: 100%;
-    }
+#app {
+    height: 100%;
+}
 </style>

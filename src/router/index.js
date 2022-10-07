@@ -12,6 +12,12 @@ const routes = [
     path: '/players',
     name: 'PlayersView',
     component: PlayersView
+  },
+  {
+    path: '/edit_player/',
+    name: 'EditPlayer',
+    props: true,
+    component: () => import("../views/EditPlayer.vue"),
   }
 ]
 
