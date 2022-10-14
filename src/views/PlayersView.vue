@@ -3,6 +3,7 @@
         <div class="row">
             <div class="col-6">
                 <div v-for="player in all_players" :key="player.id" class="form-check">
+                    <!-- <span :class="player.level_id == 3 ? 'badge bg-danger' : 'badge bg-primary'">&nbsp;</span> -->
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
                         v-model="player.available" @change="checkAvailabilitySinglePlayer(player)" />
                     <label class="form-check-label" for="flexCheckDefault">{{player.name}}</label>
@@ -48,8 +49,16 @@ export default {
         },
         checkAvailabilitySinglePlayer(player) {
             if (player.available == true) {
-                this.players_availables.push(player);
+                if (!this.players_availables.includes(player)) {
+                    this.players_availables.push(player);
+                }
+            } else if (player.available == false) {
+                const index = this.players_availables.indexOf(player);
+                if (index > -1) {
+                    this.players_availables.splice(index, 1);
+                }
             }
+            console.log(this.players_availables);
         }
     },
     created() {
