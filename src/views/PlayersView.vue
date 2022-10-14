@@ -2,19 +2,18 @@
     <div class="container">
         <div class="row">
             <div class="col-6">
-                <div v-for="player in all_players" :key="player.id" class="form-check">
-                    <!-- <span :class="player.level_id == 3 ? 'badge bg-danger' : 'badge bg-primary'">&nbsp;</span> -->
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                        v-model="player.available" @change="checkAvailabilitySinglePlayer(player)" />
-                    <label class="form-check-label" for="flexCheckDefault">{{player.name}}</label>
+                <div v-for="player in all_players" :key="player.id" class="form-check"
+                    :class="{'d-none': player.available }">
+                    <input class="form-check-input" type="checkbox" value="" :id="player.id" v-model="player.available"
+                        @change="checkAvailabilitySinglePlayer(player)" />
+                    <label class="form-check-label" :for="player.id">{{player.name}}</label>
                 </div>
             </div>
             <div class="col-6">
-                <div v-for="player in players_availables" :key="player.id" class="form-check text-white bg-success">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                        :checked="player.available == true ? true : false"
-                        @change="checkAvailabilitySinglePlayer(player)" />
-                    <label class="form-check-label" for="flexCheckDefault">{{player.name}}</label>
+                <div v-for="player in players_availables" :key="player.id" class="form-check text-white bg-success"
+                    :class="player.available == false ? 'd-none' : ''">
+                    <input class="form-check-input" type="checkbox" :id="player.id" :checked="player.available" />
+                    <label class="form-check-label" :for="player.id">{{player.name}}</label>
                 </div>
             </div>
         </div>
@@ -59,7 +58,7 @@ export default {
                 }
             }
             console.log(this.players_availables);
-        }
+        },
     },
     created() {
         this.$http.get(`${this.api_protocol}${this.api_url}:${this.api_port}/players`)
