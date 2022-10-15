@@ -4,19 +4,11 @@
             <a class="nav-link" aria-current="page">Home</a>
         </router-link>
 
-        <router-link class="nav-item" to="/players">
+        <router-link class="nav-item" to="players">
             <a class="nav-link" aria-current="page">Players</a>
         </router-link>
     </ul>
     <router-view />
-
-    <!-- <router-link to="/">
-        home
-    </router-link> -->
-    <!-- <router-link to="/players">
-        players
-    </router-link> -->
-    <!-- <router-view /> -->
 </template>
 
 <script>

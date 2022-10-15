@@ -1,7 +1,13 @@
 <template>
     <div class="container">
-        <div class="row">
+        <div class="py-2 d-flex justify-content-end">
+            <router-link type="button" class="btn btn-outline-primary" to="selected_players">
+                Done
+            </router-link>
+        </div>
+        <div class=" row">
             <div class="col-6">
+                <h6 class="card-title">Tutti i giocatori</h6>
                 <div v-for="player in all_players" :key="player.id" class="form-check"
                     :class="{'d-none': player.available }">
                     <input class="form-check-input" type="checkbox" value="" :id="player.id" v-model="player.available"
@@ -9,9 +15,10 @@
                     <label class="form-check-label" :for="player.id">{{player.name}}</label>
                 </div>
             </div>
-            <div class="col-6">
-                <div v-for="player in players_availables" :key="player.id" class="form-check text-white bg-success"
-                    :class="player.available == false ? 'd-none' : ''">
+            <div v-if="players_availables_store.length > 0" class="col-6">
+                <h6 class="card-title">Disponibili</h6>
+                <div v-for="player in players_availables_store" :key="player.id" class="form-check"
+                    :class="{'d-none': !player.available }">
                     <input class="form-check-input" type="checkbox" :id="player.id" :checked="player.available" />
                     <label class="form-check-label" :for="player.id">{{player.name}}</label>
                 </div>
@@ -30,7 +37,7 @@ export default {
             api_url: this.$store.state.config.api_url,
             api_port: this.$store.state.config.api_port,
             all_players: [],
-            players_availables: [],
+            players_availables_store: this.$store.state.players_availables,
         };
     },
     methods: {
@@ -48,16 +55,13 @@ export default {
         },
         checkAvailabilitySinglePlayer(player) {
             if (player.available == true) {
-                if (!this.players_availables.includes(player)) {
-                    this.players_availables.push(player);
+                if (!this.players_availables_store.includes(player)) {
+                    this.$store.commit('addAvailableplayer', player);
                 }
             } else if (player.available == false) {
-                const index = this.players_availables.indexOf(player);
-                if (index > -1) {
-                    this.players_availables.splice(index, 1);
-                }
+                this.$store.commit('removeSelectedPlayer', player);
             }
-            console.log(this.players_availables);
+            console.log(this.players_availables_store);
         },
     },
     created() {
