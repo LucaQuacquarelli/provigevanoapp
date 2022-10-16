@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
     name: "PlayersView",
     components: {},
@@ -36,7 +37,6 @@ export default {
             api_protocol: this.$store.state.config.api_protocol,
             api_url: this.$store.state.config.api_url,
             api_port: this.$store.state.config.api_port,
-            all_players: [],
             players_availables_store: this.$store.state.players_availables,
         };
     },
@@ -64,15 +64,13 @@ export default {
             console.log(this.players_availables_store);
         },
     },
+    computed: {
+        ...mapGetters({
+            all_players: 'getPlayers'
+        }),
+    },
     created() {
-        this.$http.get(`${this.api_protocol}${this.api_url}:${this.api_port}/players`)
-            .then((res) => {
-                console.log(res.data);
-                this.all_players = res.data;
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        this.$store.dispatch("fetchAllPlayers");
     },
 };
 </script>
