@@ -1,21 +1,14 @@
 <template>
-    <div class="container">
-        <ul>
-            <li v-for="player in players_availables" :key="player.id">{{player.name}}</li>
-        </ul>
-
-    </div>
+    <ul>
+        <li v-for="player in this.$store.state.all_players" :key="player.id" :class="{'d-none' : !player.available}">
+            {{ player.name }}
+        </li>
+    </ul>
 </template>
 
 <script>
 export default {
-    name: "SelectedPlayers",
-    data() {
-        return {
-            players_availables: this.$store.state.players_availables
-        };
-    },
-    // props: ['selected_players']
+    name: "SelectedPlayers"
 };
 </script>
 

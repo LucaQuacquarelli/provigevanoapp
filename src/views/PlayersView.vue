@@ -1,26 +1,35 @@
 <template>
-    <div class="container">
-        <div class="py-2 d-flex justify-content-end">
+    <div class="d-flex flex-wrap">
+        <div class="col-12 py-2 text-end" v-show="availables">
             <router-link type="button" class="btn btn-outline-primary" to="selected_players">
                 Done
             </router-link>
         </div>
-        <div class=" row">
+        <div class="col-12 d-flex">
             <div class="col-6">
-                <h6 class="card-title">Tutti i giocatori</h6>
-                <div v-for="player in all_players" :key="player.id" class="form-check"
-                    :class="{'d-none': player.available }">
-                    <input class="form-check-input" type="checkbox" value="" :id="player.id" v-model="player.available"
-                        @change="checkAvailabilitySinglePlayer(player)" />
-                    <label class="form-check-label" :for="player.id">{{player.name}}</label>
+                <h6 class="card-title">
+                    Tutti i giocatori
+                </h6>
+                <div v-for="player in this.$store.state.all_players" :key="player.id" class="form-check" :class="{'d-none' : player.available}">
+                    <div v-if="!player.available">
+                        <input class="form-check-input" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
+                        <label class="form-check-label" :for="player.id">
+                            {{ player.name }}
+                        </label>
+                    </div>
                 </div>
             </div>
-            <div v-if="players_availables_store.length > 0" class="col-6">
-                <h6 class="card-title">Disponibili</h6>
-                <div v-for="player in players_availables_store" :key="player.id" class="form-check"
-                    :class="{'d-none': !player.available }">
-                    <input class="form-check-input" type="checkbox" :id="player.id" :checked="player.available" />
-                    <label class="form-check-label" :for="player.id">{{player.name}}</label>
+            <div class="col-6">
+                <h6 class="card-title">
+                    Disponibili
+                </h6>
+                <div v-for="player in this.$store.state.all_players" :key="player.id" class="form-check" :class="{'d-none' : !player.available}">
+                    <div v-if="player.available">
+                        <input class="form-check-input" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
+                        <label class="form-check-label" :for="player.id">
+                            {{ player.name }}
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
@@ -28,7 +37,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
     name: "PlayersView",
     components: {},
@@ -37,7 +45,7 @@ export default {
             api_protocol: this.$store.state.config.api_protocol,
             api_url: this.$store.state.config.api_url,
             api_port: this.$store.state.config.api_port,
-            players_availables_store: this.$store.state.players_availables,
+            availables: false
         };
     },
     methods: {
@@ -53,24 +61,36 @@ export default {
                     console.log(err);
                 });
         },
-        checkAvailabilitySinglePlayer(player) {
-            if (player.available == true) {
-                if (!this.players_availables_store.includes(player)) {
-                    this.$store.commit('addAvailableplayer', player);
-                }
-            } else if (player.available == false) {
-                this.$store.commit('removeSelectedPlayer', player);
-            }
-            console.log(this.players_availables_store);
-        },
-    },
-    computed: {
-        ...mapGetters({
-            all_players: 'getPlayers'
-        }),
+        setAvailability (player) {
+            this.$http
+                .post(`${this.api_protocol}${this.api_url}:${this.api_port}/players_availability`,
+                    {
+                        id: player.id,
+                        available: player.available
+                    }
+                )
+                .then(() => {
+                    this.availables = this.$store.state.all_players.some(
+                            (player) => player.available
+                        )
+                })
+                .catch((err) => {
+                    console.log(err);
+                }) 
+        }
     },
     created() {
-        this.$store.dispatch("fetchAllPlayers");
+        this.$http
+            .get(`${this.api_protocol}${this.api_url}:${this.api_port}/players`)
+            .then((res) => {
+                this.$store.state.all_players = res.data
+                this.availables = this.$store.state.all_players.some(
+                        (player) => player.available
+                    )
+            })
+            .catch((err) => {
+                console.log(err);
+            }) 
     },
 };
 </script>

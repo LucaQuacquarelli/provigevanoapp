@@ -22,6 +22,7 @@ app.use(bodyParser.json())
  ** Players endPoints
  */
 app.get('/players', PlayersController.index)
+app.post('/players_availability', PlayersController.setAvailability)
 // app.get('/update_player', PlayersController.update)
 // TODO complete this function for Players
 // app.post('/update_player',

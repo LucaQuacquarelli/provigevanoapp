@@ -8,7 +8,9 @@
             <a class="nav-link" aria-current="page">Players</a>
         </router-link>
     </ul>
-    <router-view />
+    <div class="container">
+        <router-view />
+    </div>
 </template>
 
 <script>
