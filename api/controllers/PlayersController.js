@@ -9,9 +9,22 @@ module.exports.index = (req, res) => {
             ['name', 'ASC']
         ]
     })
-        .then((player) => {
-            res.send(player);
-        });
+    .then((player) => {
+        res.send(player);
+    });
+};
+
+module.exports.setAvailability= (req, res) => {
+    ModelBase.Player.update({
+        available: req.body.available
+    },{
+        where: {
+            id: req.body.id
+        }
+    })
+    .then(() => {
+        res.end()
+    });
 };
 
 /**
