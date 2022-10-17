@@ -3,11 +3,8 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
     const Model = Sequelize.Model;
 
-    class Role extends Model {
-        static associate(models) {
-            Role.hasMany(models.Player);
-        }
-    };
+    class Role extends Model {};
+    
     Role.init({
         id: {
             type: Sequelize.INTEGER,

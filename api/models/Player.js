@@ -3,13 +3,7 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
     const Model = Sequelize.Model;
 
-    class Player extends Model {
-        static associate(models) {
-            Player.belongsTo(models.Role);
-            Player.belongsTo(models.Level);
-            Player.belongsTo(models.Language);
-        }
-    }
+    class Player extends Model {}
 
     Player.init({
         id: {

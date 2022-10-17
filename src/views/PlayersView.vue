@@ -5,9 +5,9 @@
                 Done
             </router-link>
         </div>
-        <div class="col-12 d-flex">
+        <div class="col-12 d-flex align-items-start">
             <div class="col-6">
-                <h6 class="card-title">
+                <h6 class="d-flex align-items-center">
                     Tutti i giocatori
                 </h6>
                 <div v-for="player in this.$store.state.all_players" :key="player.id" class="form-check" :class="{'d-none' : player.available}">

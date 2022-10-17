@@ -3,12 +3,8 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
     const Model = Sequelize.Model;
 
-    class Level extends Model { 
-
-        static associate(models) {
-            Level.hasMany(models.Player);
-        }
-    };
+    class Level extends Model {};
+    
     Level.init({
         id: {
             type: Sequelize.INTEGER,

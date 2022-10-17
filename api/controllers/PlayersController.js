@@ -27,6 +27,18 @@ module.exports.setAvailability= (req, res) => {
     });
 };
 
+module.exports.getAvailables = (req, res) => {
+    ModelBase.Player.findAll({
+        where: {
+            available: true
+        },
+        include: ModelBase.Level
+    })
+    .then((player) => {
+        res.send(player);
+    });
+};
+
 /**
  * TODO
  */

@@ -3,11 +3,7 @@ const Sequelize = require('sequelize');
 module.exports = (sequelize) => {
     const Model = Sequelize.Model;
 
-    class Language extends Model {
-        static associate(models) {
-            Language.hasMany(models.Player);
-        }
-    }
+    class Language extends Model {}
 
     Language.init({
         id: {
