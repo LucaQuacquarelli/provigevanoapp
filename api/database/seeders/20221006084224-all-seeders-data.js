@@ -13,10 +13,10 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Roles', allData.roles, {});
-    await queryInterface.bulkInsert('Languages', allData.languages, {});
-    await queryInterface.bulkInsert('Levels', allData.levels, {});
-    await queryInterface.bulkInsert('Players', allData.players, {});
+    await queryInterface.bulkInsert('roles', allData.roles, {});
+    await queryInterface.bulkInsert('languages', allData.languages, {});
+    await queryInterface.bulkInsert('levels', allData.levels, {});
+    await queryInterface.bulkInsert('players', allData.players, {});
   },
 
   async down(queryInterface, Sequelize) {
