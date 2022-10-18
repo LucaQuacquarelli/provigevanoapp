@@ -1,100 +1,143 @@
 <template>
-    <div class="d-flex flex-wrap">
-        <div class="col-12 py-2 text-end" v-show="availables">
-            <router-link type="button" class="btn btn-outline-primary" to="selected_players">
-                Done
-            </router-link>
+    <div class="d-flex justify-content-around flex-wrap">
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <h2>
+                All Players
+            </h2>
+            <h2>
+                {{ this.$store.state.all_players.length }}
+            </h2>
         </div>
-        <div class="col-12 d-flex align-items-start">
-            <div class="col-6">
-                <h6 class="d-flex align-items-center">
-                    Tutti i giocatori
-                </h6>
-                <div v-for="player in this.$store.state.all_players" :key="player.id" class="form-check" :class="{'d-none' : player.available}">
-                    <div v-if="!player.available">
-                        <input class="form-check-input" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
-                        <label class="form-check-label" :for="player.id">
-                            {{ player.name }}
-                        </label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <h6 class="card-title">
-                    Disponibili
-                </h6>
-                <div v-for="player in this.$store.state.all_players" :key="player.id" class="form-check" :class="{'d-none' : !player.available}">
-                    <div v-if="player.available">
-                        <input class="form-check-input" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
-                        <label class="form-check-label" :for="player.id">
-                            {{ player.name }}
-                        </label>
-                    </div>
-                </div>
-            </div>
+        <div class="col-12 my-4">
+            <input type="text" class="form-control" placeholder="search" v-model="inputSearch" @keyup="searchPlayers">
+        </div>
+        <div v-for="player in this.$store.state.all_players" :key="player.id" class="col-5 mb-4">
+            <PlayerCard :player="player" @click="activateEdit(player)"/>
+            <!-- <PlayerCard :player="player" :level="{}" @dblclick="editModal = true"/> -->
         </div>
     </div>
+    <transition name="fade-modal">
+        <modal v-if="editModal" @close="editModal = false">
+            <template v-slot:header>
+                <div class="modal-header d-flex justify-content-between align-items-center">
+                    <span class="fs-2 fw-bold text-uppercase">
+                        {{ activeEditPlayer.name }}
+                        {{ activeEditPlayer.surname }}
+                    </span>
+                    <span class="fs-2 fw-bold">
+                        Edit 
+                    </span>
+                </div>
+            </template>
+            <template v-slot:body>
+                <div class="modal-body my-4">
+                    <form action="" class="d-flex justify-content-between flex-wrap">
+                        <div class="col-12">
+                            <label class="form-label">
+                                Name
+                            </label>
+                            <input type="text" name="name" class="form-control" :placeholder="activeEditPlayer.name" v-model="activeEditPlayer.name">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label mt-2">
+                                Surname
+                            </label>
+                            <input type="text" name="surname" class="form-control" :placeholder="activeEditPlayer.surname" v-model="activeEditPlayer.surname">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label mt-2">
+                                NickName
+                            </label>
+                            <input type="text" name="nick_name" class="form-control" :placeholder="activeEditPlayer.nick_name" v-model="activeEditPlayer.nick_name">
+                        </div>
+                        <div class="col-5">
+                            <label class="form-label mt-2">
+                                Goalkeeper Provisory
+                            </label>
+                            <input type="checkbox" name="goalkeeper_provisory" class="form-check" disabled>
+                        </div>
+                        <div class="col-5">
+                            <label class="form-label mt-2">
+                                Level
+                            </label>
+                            <select name="level_id">
+                                <option :value="activeEditPlayer.level_id" disabled>
+                                    {{activeEditPlayer.level_id}}
+                                </option>
+                                <option v-for="level in this.$store.state.levels" :key="level.id" :value="level.id">
+                                    {{ level.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </template>
+            <template v-slot:footer>
+                <div class="modal-footer d-flex justify-content-between align-items-center">
+                    <button class="btn btn-secondary" @click="editModal = false">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Submit
+                    </button>
+                </div>
+            </template>
+        </modal>
+    </transition>
 </template>
 
 <script>
+import PlayerCard from '../components/PlayerCard.vue';
+import Modal from '../components/Modal.vue';
 export default {
-    name: "PlayersView",
-    components: {},
+    name: 'PlayersView',
+    components: {
+        PlayerCard,
+        Modal
+    },
     data() {
         return {
-            api_protocol: this.$store.state.config.api_protocol,
-            api_url: this.$store.state.config.api_url,
-            api_port: this.$store.state.config.api_port,
-            availables: false
-        };
+            inputSearch: '',
+            editModal: false,
+            activeEditPlayer: null
+        }
     },
     methods: {
-        /**
-         *!NOT USED YET
-         */
-        update() {
-            this.$http.get(`${this.api_protocol}${this.api_url}:${this.api_port}/update_player`)
-                .then((res) => {
-                    console.log(res.data);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        },
-        setAvailability (player) {
+        searchPlayers() {
             this.$http
-                .post(`${this.api_protocol}${this.api_url}:${this.api_port}/players_availability`,
+                .post(`${this.$store.getters.apiPath}/players/search`,
                     {
-                        id: player.id,
-                        available: player.available
+                        inputSearch: this.inputSearch
                     }
                 )
-                .then(() => {
-                    this.availables = this.$store.state.all_players.some(
-                            (player) => player.available
-                        )
+                .then((res) => {
+                    this.$store.state.all_players = res.data
                 })
                 .catch((err) => {
                     console.log(err);
                 }) 
+        },
+        activateEdit(player) {
+            this.editModal = true
+            this.activeEditPlayer = player
         }
     },
     created() {
         this.$http
-            .get(`${this.api_protocol}${this.api_url}:${this.api_port}/players`)
+            .get(`${this.$store.getters.apiPath}/players`)
             .then((res) => {
                 this.$store.state.all_players = res.data
-                this.availables = this.$store.state.all_players.some(
-                        (player) => player.available
-                    )
             })
             .catch((err) => {
                 console.log(err);
             }) 
-    },
-};
+    }
+}
 </script>
 
 <style lang="scss" scoped>
-
+    .rounded {
+        border-radius: 30px !important;
+        border: 2px solid red;
+    }
 </style>

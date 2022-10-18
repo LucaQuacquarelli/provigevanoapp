@@ -6,7 +6,7 @@
         <div class="card-body d-flex flex-wrap px-0">
             <div class="col-4 text-center">
                 <h2 class="fw-bold">
-                    {{ level.percentage }}
+                    {{ player.level.percentage }}
                 </h2>
                 <h2>
                     PL
@@ -44,7 +44,6 @@
 export default {
     name: 'PlayerCard',
     props: {
-        level: Object,
         player: Object
     }
 }
@@ -52,7 +51,8 @@ export default {
 
 <style lang="scss" scoped>
     .card{
-    
+        height: 100% !important;
+
         img {
             position: relative;
             top: 15%;

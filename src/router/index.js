@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
-import PlayersView from '../views/PlayersView.vue';
+import ChoosePlayers from '../views/ChoosePlayers.vue';
 
 const routes = [
   {
@@ -11,19 +11,16 @@ const routes = [
   {
     path: '/players',
     name: 'PlayersView',
-    component: PlayersView
-  },
-  /**
-   *!NOT USED YET
-   */
-  {
-    path: '/edit_player/',
-    name: 'EditPlayer',
     props: true,
-    component: () => import("../views/EditPlayer.vue"),
+    component: () => import("../views/PlayersView.vue"),
   },
   {
-    path: '/selected_players/',
+    path: '/choose_players',
+    name: 'ChoosePlayers',
+    component: ChoosePlayers
+  },
+  {
+    path: '/selected_players',
     name: 'SelectedPlayers',
     props: true,
     component: () => import("../views/SelectedPlayers.vue"),

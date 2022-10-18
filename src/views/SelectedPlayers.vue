@@ -13,7 +13,7 @@
             </div>
             <div class="col-12 d-flex justify-content-around flex-wrap">
                 <div v-for="player in level.players" :key="player.id" class="col-5 d-flex my-3 justify-content-center">
-                    <PlayerCard :level="level" :player="player"/>
+                    <PlayerCard :player="player"/>
                 </div>
             </div>
         </div>
@@ -29,17 +29,13 @@ export default {
     },
     data() {
         return {
-            api_protocol: this.$store.state.config.api_protocol,
-            api_url: this.$store.state.config.api_url,
-            api_port: this.$store.state.config.api_port,
             playersByLevel: null
         }
     },
     created() {
         this.$http
-            .get(`${this.api_protocol}${this.api_url}:${this.api_port}/players/get_by_level`)
+            .get(`${this.$store.getters.apiPath}/players/get_by_level`)
             .then((res) => {
-                console.log(res.data);
                 this.playersByLevel = res.data
             })
             .catch((err) => {

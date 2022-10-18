@@ -1,13 +1,17 @@
 <template>
-    <ul class="nav justify-content-center  ">
-        <router-link class="nav-item" to="/">
-            <a class="nav-link" aria-current="page">Home</a>
+    <nav class="nav justify-content-center  ">
+        <router-link class="nav-link" to="/">
+            Home
         </router-link>
 
-        <router-link class="nav-item" to="players">
-            <a class="nav-link" aria-current="page">Players</a>
+        <router-link class="nav-link" to="/players">
+            Players
         </router-link>
-    </ul>
+
+        <router-link class="nav-link" to="/choose_players">
+            Start
+        </router-link>
+    </nav>
     <div class="container">
         <router-view />
     </div>
@@ -15,7 +19,23 @@
 
 <script>
 export default {
-    name: 'ProVigevanoApp'
+    name: 'ProVigevanoApp',
+    data() {
+        return {
+            inputSearch: '',
+            editModal: false
+        }
+    },
+    created() {
+        this.$http
+            .get(`${this.$store.getters.apiPath}/levels`)
+            .then((res) => {
+                this.$store.state.levels = res.data
+            })
+            .catch((err) => {
+                console.log(err);
+            }) 
+    }
 };
 </script>
 
