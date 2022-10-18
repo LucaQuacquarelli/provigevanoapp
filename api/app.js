@@ -19,21 +19,23 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 /**
- ** Players endPoints
+ ** Players CRUD
  */
 app.get('/players', PlayersController.index)
+app.post('/player/update',
+    body('name').not().isEmpty().trim().escape(),
+    body('surname').not().isEmpty().trim().escape(),
+    body('nick_name').not().isEmpty().trim().escape(),
+    // [check('date-of-birth').isISO8601().toDate()],
+    // [check("language_id", "language not supported").isIn(config.app_lang_supported)],
+PlayersController.update)
+
+/**
+ ** Players endPoints
+ */
 app.post('/players/search', PlayersController.searchPlayers)
 app.get('/players/get_by_level', PlayersController.getByLevel)
 app.post('/players_availability', PlayersController.setAvailability)
-// app.get('/update_player', PlayersController.update)
-// TODO complete this function for Players
-// app.post('/update_player',
-//     body('name').not().isEmpty().trim().escape(),
-//     body('surname').not().isEmpty().trim().escape(),
-//     body('nick_name').not().isEmpty().trim().escape(),
-//     [check('date-of-birth').isISO8601().toDate()],
-//     [check("language_id", "language not supported").isIn(config.app_lang_supported)],
-// PlayersController.update)
 
 /**
  ** Levels

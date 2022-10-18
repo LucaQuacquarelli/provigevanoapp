@@ -16,7 +16,7 @@
             <!-- <PlayerCard :player="player" :level="{}" @dblclick="editModal = true"/> -->
         </div>
     </div>
-    <transition name="fade-modal">
+    <transition ref="fade-modal">
         <modal v-if="editModal" @close="editModal = false">
             <template v-slot:header>
                 <div class="modal-header d-flex justify-content-between align-items-center">
@@ -30,46 +30,41 @@
                 </div>
             </template>
             <template v-slot:body>
-                <div class="modal-body my-4">
-                    <form action="" class="d-flex justify-content-between flex-wrap">
-                        <div class="col-12">
-                            <label class="form-label">
-                                Name
-                            </label>
-                            <input type="text" name="name" class="form-control" :placeholder="activeEditPlayer.name" v-model="activeEditPlayer.name">
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label mt-2">
-                                Surname
-                            </label>
-                            <input type="text" name="surname" class="form-control" :placeholder="activeEditPlayer.surname" v-model="activeEditPlayer.surname">
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label mt-2">
-                                NickName
-                            </label>
-                            <input type="text" name="nick_name" class="form-control" :placeholder="activeEditPlayer.nick_name" v-model="activeEditPlayer.nick_name">
-                        </div>
-                        <div class="col-5">
-                            <label class="form-label mt-2">
-                                Goalkeeper Provisory
-                            </label>
-                            <input type="checkbox" name="goalkeeper_provisory" class="form-check" disabled>
-                        </div>
-                        <div class="col-5">
-                            <label class="form-label mt-2">
-                                Level
-                            </label>
-                            <select name="level_id">
-                                <option :value="activeEditPlayer.level_id" disabled>
-                                    {{activeEditPlayer.level_id}}
-                                </option>
-                                <option v-for="level in this.$store.state.levels" :key="level.id" :value="level.id">
-                                    {{ level.name }}
-                                </option>
-                            </select>
-                        </div>
-                    </form>
+                <div class="modal-body d-flex justify-content-between flex-wrap my-4">
+                    <div class="col-12">
+                        <label class="form-label">
+                            Name
+                        </label>
+                        <input type="text" ref="name" class="form-control" :placeholder="activeEditPlayer.name" :value="activeEditPlayer.name">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label mt-2">
+                            Surname
+                        </label>
+                        <input type="text" ref="surname" class="form-control" :placeholder="activeEditPlayer.surname" :value="activeEditPlayer.surname">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label mt-2">
+                            NickName
+                        </label>
+                        <input type="text" ref="nick_name" class="form-control" :placeholder="activeEditPlayer.nick_name" :value="activeEditPlayer.nick_name">
+                    </div>
+                    <div class="col-5">
+                        <label class="form-label mt-2">
+                            Goalkeeper Provisory
+                        </label>
+                        <input type="checkbox" ref="goalkeeper_provisory" class="form-check" disabled>
+                    </div>
+                    <div class="col-5">
+                        <label class="form-label mt-2">
+                            Level
+                        </label>
+                        <select ref="level_id">
+                            <option v-for="level in this.$store.state.levels" :key="level.id" :value="level.id" :selected="level.id == activeEditPlayer.level.id">
+                                {{ level.name }}
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </template>
             <template v-slot:footer>
@@ -77,7 +72,7 @@
                     <button class="btn btn-secondary" @click="editModal = false">
                         Cancel
                     </button>
-                    <button type="submit" class="btn btn-primary">
+                    <button @click="edit" class="btn btn-primary">
                         Submit
                     </button>
                 </div>
@@ -120,6 +115,24 @@ export default {
         activateEdit(player) {
             this.editModal = true
             this.activeEditPlayer = player
+        },
+        edit() {
+            this.$http
+                .post(`${this.$store.getters.apiPath}/player/update`,
+                    {
+                        id: this.activeEditPlayer.id,
+                        name: this.$refs.name.value,
+                        surname: this.$refs.surname.value,
+                        nick_name: this.$refs.nick_name.value,
+                        level_id: this.$refs.level_id.value,
+                    }
+                )
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
         }
     },
     created() {

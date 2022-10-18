@@ -4,6 +4,9 @@ var sequelize = Config.sequelize()
 const { validationResult } = require('express-validator')
 var ModelBase = require(`${__dirname}/../models/ModelBase`)(sequelize.pro())
 
+/**
+ ** Players CRUD
+ */
 module.exports.index = (req, res) => {
     ModelBase.Player.findAll({
         order: [
@@ -24,6 +27,32 @@ module.exports.index = (req, res) => {
     })
 }
 
+module.exports.update = (req, res) => {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            res.send({
+                errors: errors.errors
+            })
+        } else {
+            ModelBase.Player.update({
+                name: req.body.name,
+                surname: req.body.surname,
+                nick_name: req.body.nick_name,
+                level_id: req.body.level_id,
+            },{
+                where: {
+                    id: req.body.id
+                }
+            })
+            .then(() => {
+                res.send('update success')
+            })
+        }
+    }
+
+/**
+ ** Players Endpoints
+ */
 module.exports.searchPlayers = (req, res) => {
     ModelBase.Player.findAll({
         order: [
@@ -91,22 +120,3 @@ module.exports.getByLevel = (req, res) => {
         res.send(player)
     })
 }
-
-/**
- * TODO
- */
-// module.exports.update = (req, res) => {
-//     const errors = validationResult(req)
-//     if (!errors.isEmpty()) {
-//         res.send({
-//             errors: errors.errors
-//         })
-//     } else {
-//         ModelBase.Player.findAll({
-//             attributes: ['id']
-//         })
-//         .then((players_ids) => {
-//              res.send(players_ids)
-//         })
-//     }
-// }
