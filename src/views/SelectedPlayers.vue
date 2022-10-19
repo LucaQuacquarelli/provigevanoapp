@@ -1,7 +1,9 @@
 <template>
     <div class="d-flex flex-wrap">
-        <div class="d-flex col-12 p-2 bg-danger rounded">
-            Total : {{ this.allPlayersSelectedCounter  }}
+        <div class="d-flex col-12 p-2 justify-content-end">
+            <h3 class="fw-bolder">
+                Total {{ this.allPlayersCounter  }}
+            </h3>
         </div>
         <div v-for="level in playersByLevel" :key="level.id" class="col-12 d-flex align-items-center flex-wrap mb-4 p-4 rounded-4" :class="backgroundColors(level.id)">
             <div class="col-6">
@@ -20,6 +22,16 @@
                 </div>
             </div>
         </div>
+        <!--TODO add computed to show this div or not  -->
+        <div v-if="checkGoalkeepers">
+        <div class="col-12 d-flex align-items-center flex-wrap mb-4 p-4 bg-dark bg-gradient rounded-4">
+            <div class="col-12 d-flex justify-content-around flex-wrap">
+                <div v-for="goalkeeper in allGoalkeepers" :key="goalkeeper.id" class="col-5 d-flex my-3 justify-content-center">
+                    <PlayerCard :player="goalkeeper"/>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
 </template>
 
@@ -33,7 +45,8 @@ export default {
     data() {
         return {
             playersByLevel: null,
-            allPlayersSelectedCounter : null
+            allPlayersCounter : null,
+            allGoalkeepers: ''
         }
     },
     computed: {
@@ -47,6 +60,9 @@ export default {
             }
             return id => bootstrapClasses[id] 
         },
+        checkGoalkeepers(){
+            return this.allGoalkeepers.length > 0 ? true : false
+        }
     },
     created() {
         this.$http
@@ -54,7 +70,8 @@ export default {
             .then((res) => {
                 console.log("🚀 ~ file: SelectedPlayers.vue ~ line 39 ~ .then ~ res.data", res.data)
                 this.playersByLevel = res.data.playersByLevel
-                this.allPlayersSelectedCounter = res.data.counterPlayersAvailables
+                this.allPlayersCounter = res.data.counterPlayersAvailables
+                this.allGoalkeepers = res.data.allGoalKeepersSelected
             })
             .catch((err) => {
                 console.log(err);

@@ -106,7 +106,8 @@ module.exports.getByLevel = (req, res) => {
         include: {
             model: ModelBase.Player,
             where: {
-                available: true
+                available: true,
+                role_id:  1
             },
             attributes: {exclude : ['level_id', 'role_id']} ,
             include: [
@@ -127,11 +128,30 @@ module.exports.getByLevel = (req, res) => {
         }
     })
 
-    Promise.all([playersByLevel, countAllPlayersSelected])
+    const allGoalKeepersSelected = ModelBase.Player.findAll({
+        order: [
+            ['id', 'DESC']
+        ],
+        where: {
+            available: true,
+            role_id: 2
+        },
+        include: [
+            {
+                model: ModelBase.Level,
+                attributes: ['percentage']
+            },
+            {
+                model: ModelBase.Role
+            }]
+        })
+
+    Promise.all([playersByLevel, countAllPlayersSelected, allGoalKeepersSelected])
         .then((responses) => {
             const responsesObject = {
                 playersByLevel: responses[0],
                 counterPlayersAvailables: responses[1],
+                allGoalKeepersSelected: responses[2],
             }
             res.send(responsesObject)
         })
