@@ -1,13 +1,13 @@
 <template>
     <div class="d-flex flex-wrap">
-        <div v-for="level in playersByLevel" :key="level.id" class="col-12 d-flex align-items-center flex-wrap mb-4 p-4 rounded">
+        <div v-for="level in playersByLevel" :key="level.id" class="col-12 d-flex align-items-center flex-wrap mb-4 p-4 rounded-4" :class="backgroundColors(level.id)">
             <div class="col-6">
-                <h2>
+                <h2 class="text-white fw.bold">
                     {{ level.name }}
                 </h2>
             </div>
             <div class="col-6 text-end">
-                <h2>
+                <h2 class="text-white fw.bold">
                     {{ level.players.length }}
                 </h2>
             </div>
@@ -32,10 +32,23 @@ export default {
             playersByLevel: null
         }
     },
+    computed: {
+        backgroundColors() {
+            const bootstrapClasses = {
+                1 : 'bg-danger bg-gradient',
+                2 : 'bg-warning bg-gradient',
+                3 : 'bg-primary bg-gradient',
+                4 : 'bg-success bg-gradient',
+                5 : 'bg-dark bg-gradient',
+            }
+            return id => bootstrapClasses[id] 
+        }
+    },
     created() {
         this.$http
             .get(`${this.$store.getters.apiPath}/players/get_by_level`)
             .then((res) => {
+                console.log("🚀 ~ file: SelectedPlayers.vue ~ line 39 ~ .then ~ res", res.data)
                 this.playersByLevel = res.data
             })
             .catch((err) => {

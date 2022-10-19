@@ -8,8 +8,8 @@
                 <h2 class="fw-bold">
                     {{ player.level.percentage }}
                 </h2>
-                <h2>
-                    PL
+                <h2 class="badge" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                    {{ roleAbbreviation(player.role.name) }}
                 </h2>
                 <h2>
                     🇮🇹
@@ -45,7 +45,16 @@ export default {
     name: 'PlayerCard',
     props: {
         player: Object
-    }
+    },
+    computed: {
+        roleAbbreviation() {
+            const abbreviation = {
+                'goalkeeper' : "PT",
+                'player' : "PL",
+            }
+            return role => abbreviation[role]
+        }
+    },
 }
 </script>
 
