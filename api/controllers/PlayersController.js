@@ -98,7 +98,7 @@ module.exports.setAvailability= (req, res) => {
 }
 
 module.exports.getByLevel = (req, res) => {
-    ModelBase.Level.findAll({
+    const playersByLevel = ModelBase.Level.findAll({
         order: [
             ['id', 'DESC']
         ],
@@ -120,7 +120,20 @@ module.exports.getByLevel = (req, res) => {
             ]
         }
     })
-    .then((player) => {
-        res.send(player)
+
+    const countAllPlayersSelected = ModelBase.Player.count({
+        where: {
+            available: true
+        }
     })
+
+    Promise.all([playersByLevel, countAllPlayersSelected])
+        .then((responses) => {
+            const responsesObject = {
+                playersByLevel: responses[0],
+                counterPlayersAvailables: responses[1],
+            }
+            res.send(responsesObject)
+        })
+        .catch(err => console.log(err))
 }

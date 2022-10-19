@@ -1,5 +1,8 @@
 <template>
     <div class="d-flex flex-wrap">
+        <div class="d-flex col-12 p-2 bg-danger rounded">
+            Total : {{ this.allPlayersSelectedCounter  }}
+        </div>
         <div v-for="level in playersByLevel" :key="level.id" class="col-12 d-flex align-items-center flex-wrap mb-4 p-4 rounded-4" :class="backgroundColors(level.id)">
             <div class="col-6">
                 <h2 class="text-white fw.bold">
@@ -29,7 +32,8 @@ export default {
     },
     data() {
         return {
-            playersByLevel: null
+            playersByLevel: null,
+            allPlayersSelectedCounter : null
         }
     },
     computed: {
@@ -42,14 +46,15 @@ export default {
                 5 : 'bg-dark bg-gradient',
             }
             return id => bootstrapClasses[id] 
-        }
+        },
     },
     created() {
         this.$http
             .get(`${this.$store.getters.apiPath}/players/get_by_level`)
             .then((res) => {
-                console.log("🚀 ~ file: SelectedPlayers.vue ~ line 39 ~ .then ~ res", res.data)
-                this.playersByLevel = res.data
+                console.log("🚀 ~ file: SelectedPlayers.vue ~ line 39 ~ .then ~ res.data", res.data)
+                this.playersByLevel = res.data.playersByLevel
+                this.allPlayersSelectedCounter = res.data.counterPlayersAvailables
             })
             .catch((err) => {
                 console.log(err);
