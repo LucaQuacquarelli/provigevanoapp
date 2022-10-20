@@ -9,7 +9,7 @@
             </h2>
         </div>
         <div class="col-12 my-4">
-            <input type="text" class="form-control" :placeholder="$t('general.search')" v-model="inputSearch" @keyup="searchPlayers">
+            <input type="text" class="form-control" :placeholder="$t('general.search')" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
         </div>
         <div v-for="player in this.$store.state.all_players" :key="player.id" class="col-5 mb-4">
             <PlayerCard :player="player" @click="activateEdit(player)"/>
@@ -93,27 +93,11 @@ export default {
     },
     data() {
         return {
-            inputSearch: '',
             editModal: false,
             activeEditPlayer: null
         }
     },
     methods: {
-        searchPlayers() {
-            this.$http
-                .post(`${this.$store.getters.apiPath}/players/search`,
-                    {
-                        inputSearch: this.inputSearch
-                    }
-                )
-                .then((res) => {
-                    this.$store.state.all_players = res.data
-                })
-                .catch((err) => {
-                    this.$store.state.serverModal = true
-                    this.$store.state.errServer = err.message
-                }) 
-        },
         activateEdit(player) {
             this.editModal = true
             this.activeEditPlayer = player
@@ -140,8 +124,8 @@ export default {
                         this.$store.state.successHeader = this.$t("modal.success.edited")
                         this.$store.state.successModal = true
                         this.$store.state.all_players = res.data
-                        if (this.inputSearch != "") {
-                            this.inputSearch = ""
+                        if (this.$store.state.inputSearch != "") {
+                            this.$store.state.inputSearch = ""
                         }
                         setTimeout(() => {
                             this.$store.state.successModal = false

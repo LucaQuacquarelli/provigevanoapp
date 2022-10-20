@@ -5,6 +5,9 @@
                 {{ $t('general.confirm') }}
             </router-link>
         </div>
+        <div class="col-12 my-4">
+            <input type="text" class="form-control" :placeholder="$t('general.search')" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
+        </div>
         <div class="col-12 d-flex align-items-start">
             <div class="col-6">
                 <h6 class="d-flex align-items-center">
@@ -79,18 +82,6 @@ export default {
                     console.log(err);
                 }) 
         },
-        /**
-         *!NOT USED YET
-         */
-        update() {
-            this.$http.get(`${this.$store.getters.apiPath}/update_player`)
-                .then((res) => {
-                    console.log(res.data);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
     },
     created() {
         this.$http

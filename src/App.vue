@@ -58,7 +58,6 @@ export default {
     },
     data() {
         return {
-            inputSearch: '',
             editModal: false
         }
     },
