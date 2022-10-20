@@ -1,0 +1,30 @@
+{
+    "routes":{
+        "home" : "Home",
+        "players" : "Giocatori",
+        "start" : "Gioca"
+    },
+    "players": {
+        "all_players" : "Tutti i giocatori",
+        "availables" : "Disponibili"
+    },
+    "general":{
+        "edit" : "Modifica",
+        "cancel": "Annulla",
+        "save": "Salva",
+        "search": "Cerca",
+        "confirm":"Conferma"
+    },
+    "form": {
+        "name": "Nome",
+        "surname": "Cognome",
+        "nick_name": "Sopranome",
+        "goalkeeper_provisory" : "Portiere provvisorio",
+        "level": "Livello"
+    },
+    "modal":{
+        "success":{
+            "edited" : "Modifiche applicate con successo!"
+        }
+    }
+}

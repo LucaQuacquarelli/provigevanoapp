@@ -2,18 +2,19 @@
     <div class="d-flex justify-content-around flex-wrap">
         <div class="col-12 d-flex justify-content-between align-items-center">
             <h2>
-                All Players
+                {{ $t('players.all_players') }}
             </h2>
             <h2>
                 {{ this.$store.state.all_players.length }}
             </h2>
         </div>
         <div class="col-12 my-4">
-            <input type="text" class="form-control" placeholder="search" v-model="inputSearch" @keyup="searchPlayers">
+            <input type="text" class="form-control" :placeholder="$t('general.search')" v-model="inputSearch" @keyup="searchPlayers">
         </div>
         <div v-for="player in this.$store.state.all_players" :key="player.id" class="col-5 mb-4">
             <PlayerCard :player="player" @click="activateEdit(player)"/>
-            <!-- <PlayerCard :player="player" :level="{}" @dblclick="editModal = true"/> -->
+            <!-- TODO -->
+            <!-- <PlayerCard :player="player" @dblclick="editModal = true"/> -->
         </div>
     </div>
     <transition ref="fade-modal">
@@ -25,7 +26,7 @@
                         {{ activeEditPlayer.surname }}
                     </span>
                     <span class="fs-2 fw-bold">
-                        Edit 
+                        {{ $t('general.edit') }}
                     </span>
                 </div>
             </template>
@@ -33,31 +34,31 @@
                 <div class="modal-body d-flex justify-content-between flex-wrap my-4 px-4">
                     <div class="col-12">
                         <label class="form-label">
-                            Name
+                            {{ $t('form.name') }}
                         </label>
                         <input type="text" ref="name" class="form-control" :placeholder="activeEditPlayer.name" :value="activeEditPlayer.name">
                     </div>
                     <div class="col-12">
                         <label class="form-label mt-2">
-                            Surname
+                            {{ $t('form.surname') }}
                         </label>
                         <input type="text" ref="surname" class="form-control" :placeholder="activeEditPlayer.surname" :value="activeEditPlayer.surname">
                     </div>
                     <div class="col-12">
                         <label class="form-label mt-2">
-                            NickName
+                            {{ $t('form.nick_name') }}
                         </label>
                         <input type="text" ref="nick_name" class="form-control" :placeholder="activeEditPlayer.nick_name" :value="activeEditPlayer.nick_name">
                     </div>
                     <div class="col-5">
                         <label class="form-label mt-2">
-                            Goalkeeper Provisory
+                            {{ $t('form.goalkeeper_provisory') }}
                         </label>
                         <input type="checkbox" ref="goalkeeper_provisory" class="form-check" disabled>
                     </div>
                     <div class="col-5">
                         <label class="form-label mt-2">
-                            Level
+                            {{ $t('form.level') }}
                         </label>
                         <select ref="level_id">
                             <option v-for="level in this.$store.state.levels" :key="level.id" :value="level.id" :selected="level.id == activeEditPlayer.level.id">
@@ -70,10 +71,10 @@
             <template v-slot:footer>
                 <div class="modal-footer d-flex justify-content-between align-items-center py-2 px-4">
                     <button class="btn btn-secondary" @click="editModal = false">
-                        Cancel
+                        {{ $t('general.cancel') }}
                     </button>
                     <button @click="edit" class="btn btn-primary">
-                        Submit
+                        {{ $t('general.save') }}
                     </button>
                 </div>
             </template>
@@ -130,10 +131,13 @@ export default {
                 )
                 .then((res) => {
                     if (res.data.errors) {
-                        console.log("🚀 ~ file: PlayersView.vue ~ line 132 ~ .then ~ res", res)
+                        /**
+                         *TODO add modal errors
+                         */
+                        console.log("🚀 ~ file: PlayersView.vue ~ line 134 ~ .then ~ res", res)
                     }else{
                         this.editModal = false
-                        this.$store.state.successHeader = "Modifiche applicate con successo!"
+                        this.$store.state.successHeader = this.$t("modal.success.edited")
                         this.$store.state.successModal = true
                         this.$store.state.all_players = res.data
                         if (this.inputSearch != "") {

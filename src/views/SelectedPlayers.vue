@@ -2,7 +2,7 @@
     <div class="d-flex flex-wrap">
         <div class="d-flex col-12 p-2 justify-content-end">
             <h3 class="fw-bolder">
-                Total {{ this.allPlayersCounter  }}
+                {{ $t('players.availables') }} {{ this.allPlayersCounter  }}
             </h3>
         </div>
         <div v-for="level in playersByLevel" :key="level.id" class="col-12 d-flex align-items-center flex-wrap mb-4 p-4 rounded-4" :class="backgroundColors(level.id)">

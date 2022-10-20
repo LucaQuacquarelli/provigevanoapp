@@ -12,6 +12,7 @@
                     {{ roleAbbreviation(player.role.name) }}
                 </h2>
                 <h2>
+                    <!-- TODO Add columns nations to players -->
                     🇮🇹
                 </h2>
             </div>

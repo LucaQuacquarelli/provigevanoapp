@@ -1,15 +1,15 @@
 <template>
     <nav class="nav justify-content-center  ">
         <router-link class="nav-link" to="/">
-            Home
+            {{ $t("routes.home")}}
         </router-link>
 
         <router-link class="nav-link" to="/players">
-            Players
+            {{ $t("routes.players")}}
         </router-link>
 
         <router-link class="nav-link" to="/choose_players">
-            Start
+            {{ $t("routes.start")}}
         </router-link>
     </nav>
     <div class="container">
