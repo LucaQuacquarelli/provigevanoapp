@@ -19,7 +19,7 @@
     <transition ref="fade-modal">
         <modal v-if="editModal" @close="editModal = false">
             <template v-slot:header>
-                <div class="modal-header d-flex justify-content-between align-items-center">
+                <div class="modal-header d-flex justify-content-between align-items-center py-2 px-4">
                     <span class="fs-2 fw-bold text-uppercase">
                         {{ activeEditPlayer.name }}
                         {{ activeEditPlayer.surname }}
@@ -30,7 +30,7 @@
                 </div>
             </template>
             <template v-slot:body>
-                <div class="modal-body d-flex justify-content-between flex-wrap my-4">
+                <div class="modal-body d-flex justify-content-between flex-wrap my-4 px-4">
                     <div class="col-12">
                         <label class="form-label">
                             Name
@@ -68,7 +68,7 @@
                 </div>
             </template>
             <template v-slot:footer>
-                <div class="modal-footer d-flex justify-content-between align-items-center">
+                <div class="modal-footer d-flex justify-content-between align-items-center py-2 px-4">
                     <button class="btn btn-secondary" @click="editModal = false">
                         Cancel
                     </button>
@@ -109,7 +109,8 @@ export default {
                     this.$store.state.all_players = res.data
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.$store.state.serverModal = true
+                    this.$store.state.errServer = err.message
                 }) 
         },
         activateEdit(player) {
@@ -128,10 +129,11 @@ export default {
                     }
                 )
                 .then((res) => {
-                    console.log(res);
+                    this.$store.state.all_players = res.data
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.$store.state.serverModal = true
+                    this.$store.state.errServer = err.message
                 })
         }
     },
@@ -142,7 +144,8 @@ export default {
                 this.$store.state.all_players = res.data
             })
             .catch((err) => {
-                console.log(err);
+                this.$store.state.serverModal = true
+                this.$store.state.errServer = err.message
             }) 
     }
 }

@@ -39,7 +39,8 @@ export default {
                 this.playersByLevel = res.data
             })
             .catch((err) => {
-                console.log(err);
+                this.$store.state.serverModal = true
+                this.$store.state.errServer = err.message
             }) 
     }
 }

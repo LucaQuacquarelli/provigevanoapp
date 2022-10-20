@@ -5,7 +5,9 @@ export default createStore({
     state: {
         config,
         all_players: [],
-        levels: []
+        levels: [],
+        serverModal: false,
+        errServer: null,
     },
     getters: {
         apiPath(state) {

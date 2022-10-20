@@ -45,7 +45,7 @@ module.exports.update = (req, res) => {
                 }
             })
             .then(() => {
-                res.send('update success')
+                this.index(req, res)
             })
         }
     }

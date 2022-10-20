@@ -1,6 +1,6 @@
 <template>
     <div class="my-modal-backdrop d-flex justify-content-center align-items-start" @click.self="$emit('close')">
-        <div class="my-modal col-12 col-md-6 col-xxl-5 rounded py-2 px-4">
+        <div class="my-modal col-12 col-md-6 col-xxl-5 rounded">
 
             <slot name="header">
             </slot>
