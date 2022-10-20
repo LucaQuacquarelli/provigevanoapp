@@ -7,10 +7,12 @@ export default createStore({
         config,
         all_players: [],
         levels: [],
+        availables_players_counter: null,
         serverModal: false,
         errServer: null,
         successHeader: null,
         successModal: false,
+        modalSlide: false,
         inputSearch: ""
     },
     getters: {

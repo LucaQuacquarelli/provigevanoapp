@@ -85,6 +85,15 @@ module.exports.searchPlayers = (req, res) => {
 }
 
 module.exports.setAvailability= (req, res) => {
+    /**
+     *TODO aggiungi count per la choose Players
+     */
+    const countAllPlayersSelected = ModelBase.Player.count({
+        where: {
+            available: true
+        }
+    })
+    
     ModelBase.Player.update({
         available: req.body.available
     },{

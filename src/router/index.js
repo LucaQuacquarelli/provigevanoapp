@@ -20,6 +20,11 @@ const routes = [
     component: ChoosePlayers
   },
   {
+    path: '/match_values',
+    name: 'MatchValues',
+    component: () => import("../views/MatchValues.vue")
+  },
+  {
     path: '/selected_players',
     name: 'SelectedPlayers',
     props: true,

@@ -32,9 +32,14 @@
                 </div>
             </div>
             <div class="col-6">
-                <h6>
-                    {{ $t('players.availables') }}
-                </h6>
+                <div class="d-flex">
+                    <h6>
+                        {{ $t('players.availables') }}
+                    </h6>
+                    <span class="badge bg-dark ms-2">
+                        {{ this.$store.state.availables_players_counter }}
+                    </span>
+                </div>
                 <div v-for="player in this.$store.state.all_players" :key="player.id" class="form-check"
                     :class="{'d-none' : !player.available}">
                     <div v-if="player.available">
@@ -80,10 +85,12 @@ export default {
                         available: player.available
                     }
                 )
-                .then(() => {
+                .then((res) => {
                     this.availables = this.$store.state.all_players.some(
                         (player) => player.available
                     )
+                    console.log(res);
+                    // this.$store.state.availables_players_counter = res.data
                 })
                 .catch((err) => {
                     console.log(err)
@@ -93,7 +100,6 @@ export default {
             this.$http
                 .post(`${this.$store.getters.apiPath}/players_availability/clear`)
                 .then((res) => {
-                    // console.log("🚀 ~ file: ChoosePlayers.vue ~ line 96 ~ .then ~ res", res);
                     this.$store.state.all_players = res.data
                 })
                 .catch((err) => {

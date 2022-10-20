@@ -8,12 +8,19 @@
         "all_players" : "Tutti i giocatori",
         "availables" : "Disponibili"
     },
+    "teams": {
+        "options" : "Opzioni",
+        "teams": "Squadre",
+        "players": "Giocatori",
+        "from": "da"
+    },
     "general":{
         "edit" : "Modifica",
         "cancel": "Annulla",
         "save": "Salva",
         "search": "Cerca",
-        "confirm":"Conferma"
+        "confirm":"Conferma",
+        "end":"Fine"
     },
     "form": {
         "name": "Nome",
