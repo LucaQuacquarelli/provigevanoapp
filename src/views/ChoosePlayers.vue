@@ -14,8 +14,12 @@
                     <div v-if="!player.available">
                         <input class="form-check-input" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
                         <label class="form-check-label" :for="player.id">
-                            {{ player.name }}
+                            {{ player.nick_name }}
                         </label>
+                        &nbsp;
+                        <span class="badge" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                            {{ roleAbbreviation(player.role.name) }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -27,7 +31,11 @@
                     <div v-if="player.available">
                         <input class="form-check-input" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
                         <label class="form-check-label" :for="player.id">
-                            {{ player.name }}
+                            {{ player.nick_name }}
+                            &nbsp;
+                            <span class="badge" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                {{ roleAbbreviation(player.role.name) }}
+                            </span>
                         </label>
                     </div>
                 </div>
@@ -44,6 +52,15 @@ export default {
         return {
             availables: false
         };
+    },
+    computed: {
+        roleAbbreviation() {
+            const abbreviation = {
+                'goalkeeper' : "PT",
+                'player' : "PL",
+            }
+            return role => abbreviation[role]
+        }
     },
     methods: {
         setAvailability (player) {

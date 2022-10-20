@@ -135,6 +135,9 @@ export default {
                     this.$store.state.serverModal = true
                     this.$store.state.errServer = err.message
                 })
+
+            this.editModal = false
+            location.reload();
         }
     },
     created() {

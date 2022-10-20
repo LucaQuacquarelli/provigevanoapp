@@ -10,7 +10,8 @@ var ModelBase = require(`${__dirname}/../models/ModelBase`)(sequelize.pro())
 module.exports.index = (req, res) => {
     ModelBase.Player.findAll({
         order: [
-            ['name', 'ASC']
+            // ['name', 'ASC']
+            ['role_id', 'DESC']
         ],
         attributes: {exclude : ['level_id', 'role_id']} ,
         include: [
@@ -97,12 +98,16 @@ module.exports.setAvailability= (req, res) => {
 }
 
 module.exports.getByLevel = (req, res) => {
-    ModelBase.Level.findAll({
+    const playersByLevel = ModelBase.Level.findAll({
+        order: [
+            ['id', 'DESC']
+        ],
         attributes: {exclude : ['percentage']} ,
         include: {
             model: ModelBase.Player,
             where: {
-                available: true
+                available: true,
+                role_id:  1
             },
             attributes: {exclude : ['level_id', 'role_id']} ,
             include: [
@@ -116,7 +121,39 @@ module.exports.getByLevel = (req, res) => {
             ]
         }
     })
-    .then((player) => {
-        res.send(player)
+
+    const countAllPlayersSelected = ModelBase.Player.count({
+        where: {
+            available: true
+        }
     })
+
+    const allGoalKeepersSelected = ModelBase.Player.findAll({
+        order: [
+            ['id', 'DESC']
+        ],
+        where: {
+            available: true,
+            role_id: 2
+        },
+        include: [
+            {
+                model: ModelBase.Level,
+                attributes: ['percentage']
+            },
+            {
+                model: ModelBase.Role
+            }]
+        })
+
+    Promise.all([playersByLevel, countAllPlayersSelected, allGoalKeepersSelected])
+        .then((responses) => {
+            const responsesObject = {
+                playersByLevel: responses[0],
+                counterPlayersAvailables: responses[1],
+                allGoalKeepersSelected: responses[2],
+            }
+            res.send(responsesObject)
+        })
+        .catch(err => console.log(err))
 }
