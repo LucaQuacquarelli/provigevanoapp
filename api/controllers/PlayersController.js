@@ -97,6 +97,19 @@ module.exports.setAvailability= (req, res) => {
     })
 }
 
+module.exports.clearAvailability = (req, res) => {
+    ModelBase.Player.update({
+        available: false
+    }, {
+        where: {
+            available: true
+        }
+    })
+        .then(() => {
+            this.index(req,res)
+        });
+}
+
 module.exports.getByLevel = (req, res) => {
     const playersByLevel = ModelBase.Level.findAll({
         order: [

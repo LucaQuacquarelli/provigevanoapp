@@ -35,7 +35,8 @@ PlayersController.update)
  */
 app.post('/players/search', PlayersController.searchPlayers)
 app.get('/players/get_by_level', PlayersController.getByLevel)
-app.post('/players_availability', PlayersController.setAvailability)
+app.post('/players_availability', PlayersController.setAvailability);
+app.post('/players_availability/clear', PlayersController.clearAvailability)
 
 /**
  ** Levels
