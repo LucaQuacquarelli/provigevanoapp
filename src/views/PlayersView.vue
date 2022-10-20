@@ -129,7 +129,16 @@ export default {
                     }
                 )
                 .then((res) => {
-                    this.$store.state.all_players = res.data
+                    if (res.data.errors) {
+                        console.log("🚀 ~ file: PlayersView.vue ~ line 132 ~ .then ~ res", res)
+                    }else{
+                        this.$store.state.successHeader = "Modifiche applicate con successo!"
+                        this.$store.state.successModal = true
+                        this.$store.state.all_players = res.data
+                        setTimeout(() => {
+                        this.$store.state.successModal = false
+                        }, 1500);
+                    }
                 })
                 .catch((err) => {
                     this.$store.state.serverModal = true
@@ -137,7 +146,6 @@ export default {
                 })
 
             this.editModal = false
-            location.reload();
         }
     },
     created() {

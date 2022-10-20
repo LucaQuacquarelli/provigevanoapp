@@ -32,6 +32,21 @@
             </template>
         </modal>
     </transition>
+
+    <transition name="fade-modal">
+        <modal v-if="this.$store.state.successModal" @close="this.$store.state.successModal = false">
+            <template v-slot:header>
+                <div class="modal-header bg-success border-0 rounded-0 text-light py-2 px-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fa-solid fa-user-pen me-2"></i>
+                        <h5 class="modal-title">
+                            {{ this.$store.state.successHeader }}
+                        </h5>
+                    </div>
+                </div>
+            </template>
+        </modal>
+    </transition>
 </template>
 
 <script>

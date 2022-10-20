@@ -8,6 +8,8 @@ export default createStore({
         levels: [],
         serverModal: false,
         errServer: null,
+        successHeader: null,
+        successModal: false,
     },
     getters: {
         apiPath(state) {
