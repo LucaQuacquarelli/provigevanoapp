@@ -132,20 +132,22 @@ export default {
                     if (res.data.errors) {
                         console.log("🚀 ~ file: PlayersView.vue ~ line 132 ~ .then ~ res", res)
                     }else{
+                        this.editModal = false
                         this.$store.state.successHeader = "Modifiche applicate con successo!"
                         this.$store.state.successModal = true
                         this.$store.state.all_players = res.data
+                        if (this.inputSearch != "") {
+                            this.inputSearch = ""
+                        }
                         setTimeout(() => {
-                        this.$store.state.successModal = false
+                            this.$store.state.successModal = false
                         }, 1500);
-                    }
+                }
                 })
                 .catch((err) => {
                     this.$store.state.serverModal = true
                     this.$store.state.errServer = err.message
                 })
-
-            this.editModal = false
         }
     },
     created() {
