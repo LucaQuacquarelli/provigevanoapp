@@ -11,7 +11,7 @@
         <div class="col-12 my-4">
             <input type="text" class="form-control" :placeholder="$t('general.search')" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
         </div>
-        <div v-for="player in this.$store.state.all_players" :key="player.id" class="col-5 mb-4">
+        <div v-for="player in this.$store.state.all_players" :key="player.id" class="col-5 mb-4 overflow-hidden">
             <PlayerCard :player="player" @click="activateEdit(player)"/>
             <!-- TODO -->
             <!-- <PlayerCard :player="player" @dblclick="editModal = true"/> -->

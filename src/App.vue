@@ -1,17 +1,6 @@
 <template>
-    <nav class="nav justify-content-center  ">
-        <router-link class="nav-link" to="/">
-            {{ $t("routes.home")}}
-        </router-link>
-
-        <router-link class="nav-link" to="/players">
-            {{ $t("routes.players")}}
-        </router-link>
-
-        <router-link class="nav-link" to="/choose_players">
-            {{ $t("routes.start")}}
-        </router-link>
-    </nav>
+    <Header/>
+    <Aside v-if="this.$store.state.asideStatus"/>
     <div class="container">
         <router-view />
     </div>
@@ -50,11 +39,15 @@
 </template>
 
 <script>
+import Aside from './components/Aside.vue';
+import Header from './components/Header.vue';
 import Modal from './components/Modal.vue';
 export default {
     name: 'ProVigevanoApp',
     components: {
-        Modal
+        Modal,
+        Header,
+        Aside
     },
     data() {
         return {
@@ -77,8 +70,4 @@ export default {
 
 <style lang="scss">
 @import './style/general.scss';
-
-#app {
-    height: 100%;
-}
 </style>

@@ -13,7 +13,13 @@ export default createStore({
         successHeader: null,
         successModal: false,
         modalSlide: false,
+        asideStatus: false,
         inputSearch: ""
+    },
+    mutations: {
+        setAside(state) {
+            state.asideStatus = !state.asideStatus
+        }
     },
     getters: {
         apiPath(state) {
