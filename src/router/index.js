@@ -20,9 +20,9 @@ const routes = [
     component: ChoosePlayers
   },
   {
-    path: '/match_values',
-    name: 'MatchValues',
-    component: () => import("../views/MatchValues.vue")
+    path: '/teams',
+    name: 'TeamsView',
+    component: () => import("../views/TeamsView.vue")
   },
   {
     path: '/selected_players',

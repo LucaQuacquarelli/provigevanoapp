@@ -1,29 +1,43 @@
 <template>
-    <div class="d-flex flex-wrap position-relative">
+    <div class="d-flex flex-wrap">
+        <div class="col-12 py-2 text-center btn-set-wrapper" v-if="availables && this.$store.state.availables_players_counter >= 10">
+            <router-link type="button" class="btn btn-outline-primary" to="/selected_players">
+                {{ $t('general.confirm') }}
+            </router-link>
+        </div>
         <div class="col-12 my-4">
-            <input type="text" class="form-control" :placeholder="$t('general.search')"
-                v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
+            <input type="text" class="form-control" :placeholder="$t('general.search')" key="" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
         </div>
         <div class="col-12 d-flex flex-wrap align-items-start">
-            <div class="col-12 mb-4">
-                <div class="d-flex align-items-center mb-4">
+            <div class="col-12 mb-4" v-if="this.$store.state.availables_players_counter > 0">
+                <div class="d-flex justify-content-between align-items-center mb-4">
                     <h6 class="d-flex align-items-center fw-bold">
                         {{ $t('players.availables') }}
+                        <span class="badge bg-dark ms-2">
+                            {{ this.$store.state.availables_players_counter }}
+                        </span>
                     </h6>
-                    <span class="badge bg-dark ms-2">
-                        {{ this.$store.state.availables_players_counter }}
-                    </span>
+                    <button class="ms-2 btn btn-danger" @click="clearAvailability">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
                 </div>
-                <div v-for="player in this.$store.state.all_players" :key="player.id" :class="{'d-none' : !player.available}">
-                    <label v-if="player.available" class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill" :class="{'available' : player.available}" :for="player.id">
-                        <input class="d-none" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
-                        <span class="fs-3 fw-bold">
-                            {{ player.nick_name }}
-                        </span>
-                        <span class="badge fs-6" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
-                            {{ roleAbbreviation(player.role.name) }}
-                        </span>
-                    </label>
+                <div class="availables-container">
+                    <div v-for="player in this.$store.state.all_players" :key="player.id" :class="{'d-none' : !player.available}">
+                        <label v-if="player.available" class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill" :class="{'available' : player.available}" :for="player.id">
+                            <input class="d-none" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
+                            <span class="fs-3 fw-bold">
+                                {{ player.nick_name }}
+                            </span>
+                            <span class="d-flex align-items-center">
+                                <span class="badge fs-6 bg-dark me-2">
+                                    {{ player.level.percentage }}
+                                </span>
+                                <span class="badge fs-6" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                    {{ roleAbbreviation(player.role.name) }}
+                                </span>
+                            </span>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="col-12">
@@ -35,28 +49,25 @@
                         {{ this.$store.state.unavailables_players_counter }}
                     </span>
                 </div>
-                <div class="col-12 unavailable-container">
+                <div class="unavailables-container">
                     <div v-for="player in this.$store.state.all_players" :key="player.id" :class="{'d-none' : player.available}">
                         <label v-if="!player.available" class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill" :class="{'unavailable' : !player.available}" :for="player.id">
                             <input class="d-none" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
                             <span class="fs-3 fw-bold">
                                 {{ player.nick_name }}
                             </span>
-                            <span class="badge" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
-                                {{ roleAbbreviation(player.role.name) }}
+                            <span class="d-flex align-items-center">
+                                <span class="badge fs-6 bg-dark me-2">
+                                    {{ player.level.percentage }}
+                                </span>
+                                <span class="badge fs-6" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                    {{ roleAbbreviation(player.role.name) }}
+                                </span>
                             </span>
                         </label>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-12 py-2 text-center btn-set-wrapper" v-if="availables">
-            <router-link type="button" class="btn btn-outline-primary" to="selected_players">
-                {{ $t('general.confirm') }}
-            </router-link>
-            <button class="ms-2 btn btn-danger" @click="clearAvailability">
-                <i class="fa-solid fa-rotate"></i>
-            </button>
         </div>
     </div>
 </template>
@@ -67,7 +78,8 @@ export default {
     components: {},
     data() {
         return {
-            availables: false
+            availables: false,
+            allPossibilities: []
         }
     },
     computed: {
@@ -94,8 +106,10 @@ export default {
                     )
                     this.$store.state.availables_players_counter = res.data.availables_players_counter
                     this.$store.state.unavailables_players_counter = res.data.unavailables_players_counter
+                    this.sortTeams(this.$store.state.availables_players_counter)
                 })
                 .catch((err) => {
+                    // TODO modal errors
                     console.log(err)
                 })
         },
@@ -103,11 +117,33 @@ export default {
             this.$http
                 .post(`${this.$store.getters.apiPath}/players_availability/clear`)
                 .then((res) => {
-                    this.$store.state.all_players = res.data
+                    this.$store.state.all_players = res.data.all_players
+                    this.$store.state.availables_players_counter = res.data.availables_players_counter
+                    this.$store.state.unavailables_players_counter = res.data.unavailables_players_counter
                 })
                 .catch((err) => {
                     console.log(err);
                 })
+        },
+        between(x, min, max) {
+            return x >= min && x <= max;
+        },
+        sortTeams(players) {
+            this.allPossibilities = []
+            const minPlayers = 5;
+            const maxPlayers = 9
+            for (let i = 2; i < 5; i++) {
+                var playersForTeam = players / i
+                var teams = players / playersForTeam
+                if (Number.isInteger(teams) && Number.isInteger(playersForTeam) && this.between(playersForTeam, minPlayers, maxPlayers)) {
+                    const possibilitiesObj = {
+                        teams,
+                        playersForTeam
+                    }
+                    this.allPossibilities.push(possibilitiesObj)
+                }
+            }
+            console.log(this.allPossibilities);
         }
     },
     created() {
@@ -138,8 +174,10 @@ export default {
         }
     }
 
-    .unavailable-container {
-        height: 480px;
+    .unavailables-container, 
+    .availables-container {
+        min-height: 100px;
+        max-height: 480px;
         overflow-y: auto;
     }
 

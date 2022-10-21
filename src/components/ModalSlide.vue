@@ -29,17 +29,16 @@ export default {
     overflow-y: auto;
     
     .my-modal {
-        position: relative;
-        bottom: 50px;
-        top: 50px;
+        position: absolute;
+        bottom: 0px;
         background-color: white;
         overflow-y: auto;
         animation-name: modal;
         animation-duration: .3s;
 
         @keyframes modal {
-            0%   {bottom:50%; top:50%;}
-            100% {bottom:50px; top:50px;}
+            0%   {bottom: -50%; }
+            100% {bottom: 0px; }
         }
         
     }

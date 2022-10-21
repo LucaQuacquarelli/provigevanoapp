@@ -6,9 +6,12 @@ export default createStore({
     state: {
         config,
         all_players: [],
+        players_by_level: [],
         levels: [],
         availables_players_counter: null,
         all_players_counter: null,
+        all_goal_keepers_selected: [],
+        possibility: null,
         serverModal: false,
         errServer: null,
         successHeader: null,

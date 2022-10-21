@@ -160,7 +160,7 @@ module.exports.clearAvailability = (req, res) => {
 }
 
 module.exports.getByLevel = (req, res) => {
-    const playersByLevel = ModelBase.Level.findAll({
+    const players_by_level = ModelBase.Level.findAll({
         order: [
             ['id', 'DESC']
         ],
@@ -184,13 +184,13 @@ module.exports.getByLevel = (req, res) => {
         }
     })
 
-    const countAllPlayersSelected = ModelBase.Player.count({
+    const availables_players_counter = ModelBase.Player.count({
         where: {
             available: true
         }
     })
 
-    const allGoalKeepersSelected = ModelBase.Player.findAll({
+    const all_goal_keepers_selected = ModelBase.Player.findAll({
         order: [
             ['id', 'DESC']
         ],
@@ -208,12 +208,12 @@ module.exports.getByLevel = (req, res) => {
             }]
         })
 
-    Promise.all([playersByLevel, countAllPlayersSelected, allGoalKeepersSelected])
+    Promise.all([players_by_level, availables_players_counter, all_goal_keepers_selected])
         .then((responses) => {
             const responsesObject = {
-                playersByLevel: responses[0],
-                counterPlayersAvailables: responses[1],
-                allGoalKeepersSelected: responses[2],
+                players_by_level: responses[0],
+                availables_players_counter: responses[1],
+                all_goal_keepers_selected: responses[2],
             }
             res.send(responsesObject)
         })
