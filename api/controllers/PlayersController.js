@@ -8,7 +8,20 @@ var ModelBase = require(`${__dirname}/../models/ModelBase`)(sequelize.pro())
  ** Players CRUD
  */
 module.exports.index = (req, res) => {
-    ModelBase.Player.findAll({
+
+    const unavailables_players_counter = ModelBase.Player.count({
+        where: {
+            available: false
+        }
+    })
+
+    const availables_players_counter = ModelBase.Player.count({
+        where: {
+            available: true
+        }
+    })
+
+    const all_players = ModelBase.Player.findAll({
         order: [
             // ['name', 'ASC']
             ['role_id', 'DESC']
@@ -23,33 +36,43 @@ module.exports.index = (req, res) => {
             }
         ]
     })
-    .then((player) => {
-        res.send(player)
-    })
+
+    Promise.all([all_players, unavailables_players_counter, availables_players_counter])
+        .then((responses) => {
+            const responsesObject = {
+                all_players: responses[0],
+                unavailables_players_counter: responses[1],
+                availables_players_counter: responses[2],
+            }
+            res.send(responsesObject)
+        })
+        .catch((err) => {
+            res.send(err)
+        })
 }
 
 module.exports.update = (req, res) => {
-        const errors = validationResult(req)
-        if (!errors.isEmpty()) {
-            res.send({
-                errors: errors.errors
-            })
-        } else {
-            ModelBase.Player.update({
-                name: req.body.name,
-                surname: req.body.surname,
-                nick_name: req.body.nick_name,
-                level_id: req.body.level_id,
-            },{
-                where: {
-                    id: req.body.id
-                }
-            })
-            .then(() => {
-                this.index(req, res)
-            })
-        }
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        res.send({
+            errors: errors.errors
+        })
+    } else {
+        ModelBase.Player.update({
+            name: req.body.name,
+            surname: req.body.surname,
+            nick_name: req.body.nick_name,
+            level_id: req.body.level_id,
+        },{
+            where: {
+                id: req.body.id
+            }
+        })
+        .then(() => {
+            this.index(req, res)
+        })
     }
+}
 
 /**
  ** Players Endpoints
@@ -84,15 +107,31 @@ module.exports.searchPlayers = (req, res) => {
     })
 }
 
-module.exports.setAvailability= (req, res) => {
-    /**
-     *TODO aggiungi count per la choose Players
-     */
-    const countAllPlayersSelected = ModelBase.Player.count({
+module.exports.getCounters = (req, res) => {
+    const unavailables_players_counter = ModelBase.Player.count({
+        where: {
+            available: false
+        }
+    })
+
+    const availables_players_counter = ModelBase.Player.count({
         where: {
             available: true
         }
     })
+    Promise.all([unavailables_players_counter, availables_players_counter])
+        .then((responses) => {
+            const responsesObject = {
+                unavailables_players_counter: responses[0],
+                availables_players_counter: responses[1],
+            }
+            res.send(responsesObject)
+        })
+        .catch((err) => {
+            res.send(err)
+        })
+}
+module.exports.setAvailability= (req, res) => {
     
     ModelBase.Player.update({
         available: req.body.available
@@ -102,8 +141,9 @@ module.exports.setAvailability= (req, res) => {
         }
     })
     .then(() => {
-        res.end()
+        this.getCounters(req, res)
     })
+
 }
 
 module.exports.clearAvailability = (req, res) => {
@@ -177,5 +217,7 @@ module.exports.getByLevel = (req, res) => {
             }
             res.send(responsesObject)
         })
-        .catch(err => console.log(err))
+        .catch((err) => {
+            res.send(err)
+        })
 }

@@ -8,6 +8,7 @@ export default createStore({
         all_players: [],
         levels: [],
         availables_players_counter: null,
+        all_players_counter: null,
         serverModal: false,
         errServer: null,
         successHeader: null,

@@ -25,7 +25,6 @@
                 </div>
             </div>
         </div>
-        <!--TODO add computed to show this div or not  -->
         <div v-if="checkGoalkeepers">
             <div class="col-12 d-flex align-items-center flex-wrap mb-4 p-4 bg-dark bg-gradient rounded-4">
                 <div class="col-12 d-flex justify-content-around flex-wrap">

@@ -4,7 +4,7 @@
             <h2>
                 {{ $t('players.all_players') }}
             </h2>
-            <h2>
+            <h2 class="badge bg-dark">
                 {{ this.$store.state.all_players.length }}
             </h2>
         </div>
@@ -123,7 +123,7 @@ export default {
                         this.editModal = false
                         this.$store.state.successHeader = this.$t("modal.success.edited")
                         this.$store.state.successModal = true
-                        this.$store.state.all_players = res.data
+                        this.$store.state.all_players = res.data.all_players
                         if (this.$store.state.inputSearch != "") {
                             this.$store.state.inputSearch = ""
                         }
@@ -142,7 +142,7 @@ export default {
         this.$http
             .get(`${this.$store.getters.apiPath}/players`)
             .then((res) => {
-                this.$store.state.all_players = res.data
+                this.$store.state.all_players = res.data.all_players
             })
             .catch((err) => {
                 this.$store.state.serverModal = true

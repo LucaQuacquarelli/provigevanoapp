@@ -6,8 +6,8 @@
         </div>
         <div class="col-12 d-flex flex-wrap align-items-start">
             <div class="col-12 mb-4">
-                <div class="d-flex align-items-center">
-                    <h6 class="d-flex align-items-center mb-4 fw-bold">
+                <div class="d-flex align-items-center mb-4">
+                    <h6 class="d-flex align-items-center fw-bold">
                         {{ $t('players.availables') }}
                     </h6>
                     <span class="badge bg-dark ms-2">
@@ -27,9 +27,14 @@
                 </div>
             </div>
             <div class="col-12">
-                <h6 class="d-flex align-items-center mb-4 fw-bold">
-                    {{ $t('players.all_players') }}
-                </h6>
+                <div class="d-flex align-items-center mb-4">
+                    <h6 class="d-flex align-items-center fw-bold">
+                        {{ $t('players.all_players') }}
+                    </h6>
+                    <span class="badge bg-dark ms-2">
+                        {{ this.$store.state.unavailables_players_counter }}
+                    </span>
+                </div>
                 <div class="col-12 unavailable-container">
                     <div v-for="player in this.$store.state.all_players" :key="player.id" :class="{'d-none' : player.available}">
                         <label v-if="!player.available" class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill" :class="{'unavailable' : !player.available}" :for="player.id">
@@ -87,8 +92,8 @@ export default {
                     this.availables = this.$store.state.all_players.some(
                         (player) => player.available
                     )
-                    console.log(res);
-                    // this.$store.state.availables_players_counter = res.data
+                    this.$store.state.availables_players_counter = res.data.availables_players_counter
+                    this.$store.state.unavailables_players_counter = res.data.unavailables_players_counter
                 })
                 .catch((err) => {
                     console.log(err)
@@ -109,7 +114,9 @@ export default {
         this.$http
             .get(`${this.$store.getters.apiPath}/players`)
             .then((res) => {
-                this.$store.state.all_players = res.data
+                this.$store.state.all_players = res.data.all_players
+                this.$store.state.availables_players_counter = res.data.availables_players_counter
+                this.$store.state.unavailables_players_counter = res.data.unavailables_players_counter
                 this.availables = this.$store.state.all_players.some(
                     (player) => player.available
                 )
