@@ -10,6 +10,7 @@ export default createStore({
         levels: [],
         availables_players_counter: null,
         all_players_counter: null,
+        all_goal_keepers_counter: null,
         all_goal_keepers_selected: [],
         possibility: null,
         serverModal: false,
@@ -17,6 +18,7 @@ export default createStore({
         successHeader: null,
         successModal: false,
         modalSlide: false,
+        possibilityModal: false,
         asideStatus: false,
         inputSearch: ""
     },

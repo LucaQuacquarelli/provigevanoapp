@@ -42,7 +42,7 @@ module.exports.index = (req, res) => {
             const responsesObject = {
                 all_players: responses[0],
                 unavailables_players_counter: responses[1],
-                availables_players_counter: responses[2],
+                availables_players_counter: responses[2]
             }
             res.send(responsesObject)
         })
@@ -119,11 +119,20 @@ module.exports.getCounters = (req, res) => {
             available: true
         }
     })
-    Promise.all([unavailables_players_counter, availables_players_counter])
+
+    const all_goal_keepers_counter = ModelBase.Player.count({
+        where: {
+            available: true,
+            role_id: 2
+        }
+    })
+
+    Promise.all([unavailables_players_counter, availables_players_counter, all_goal_keepers_counter])
         .then((responses) => {
             const responsesObject = {
                 unavailables_players_counter: responses[0],
                 availables_players_counter: responses[1],
+                all_goal_keepers_counter: responses[2] 
             }
             res.send(responsesObject)
         })

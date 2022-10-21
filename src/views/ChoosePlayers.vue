@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex flex-wrap">
-        <div class="col-12 py-2 text-center btn-set-wrapper" v-if="availables && this.$store.state.availables_players_counter >= 10">
+        <div class="col-12 py-2 text-center btn-set-wrapper" v-if="this.$store.state.availables_players_counter >= 10">
             <router-link type="button" class="btn btn-outline-primary" to="/selected_players">
                 {{ $t('general.confirm') }}
             </router-link>
@@ -70,15 +70,32 @@
             </div>
         </div>
     </div>
+
+    <transition name="fade-modal">
+        <modal v-if="this.$store.state.possibilityModal" @close="this.$store.state.possibilityModal = false">
+            <template v-slot:header>
+                <div class="modal-header bg-danger text-light py-2 px-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-globe me-2"></i>
+                        <h5 class="modal-title">
+                            ciao
+                        </h5>
+                    </div>
+                </div>
+            </template>
+        </modal>
+    </transition>
 </template>
 
 <script>
+import Modal from '../components/Modal.vue'
 export default {
     name: "ChoosePlayers",
-    components: {},
+    components: {
+        Modal
+    },
     data() {
         return {
-            availables: false,
             allPossibilities: []
         }
     },
@@ -101,12 +118,14 @@ export default {
                     }
                 )
                 .then((res) => {
-                    this.availables = this.$store.state.all_players.some(
-                        (player) => player.available
-                    )
                     this.$store.state.availables_players_counter = res.data.availables_players_counter
                     this.$store.state.unavailables_players_counter = res.data.unavailables_players_counter
-                    this.sortTeams(this.$store.state.availables_players_counter)
+                    this.$store.state.all_goal_keepers_counter = res.data.all_goal_keepers_counter
+                    this.sortTeams(this.$store.state.availables_players_counter).then(
+                        () => {
+                            this.checkOnPossibilities()
+                        }
+                    )
                 })
                 .catch((err) => {
                     // TODO modal errors
@@ -129,21 +148,39 @@ export default {
             return x >= min && x <= max;
         },
         sortTeams(players) {
-            this.allPossibilities = []
-            const minPlayers = 5;
-            const maxPlayers = 9
-            for (let i = 2; i < 5; i++) {
-                var playersForTeam = players / i
-                var teams = players / playersForTeam
-                if (Number.isInteger(teams) && Number.isInteger(playersForTeam) && this.between(playersForTeam, minPlayers, maxPlayers)) {
-                    const possibilitiesObj = {
-                        teams,
-                        playersForTeam
+            return new Promise((resolve) => {
+                this.allPossibilities = []
+                const minPlayers = 5;
+                const maxPlayers = 9
+                for (let i = 2; i < 5; i++) {
+                    var playersForTeam = players / i
+                    var teams = players / playersForTeam
+                    if (Number.isInteger(teams) && Number.isInteger(playersForTeam) && this.between(playersForTeam, minPlayers, maxPlayers)) {
+                        const possibilitiesObj = {
+                            teams,
+                            playersForTeam
+                        }
+                        this.allPossibilities.push(possibilitiesObj)
                     }
-                    this.allPossibilities.push(possibilitiesObj)
                 }
-            }
-            console.log(this.allPossibilities);
+                resolve()
+            })
+        },
+        checkOnPossibilities() {
+            this.allPossibilities.forEach(
+                possibility => {
+                    if (possibility.teams > this.$store.state.all_goal_keepers_counter) {
+                        this.$store.state.possibilityModal = true
+                        return 'add'
+                    } else if (possibility.teams < this.$store.state.all_goal_keepers_counter) {
+                        this.$store.state.possibilityModal = true
+                        return 'remove'
+                    } else {
+                        this.$store.state.possibilityModal = true
+                        return 'same'
+                    }
+                }
+            )
         }
     },
     created() {
@@ -151,11 +188,8 @@ export default {
             .get(`${this.$store.getters.apiPath}/players`)
             .then((res) => {
                 this.$store.state.all_players = res.data.all_players
-                this.$store.state.availables_players_counter = res.data.availables_players_counter
                 this.$store.state.unavailables_players_counter = res.data.unavailables_players_counter
-                this.availables = this.$store.state.all_players.some(
-                    (player) => player.available
-                )
+                this.$store.state.availables_players_counter = res.data.availables_players_counter
             })
             .catch((err) => {
                 console.log(err)
