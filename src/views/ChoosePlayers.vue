@@ -77,8 +77,10 @@
                 <div class="modal-header bg-danger text-light py-2 px-4">
                     <div class="d-flex align-items-center">
                         <i class="fas fa-globe me-2"></i>
-                        <h5 class="modal-title">
-                            ciao
+                        <h5 class="modal-title text-white">
+                            alf
+                            <!-- TODO esegui computed -->
+                            {{ chooseContentModalPossibility(checkOnPossibilities) }}
                         </h5>
                     </div>
                 </div>
@@ -106,6 +108,14 @@ export default {
                 'player': "PL",
             }
             return role => abbreviation[role]
+        },
+        chooseContentModalPossibility(){
+            const response = {
+                'add': "Aggiungi",
+                'remove': "Togli",
+                'same': "So uguali",
+            }
+            return pippo => response[pippo];
         }
     },
     methods: {
@@ -167,21 +177,23 @@ export default {
             })
         },
         checkOnPossibilities() {
+            var response = []
             this.allPossibilities.forEach(
                 possibility => {
                     if (possibility.teams > this.$store.state.all_goal_keepers_counter) {
                         this.$store.state.possibilityModal = true
-                        return 'add'
+                        response.push('add')
                     } else if (possibility.teams < this.$store.state.all_goal_keepers_counter) {
                         this.$store.state.possibilityModal = true
-                        return 'remove'
+                        response.push('remove')
                     } else {
                         this.$store.state.possibilityModal = true
-                        return 'same'
+                        response.push('same')
                     }
                 }
             )
-        }
+            return response
+        },
     },
     created() {
         this.$http
