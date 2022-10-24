@@ -35,8 +35,11 @@ PlayersController.update)
  */
 app.post('/players/search', PlayersController.searchPlayers)
 app.get('/players/get_by_level', PlayersController.getByLevel)
-app.post('/players_availability', PlayersController.setAvailability);
-app.post('/players_availability/clear', PlayersController.clearAvailability)
+app.get('/players/available_unavailable', PlayersController.available_unavailable)
+app.post('/players_availability', PlayersController.setAvailability)
+app.get('/players_availability/clear', PlayersController.clearAvailability)
+app.post('/goalkeeper_provisory', PlayersController.setGoalKeepersProvisory)
+app.get('/goalkeeper_provisory/clear', PlayersController.clearGoalKeepersProvisory)
 
 /**
  ** Levels

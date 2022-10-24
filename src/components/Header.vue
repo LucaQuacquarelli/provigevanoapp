@@ -1,5 +1,5 @@
 <template>
-    <header class="d-flex py-2 px-4 mb-4">
+    <header class="d-flex py-2 px-4">
         <div class="col-12 d-flex align-items-center">
             <div class="col-2">
                 <span class="fs-1" @click="setAside">

@@ -6,6 +6,7 @@
     },
     "players": {
         "all_players" : "Tutti i giocatori",
+        "no_players" : "Nessun giocatore trovato",
         "availables" : "Disponibili"
     },
     "teams": {
@@ -32,6 +33,18 @@
     "modal":{
         "success":{
             "edited" : "Modifiche applicate con successo!"
+        },
+        "teamsSettings": {
+            "sort": "Impostazioni squadre",
+            "addGk":  "Aggiungi",
+            "removeGk": "Rimuovi",
+            "gk": "portiere",
+            "gks": "portieri",
+            "gk_provisory": "è ora un portiere provvisorio",
+            "toContinue": "per proseguire",
+            "set": "Premi Fine per iniziare il sorteggio",
+            "or": "o",
+            "discard": "Premi Annulla per resettare le impostazioni"
         }
     }
 }

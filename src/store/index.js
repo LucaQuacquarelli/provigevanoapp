@@ -6,12 +6,15 @@ export default createStore({
     state: {
         config,
         all_players: [],
+        all_players_availables: [],
+        all_players_unavailables: [],
         players_by_level: [],
         levels: [],
         availables_players_counter: null,
         all_players_counter: null,
         all_goal_keepers_counter: null,
         all_goal_keepers_selected: [],
+        allPossibilities: [],
         possibility: null,
         serverModal: false,
         errServer: null,
@@ -41,7 +44,8 @@ export default createStore({
                     }
                 )
                 .then((res) => {
-                    state.all_players = res.data;
+                    state.all_players_availables = res.data.all_players_availables
+                    state.all_players_unavailables = res.data.all_players_unavailables
                 })
                 .catch((err) => {
                     state.serverModal = true;
