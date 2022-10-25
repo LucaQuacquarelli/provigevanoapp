@@ -1,23 +1,23 @@
 <template>
     <div class="d-flex flex-wrap">
-        <div class="col-12 py-2 text-center btn-set-wrapper mt-4" v-if="this.$store.state.all_players_availables.length >= 10 && this.$store.state.allPossibilities.length != 0">
-            <button type="button" class="btn btn-outline-primary" @click="this.$store.state.possibilityModal = true">
+        <div class="col-12 py-2 text-center wrapper mt-4" v-if="this.$store.state.all_players_availables.length >= 10 && this.$store.state.allPossibilities.length != 0">
+            <button type="button" class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
                 {{ $t('general.confirm') }}
             </button>
         </div>
         <div class="col-12 my-4">
-            <input type="text" class="form-control" :placeholder="$t('general.search')" key="" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
+            <Search/>
         </div>
         <div class="col-12 d-flex flex-wrap align-items-start">
-            <div class="col-12 mb-4" v-if="this.$store.state.all_players_availables.length > 0">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="col-12 players-availables-wrapper" v-if="this.$store.state.all_players_availables.length > 0">
+                <div class="d-flex justify-content-between align-items-center p-4 wrapper-header" @click="dropdown('availables')">
                     <h6 class="d-flex align-items-center fw-bold">
                         {{ $t('players.availables') }}
                         <span class="badge bg-dark ms-2">
                             {{ this.$store.state.all_players_availables.length }}
                         </span>
                     </h6>
-                    <button class="ms-2 btn btn-danger" @click="clearAvailability">
+                    <button class="ms-2 btn btn-outline-danger rounded-pill" @click="clearAvailability">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
@@ -40,14 +40,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12" v-if="this.$store.state.all_players_unavailables.length > 0">
-                <div class="d-flex align-items-center mb-4">
+            <div class="col-12 players-unavailables-wrapper" v-if="this.$store.state.all_players_unavailables.length > 0">
+                <div class="d-flex justify-content-between align-items-center p-4 wrapper-header" @click="dropdown('unavailables')">
                     <h6 class="d-flex align-items-center fw-bold">
                         {{ $t('players.all_players') }}
+                        <span class="badge bg-dark ms-2">
+                            {{ this.$store.state.all_players_unavailables.length }}
+                        </span>
                     </h6>
-                    <span class="badge bg-dark ms-2">
-                        {{ this.$store.state.all_players_unavailables.length }}
-                    </span>
+                    <!--TODO -->
+                    <button class="ms-2 btn btn-outline-danger rounded-pill">
+                        test
+                    </button>
                 </div>
                 <div class="unavailables-container">
                     <div v-for="player in this.$store.state.all_players_unavailables" :key="player.id">
@@ -186,11 +190,14 @@
 </template>
 
 <script>
+import $ from 'jquery'
 import ModalSlide from '../components/ModalSlide.vue'
+import Search from '../components/Search.vue'
 export default {
     name: "ChoosePlayers",
     components: {
-        ModalSlide
+        ModalSlide,
+        Search
     },
     data() {
         return {
@@ -198,7 +205,8 @@ export default {
             possibility: null,
             choicePossibility: null,
             differenceGk: null,
-            goalkeepers_provisory: []
+            goalkeepers_provisory: null,
+            key: false
         }
     },
     computed: {
@@ -256,13 +264,14 @@ export default {
                     }
                 )
                 .then((res) => {
-                    this.checkOnPossibility(this.possibility)
-                    res.data.forEach(
+                    this.$store.state.all_goal_keepers = res.data.all_goal_keepers
+                    res.data.all_goal_keepers_provisory.forEach(
                         goalkeeper_provisory => {
                             this.$store.state.all_goal_keepers.push(goalkeeper_provisory)
                         }
                     )
-                    this.goalkeepers_provisory = res.data
+                    this.checkOnPossibility(this.possibility)
+                    this.goalkeepers_provisory = res.data.all_goal_keepers_provisory
                 })
                 .catch((err) => {
                     console.log(err);
@@ -271,7 +280,8 @@ export default {
         clearGoalKeepersProvisory(){
             this.$http
                 .get(`${this.$store.getters.apiPath}/goalkeeper_provisory/clear`)
-                .then(() => {
+                .then((res) => {
+                    this.$store.state.all_goal_keepers = res.data
                     this.$store.state.possibilityModal = false
                     this.transition = false
                 })
@@ -300,9 +310,6 @@ export default {
         },
         checkOnPossibility(possibility) {
             this.possibility = possibility
-            console.log("🚀 ~ file: ChoosePlayers.vue ~ line 298 ~ checkOnPossibility ~ this.possibility", this.possibility)
-            
-                console.log("🚀 ~ file: ChoosePlayers.vue ~ line 301 ~ checkOnPossibility ~ this.$store.state.all_goal_keepers.length", this.$store.state.all_goal_keepers.length)
             if (possibility.teams > this.$store.state.all_goal_keepers.length) {
                 this.transition = true
                 this.choicePossibility = 'add'
@@ -313,6 +320,25 @@ export default {
                 this.differenceGk = this.$store.state.all_goal_keepers.length - possibility.teams
             } else {
                 this.transition = null
+            }
+        },
+        dropdown(container) {
+            this.key = !this.key
+            switch (container) {
+                case 'availables':
+                    if (this.key) {
+                        $('.players-availables-wrapper').addClass('open')
+                    } else {
+                        $('.players-availables-wrapper').removeClass('open')
+                    }
+                    break;
+                case 'unavailables':
+                    if (this.key) {
+                        $('.players-unavailables-wrapper').addClass('open')
+                    } else {
+                        $('.players-unavailables-wrapper').removeClass('open')
+                    }
+                    break;
             }
         }
     },
@@ -326,25 +352,50 @@ export default {
             .catch((err) => {
                 console.log(err)
             })
+
+            $(window).scroll(function() {    
+                var scroll = $(window).scrollTop();
+
+                if (scroll >= 60) {
+                    $(".wrapper").addClass("btn-set-wrapper");
+                } else {
+                    $(".wrapper").removeClass("btn-set-wrapper");
+                }
+            })
     },
 }
 </script>
 
 <style lang="scss" scoped>
 
-    .position-relative {
-        .btn-set-wrapper {
-            position: absolute;
-            bottom: 0;
-            left: 0;
+    .btn-set-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        backdrop-filter: blur(10px);
+        margin: 0 !important;
+        z-index: 999;
+
+        button {
+            transition: 0.3s;
+            width: 75% !important;
+            background-color: green;
+            box-shadow: 0 0 15px 10px green;
+            font-weight: bold;
+            color: white;
         }
     }
 
-    .modal-body {
-        height: 600px;
+    .players-availables-wrapper ,
+    .players-unavailables-wrapper {
+        height: 86px;
+        border: 2px solid green;
+        border-bottom: 0;
+        overflow: hidden;
+        transition: 0.3s;
 
-        .fa-circle-check {
-            font-size: 54px;
+        &.open {
+            height: 500px;
         }
     }
 
@@ -378,6 +429,14 @@ export default {
         
         span.fs-3 {
             text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
+        }
+    }
+
+    .modal-body {
+        height: 600px;
+
+        .fa-circle-check {
+            font-size: 54px;
         }
     }
 </style>

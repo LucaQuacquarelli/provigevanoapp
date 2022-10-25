@@ -22,13 +22,10 @@ export default createStore({
         successModal: false,
         modalSlide: false,
         possibilityModal: false,
-        asideStatus: false,
         inputSearch: ""
     },
     mutations: {
-        setAside(state) {
-            state.asideStatus = !state.asideStatus
-        }
+        
     },
     getters: {
         apiPath(state) {

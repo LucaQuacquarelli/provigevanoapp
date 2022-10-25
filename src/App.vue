@@ -1,6 +1,5 @@
 <template>
     <Header/>
-    <Aside v-if="this.$store.state.asideStatus"/>
     <div class="container">
         <router-view />
     </div>
@@ -39,15 +38,13 @@
 </template>
 
 <script>
-import Aside from './components/Aside.vue';
 import Header from './components/Header.vue';
 import Modal from './components/Modal.vue';
 export default {
     name: 'ProVigevanoApp',
     components: {
         Modal,
-        Header,
-        Aside
+        Header
     },
     data() {
         return {

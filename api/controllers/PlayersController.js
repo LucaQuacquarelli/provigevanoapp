@@ -283,7 +283,7 @@ module.exports.setGoalKeepersProvisory = (req, res) => {
         }
     })
     .then(() => {
-        ModelBase.Player.findAll({
+        const all_goal_keepers_provisory = ModelBase.Player.findAll({
             where: {
                 goalkeeper_provisory: true
             },
@@ -300,8 +300,33 @@ module.exports.setGoalKeepersProvisory = (req, res) => {
                 }
             ]
         })
-        .then((players) => {
-            res.send(players)
+        const all_goal_keepers = ModelBase.Player.findAll({
+            order: [
+                ['id', 'DESC']
+            ],
+            where: {
+                role_id: 2
+            },
+            include: [
+                {
+                    model: ModelBase.Level,
+                    attributes: ['percentage']
+                },
+                {
+                    model: ModelBase.Role
+                }
+            ]
+        })
+        Promise.all([all_goal_keepers_provisory, all_goal_keepers])
+        .then((responses) => {
+            const responsesObject = {
+                all_goal_keepers_provisory: responses[0],
+                all_goal_keepers: responses[1]
+            }
+            res.send(responsesObject)
+        })
+        .catch((err) => {
+            res.send(err)
         })
     })
 }
@@ -315,7 +340,26 @@ module.exports.clearGoalKeepersProvisory = (req, res) => {
         }
     })
     .then(() => {
-        res.end()
+        ModelBase.Player.findAll({
+            order: [
+                ['id', 'DESC']
+            ],
+            where: {
+                role_id: 2
+            },
+            include: [
+                {
+                    model: ModelBase.Level,
+                    attributes: ['percentage']
+                },
+                {
+                    model: ModelBase.Role
+                }
+            ]
+        })
+        .then((goalkeepers) => {
+            res.send(goalkeepers)
+        })
     })
 }
 
