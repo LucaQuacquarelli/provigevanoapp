@@ -2,13 +2,15 @@ const Config = require('../Config')
 const { Op } = require("sequelize")
 var sequelize = Config.sequelize()
 const { validationResult } = require('express-validator')
+// const ControllerBase = require('./ControllerBase')
 var ModelBase = require(`${__dirname}/../models/ModelBase`)(sequelize.pro())
+var ControllerBase = require('./ControllerBase')(sequelize.pro())
+
 
 /**
  ** Players CRUD
  */
 module.exports.index = (req, res) => {
-
     ModelBase.Player.findAll({
         order: [
             ['role_id', 'DESC']
@@ -29,43 +31,8 @@ module.exports.index = (req, res) => {
 }
 
 module.exports.available_unavailable = (req, res) => {
-
-    const all_players_availables = ModelBase.Player.findAll({
-        where: {
-            available: true
-        },
-        order: [
-            ['role_id', 'DESC']
-        ],
-        attributes: {exclude : ['level_id', 'role_id']} ,
-        include: [
-            {
-                model: ModelBase.Level
-            },
-            {
-                model: ModelBase.Role
-            }
-        ]
-    })
-    const all_players_unavailables = ModelBase.Player.findAll({
-        where: {
-            available: false
-        },
-        order: [
-            ['role_id', 'DESC']
-        ],
-        attributes: {exclude : ['level_id', 'role_id']} ,
-        include: [
-            {
-                model: ModelBase.Level
-            },
-            {
-                model: ModelBase.Role
-            }
-        ]
-    })
-
-    Promise.all([all_players_availables, all_players_unavailables])
+    var oPlayer = new ControllerBase
+    Promise.all([oPlayer.all_players_availables(), oPlayer.all_players_unavailables()])
         .then((responses) => {
             const responsesObject = {
                 all_players_availables: responses[0],
@@ -150,42 +117,7 @@ module.exports.searchPlayers = (req, res) => {
     })
 }
 
-module.exports.getCounters = (req, res) => {
-    const unavailables_players_counter = ModelBase.Player.count({
-        where: {
-            available: false
-        }
-    })
-
-    const availables_players_counter = ModelBase.Player.count({
-        where: {
-            available: true
-        }
-    })
-
-    const all_goal_keepers_counter = ModelBase.Player.count({
-        where: {
-            available: true,
-            role_id: 2
-        }
-    })
-
-    Promise.all([unavailables_players_counter, availables_players_counter, all_goal_keepers_counter])
-        .then((responses) => {
-            const responsesObject = {
-                unavailables_players_counter: responses[0],
-                availables_players_counter: responses[1],
-                all_goal_keepers_counter: responses[2] 
-            }
-            res.send(responsesObject)
-        })
-        .catch((err) => {
-            res.send(err)
-        })
-}
-
 module.exports.setAvailability= (req, res) => {
-    
     ModelBase.Player.update({
         available: req.body.available
     },{
@@ -194,69 +126,19 @@ module.exports.setAvailability= (req, res) => {
         }
     })
     .then(() => {
-        const indexUnavailables = ModelBase.Player.findAll({
-            where: {
-                available: false
-            },
-            order: [
-                ['role_id', 'DESC']
-            ],
-            attributes: {exclude : ['level_id', 'role_id']} ,
-            include: [
-                {
-                    model: ModelBase.Level
-                },
-                {
-                    model: ModelBase.Role
+        var oPlayer = new ControllerBase
+        Promise.all([oPlayer.all_players_availables(), oPlayer.all_players_unavailables(), oPlayer.all_goal_keepers()])
+            .then((responses) => {
+                const responsesObject = {
+                    all_players_availables: responses[0],
+                    all_players_unavailables: responses[1],
+                    all_goal_keepers: responses[2]
                 }
-            ]
-        })
-        const indexAvailable = ModelBase.Player.findAll({
-            where: {
-                available: true
-            },
-            order: [
-                ['role_id', 'DESC']
-            ],
-            attributes: {exclude : ['level_id', 'role_id']} ,
-            include: [
-                {
-                    model: ModelBase.Level
-                },
-                {
-                    model: ModelBase.Role
-                }
-            ]
-        })
-        const all_goal_keepers = ModelBase.Player.findAll({
-            order: [
-                ['id', 'DESC']
-            ],
-            where: {
-                role_id: 2
-            },
-            include: [
-                {
-                    model: ModelBase.Level,
-                    attributes: ['percentage']
-                },
-                {
-                    model: ModelBase.Role
-                }]
-        })
-
-        Promise.all([indexUnavailables, indexAvailable, all_goal_keepers])
-        .then((responses) => {
-            const responsesObject = {
-                all_players: responses[0],
-                all_players_availables: responses[1],
-                all_goal_keepers: responses[2],
-            }
-            res.send(responsesObject)
-        })
-        .catch((err) => {
-            res.send(err)
-        })
+                res.send(responsesObject)
+            })
+            .catch((err) => {
+                res.send(err)
+            })
     })
 
 }
@@ -300,24 +182,8 @@ module.exports.setGoalKeepersProvisory = (req, res) => {
                 }
             ]
         })
-        const all_goal_keepers = ModelBase.Player.findAll({
-            order: [
-                ['id', 'DESC']
-            ],
-            where: {
-                role_id: 2
-            },
-            include: [
-                {
-                    model: ModelBase.Level,
-                    attributes: ['percentage']
-                },
-                {
-                    model: ModelBase.Role
-                }
-            ]
-        })
-        Promise.all([all_goal_keepers_provisory, all_goal_keepers])
+        
+        Promise.all([all_goal_keepers_provisory, ControllerBase.all_goal_keepers])
         .then((responses) => {
             const responsesObject = {
                 all_goal_keepers_provisory: responses[0],

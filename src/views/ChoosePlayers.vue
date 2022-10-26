@@ -235,7 +235,7 @@ export default {
                     }
                 )
                 .then((res) => {
-                    this.$store.state.all_players_unavailables = res.data.all_players
+                    this.$store.state.all_players_unavailables = res.data.all_players_unavailables
                     this.$store.state.all_players_availables = res.data.all_players_availables
                     this.$store.state.all_goal_keepers = res.data.all_goal_keepers
                     this.setTeamsSettings(res.data.all_players_availables.length)
@@ -348,6 +348,9 @@ export default {
             .then((res) => {
                 this.$store.state.all_players_availables = res.data.all_players_availables
                 this.$store.state.all_players_unavailables = res.data.all_players_unavailables
+                if (this.$store.state.allPossibilities.length == 0) {
+                    this.setTeamsSettings(res.data.all_players_availables.length)
+                }
             })
             .catch((err) => {
                 console.log(err)
