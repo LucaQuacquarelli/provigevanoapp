@@ -167,11 +167,14 @@
                             </h1>
                         </div>
                         <div class="col-12 text-center my-3">
-                            <h2 v-for="goalkeeper in goalkeepers_provisory" :key="goalkeeper.id">
-                                {{ goalkeeper.nick_name }} {{ $t('modal.teamsSettings.gk_provisory') }}
+                            <h2 v-for="goalkeeper in goalkeepersProvisoryFilter" :key="goalkeeper.id">
+                                {{ goalkeeper.nick_name }} 
                             </h2>
+                            <span>
+                                {{'' ?  $t('modal.teamsSettings.gks_provisory') : $t('modal.teamsSettings.gk_provisory') }}
+                            </span>
                         </div>
-                        <div class="col-12 text-center my-3">
+                        <div class="col-12 text-center">
                             <small class="text-muted">
                                 {{ $t('modal.teamsSettings.set') }}
                             </small>
@@ -205,7 +208,6 @@ export default {
             possibility: null,
             choicePossibility: null,
             differenceGk: null,
-            goalkeepers_provisory: null,
             key: false
         }
     },
@@ -223,6 +225,17 @@ export default {
                 'remove': this.$t('modal.teamsSettings.removeGk')
             }
             return possibility => possibilitiesChecked[possibility]
+        },
+        goalkeepersProvisoryFilter(){
+            const goalkeepers_provisory = this.$store.state.all_goal_keepers.filter(
+                goalkeeper => {
+                    return goalkeeper.goalkeeper_provisory
+                }
+            )
+            return goalkeepers_provisory
+        },
+        checkGoalkeepersProvisory(){
+            
         }
     },
     methods: {
@@ -237,7 +250,6 @@ export default {
                 .then((res) => {
                     this.$store.state.all_players_unavailables = res.data.all_players_unavailables
                     this.$store.state.all_players_availables = res.data.all_players_availables
-                    this.$store.state.all_goal_keepers = res.data.all_goal_keepers
                     this.setTeamsSettings(res.data.all_players_availables.length)
                 })
                 .catch((err) => {
@@ -264,14 +276,8 @@ export default {
                     }
                 )
                 .then((res) => {
-                    this.$store.state.all_goal_keepers = res.data.all_goal_keepers
-                    res.data.all_goal_keepers_provisory.forEach(
-                        goalkeeper_provisory => {
-                            this.$store.state.all_goal_keepers.push(goalkeeper_provisory)
-                        }
-                    )
+                    this.$store.state.all_goal_keepers = res.data
                     this.checkOnPossibility(this.possibility)
-                    this.goalkeepers_provisory = res.data.all_goal_keepers_provisory
                 })
                 .catch((err) => {
                     console.log(err);
@@ -348,6 +354,7 @@ export default {
             .then((res) => {
                 this.$store.state.all_players_availables = res.data.all_players_availables
                 this.$store.state.all_players_unavailables = res.data.all_players_unavailables
+                this.$store.state.all_goal_keepers = res.data.all_goal_keepers
                 if (this.$store.state.allPossibilities.length == 0) {
                     this.setTeamsSettings(res.data.all_players_availables.length)
                 }

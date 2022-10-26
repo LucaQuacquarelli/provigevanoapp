@@ -32,11 +32,12 @@ module.exports.index = (req, res) => {
 
 module.exports.available_unavailable = (req, res) => {
     var oPlayer = new ControllerBase
-    Promise.all([oPlayer.all_players_availables(), oPlayer.all_players_unavailables()])
+    Promise.all([oPlayer.all_players_availables(), oPlayer.all_players_unavailables(), oPlayer.all_goal_keepers()])
         .then((responses) => {
             const responsesObject = {
                 all_players_availables: responses[0],
-                all_players_unavailables: responses[1]
+                all_players_unavailables: responses[1],
+                all_goal_keepers: responses[2]
             }
             res.send(responsesObject)
         })
@@ -127,12 +128,11 @@ module.exports.setAvailability= (req, res) => {
     })
     .then(() => {
         var oPlayer = new ControllerBase
-        Promise.all([oPlayer.all_players_availables(), oPlayer.all_players_unavailables(), oPlayer.all_goal_keepers()])
+        Promise.all([oPlayer.all_players_availables(), oPlayer.all_players_unavailables()])
             .then((responses) => {
                 const responsesObject = {
                     all_players_availables: responses[0],
-                    all_players_unavailables: responses[1],
-                    all_goal_keepers: responses[2]
+                    all_players_unavailables: responses[1]
                 }
                 res.send(responsesObject)
             })
@@ -165,9 +165,17 @@ module.exports.setGoalKeepersProvisory = (req, res) => {
         }
     })
     .then(() => {
-        const all_goal_keepers_provisory = ModelBase.Player.findAll({
+        ModelBase.Player.findAll({
             where: {
-                goalkeeper_provisory: true
+                [Op.or]: [
+                    {
+                        goalkeeper_provisory: true
+                    },
+                    {
+                        role_id: 2
+                    }
+                ]
+
             },
             order: [
                 ['role_id', 'DESC']
@@ -182,18 +190,21 @@ module.exports.setGoalKeepersProvisory = (req, res) => {
                 }
             ]
         })
+        .then((all_gk_and_provisory) => {
+            res.send(all_gk_and_provisory)
+        })
         
-        Promise.all([all_goal_keepers_provisory, ControllerBase.all_goal_keepers])
-        .then((responses) => {
-            const responsesObject = {
-                all_goal_keepers_provisory: responses[0],
-                all_goal_keepers: responses[1]
-            }
-            res.send(responsesObject)
-        })
-        .catch((err) => {
-            res.send(err)
-        })
+        // Promise.all([all_goal_keepers_provisory, ControllerBase.all_goal_keepers])
+        // .then((responses) => {
+        //     const responsesObject = {
+        //         all_goal_keepers_provisory: responses[0],
+        //         all_goal_keepers: responses[1]
+        //     }
+        //     res.send(responsesObject)
+        // })
+        // .catch((err) => {
+        //     res.send(err)
+        // })
     })
 }
 
