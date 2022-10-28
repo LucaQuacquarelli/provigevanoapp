@@ -167,7 +167,7 @@
                                 {{ goalkeeper.nick_name }} 
                             </h2>
                             <span>
-                                {{'' ?  $t('modal.teamsSettings.gks_provisory') : $t('modal.teamsSettings.gk_provisory') }}
+                                {{ goalkeepersProvisoryFilter.length > 1 ?  $t('modal.teamsSettings.gks_provisory') : $t('modal.teamsSettings.gk_provisory') }}
                             </span>
                         </div>
                         <div class="col-12 text-center">
@@ -229,10 +229,7 @@ export default {
                 }
             )
             return goalkeepers_provisory
-        },
-        // checkGoalkeepersProvisory(){
-            
-        // }
+        }
     },
     methods: {
         setAvailability(player) {
@@ -272,8 +269,9 @@ export default {
                     }
                 )
                 .then((res) => {
-                    this.$store.state.all_goal_keepers = res.data
-                    this.checkOnPossibility(this.possibility)
+                    console.log("🚀 ~ file: ChoosePlayers.vue ~ line 272 ~ .then ~ res", res.data)
+                    // this.$store.state.all_goal_keepers = res.data
+                    // this.checkOnPossibility(this.possibility)
                 })
                 .catch((err) => {
                     console.log(err);

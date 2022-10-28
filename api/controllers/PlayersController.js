@@ -2,7 +2,6 @@ const Config = require('../Config')
 const { Op } = require("sequelize")
 var sequelize = Config.sequelize()
 const { validationResult } = require('express-validator')
-// const ControllerBase = require('./ControllerBase')
 var ModelBase = require(`${__dirname}/../models/ModelBase`)(sequelize.pro())
 var ControllerBase = require('./ControllerBase')(sequelize.pro())
 
@@ -165,46 +164,18 @@ module.exports.setGoalKeepersProvisory = (req, res) => {
         }
     })
     .then(() => {
-        ModelBase.Player.findAll({
-            where: {
-                [Op.or]: [
-                    {
-                        goalkeeper_provisory: true
-                    },
-                    {
-                        role_id: 2
-                    }
-                ]
-
-            },
-            order: [
-                ['role_id', 'DESC']
-            ],
-            attributes: {exclude : ['level_id', 'role_id']} ,
-            include: [
-                {
-                    model: ModelBase.Level
-                },
-                {
-                    model: ModelBase.Role
-                }
-            ]
+        var oPlayer = new ControllerBase
+        Promise.all([oPlayer.all_gk_and_provisory(), oPlayer.all_players_availables_without_gk()])
+        .then((responses) => {
+            const responsesObject = {
+                all_gk_and_provisory: responses[0],
+                all_players_availables_without_gk: responses[1]
+            }
+            res.send(responsesObject)
         })
-        .then((all_gk_and_provisory) => {
-            res.send(all_gk_and_provisory)
+        .catch((err) => {
+            res.send(err)
         })
-        
-        // Promise.all([all_goal_keepers_provisory, ControllerBase.all_goal_keepers])
-        // .then((responses) => {
-        //     const responsesObject = {
-        //         all_goal_keepers_provisory: responses[0],
-        //         all_goal_keepers: responses[1]
-        //     }
-        //     res.send(responsesObject)
-        // })
-        // .catch((err) => {
-        //     res.send(err)
-        // })
     })
 }
 
