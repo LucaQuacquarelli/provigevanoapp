@@ -353,6 +353,7 @@ export default {
                 if (this.$store.state.allPossibilities.length == 0) {
                     this.setTeamsSettings(res.data.all_players_availables.length)
                 }
+                this.clearGoalKeepersProvisory()
             })
             .catch((err) => {
                 console.log(err)

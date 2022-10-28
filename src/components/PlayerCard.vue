@@ -3,7 +3,7 @@
         <div class="card-header p-3 bg-info">
 
         </div>
-        <div class="card-body d-flex flex-wrap px-0">
+        <div class="card-body d-flex flex-wrap px-0" :class="backgroundColors(player.level.id)">
             <div class="col-4 text-center">
                 <h2 class="fw-bold">
                     {{ player.level.percentage }}
@@ -46,6 +46,7 @@ export default {
     name: 'PlayerCard',
     props: {
         player: Object
+        
     },
     computed: {
         roleAbbreviation() {
@@ -54,6 +55,16 @@ export default {
                 'player' : "PL",
             }
             return role => abbreviation[role]
+        },
+        backgroundColors() {
+            const bootstrapClasses = {
+                1: 'bg-danger bg-gradient',
+                2: 'bg-warning bg-gradient',
+                3: 'bg-primary bg-gradient',
+                4: 'bg-success bg-gradient',
+                5: 'bg-dark bg-gradient',
+            };
+            return id => bootstrapClasses[id];
         }
     },
 }
