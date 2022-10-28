@@ -44,16 +44,25 @@ export default {
         },
         setPlayersForTeams(allTeams){
             allTeams.forEach(team => {
-                // this.all_players_availables.forEach(player => {
-                //     if (team.length-1 <= this.possibility.playersForTeam ){
-                //         team.push(player)
-                //     }
-                // });
-                console.log("🚀 ~ file: TeamsView.vue ~ line 52 ~ setPlayersForTeams ~ this.all_players_availables", this.all_players_availables.length)
-                console.log("🚀 ~ file: TeamsView.vue ~ line 49 ~ setPlayersForTeams ~ this.possibility.playersForTeam", this.possibility.playersForTeam)
-                console.log(team.length);
+                this.all_players_availables.forEach(player => {
+                    //1
+                    // const pushplayersNTimes = this.possibility.playersForTeam - team.length 
+                    // for (let i = 0; i < pushplayersNTimes; i++) {
+                    //     team.push(player)
+                    // }
+
+                    //2
+                    // if (team.length < this.possibility.playersForTeam) {
+                        //     team.push(player)
+                    // }
+
+                    //3
+                    if (team.length <= this.possibility.playersForTeam-1 ){
+                        team.push(player)
+                    }
+                });
+                console.log("🚀 ~ file: TeamsView.vue ~ line 49 ~ setPlayersForTeams ~ team", team)
             });
-            console.log("🚀 ~ file: TeamsView.vue ~ line 46 ~ setPlayersForTeams ~ allTeams", allTeams)
         }
     },
     created() {
@@ -62,8 +71,7 @@ export default {
         } else {
             this.setTeamsByGoalkeepers()
                 .then((allTeams) => {
-                    console.log("🚀 ~ file: TeamsView.vue ~ line 65 ~ .then ~ allTeams", allTeams)
-                    // this.setPlayersForTeams(allTeams)
+                    this.setPlayersForTeams(allTeams)
                 }
                 )
         }
