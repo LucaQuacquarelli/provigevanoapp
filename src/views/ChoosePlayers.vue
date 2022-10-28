@@ -10,7 +10,7 @@
         </div>
         <div class="col-12 d-flex flex-wrap align-items-start">
             <div class="col-12 players-availables-wrapper" v-if="this.$store.state.all_players_availables.length > 0">
-                <div class="d-flex justify-content-between align-items-center p-4 wrapper-header" @click="dropdown('availables')">
+                <div class="d-flex justify-content-between align-items-center p-4" @click="dropdown('availables')">
                     <h6 class="d-flex align-items-center fw-bold">
                         {{ $t('players.availables') }}
                         <span class="badge bg-dark ms-2">
@@ -21,7 +21,7 @@
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
-                <div class="availables-container">
+                <div class="availables-container px-2">
                     <div v-for="player in this.$store.state.all_players_availables" :key="player.id">
                         <label v-if="player.available" class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill available" :for="player.id">
                             <input class="d-none" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
@@ -41,19 +41,15 @@
                 </div>
             </div>
             <div class="col-12 players-unavailables-wrapper" v-if="this.$store.state.all_players_unavailables.length > 0">
-                <div class="d-flex justify-content-between align-items-center p-4 wrapper-header" @click="dropdown('unavailables')">
+                <div class="d-flex justify-content-between align-items-center p-4" @click="dropdown('unavailables')">
                     <h6 class="d-flex align-items-center fw-bold">
                         {{ $t('players.all_players') }}
                         <span class="badge bg-dark ms-2">
                             {{ this.$store.state.all_players_unavailables.length }}
                         </span>
                     </h6>
-                    <!--TODO -->
-                    <button class="ms-2 btn btn-outline-danger rounded-pill">
-                        test
-                    </button>
                 </div>
-                <div class="unavailables-container">
+                <div class="unavailables-container px-2">
                     <div v-for="player in this.$store.state.all_players_unavailables" :key="player.id">
                         <label class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill unavailable" :for="player.id">
                             <input class="d-none" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
@@ -234,9 +230,9 @@ export default {
             )
             return goalkeepers_provisory
         },
-        checkGoalkeepersProvisory(){
+        // checkGoalkeepersProvisory(){
             
-        }
+        // }
     },
     methods: {
         setAvailability(player) {
@@ -382,6 +378,7 @@ export default {
         position: fixed;
         top: 0;
         left: 0;
+        height: 60px;
         backdrop-filter: blur(10px);
         margin: 0 !important;
         z-index: 999;

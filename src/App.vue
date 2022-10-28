@@ -67,4 +67,8 @@ export default {
 
 <style lang="scss">
 @import './style/general.scss';
+
+.container {
+    margin-top: 60px;
+}
 </style>

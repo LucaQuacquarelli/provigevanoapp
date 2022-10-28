@@ -29,6 +29,12 @@ export default {
 
 <style lang="scss" scoped>
 header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 999;
     box-shadow: 0 0 15px 10px black;
     background-image: url('../assets/img/soccer-bg.jpg');
     background-size: cover;
