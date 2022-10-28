@@ -188,26 +188,18 @@ module.exports.clearGoalKeepersProvisory = (req, res) => {
         }
     })
     .then(() => {
-        ModelBase.Player.findAll({
-            order: [
-                ['id', 'DESC']
-            ],
-            where: {
-                role_id: 2
-            },
-            include: [
-                {
-                    model: ModelBase.Level,
-                    attributes: ['percentage']
-                },
-                {
-                    model: ModelBase.Role
-                }
-            ]
-        })
-        .then((goalkeepers) => {
-            res.send(goalkeepers)
-        })
+        var oPlayer = new ControllerBase;
+        Promise.all([oPlayer.all_goal_keepers(), oPlayer.all_players_availables()])
+            .then((responses) => {
+                const responsesObject = {
+                    all_goal_keepers: responses[0],
+                    all_players_availables: responses[1]
+                };
+                res.send(responsesObject);
+            })
+            .catch((err) => {
+                res.send(err);
+            })
     })
 }
 

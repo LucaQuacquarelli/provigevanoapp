@@ -86,14 +86,14 @@
                     <h5 class="modal-title">
                         {{ $t('modal.teamsSettings.sort') }}
                     </h5>
-                    <span class="text-primary">
+                    <button :disabled="modalContent != null" @click="this.$router.replace('/selected_players')" class="border-0 bg-transparent" :class="modalContent != null ? 'text-secondary' : 'text-primary'">
                         {{ $t('general.end') }}
-                    </span>
+                    </button>
                 </div>
             </template>
             <template v-slot:body>
                 <div class="modal-body p-4">
-                    <div v-if="transition == false" class="d-flex justify-content-between align-items-center">
+                    <div v-if="modalContent == false" class="d-flex justify-content-between align-items-center">
                         <div v-for="(possibility, index) in this.$store.state.allPossibilities" :key="index" :class="this.$store.state.allPossibilities.length > 1 ? 'col-5' : 'col-12'">
                             <button class="btn btn-success rounded-pill w-100" @click="checkOnPossibility(possibility)">
                                 {{ possibility.teams }} {{ $t('teams.teams') }} <br>
@@ -101,9 +101,9 @@
                             </button>
                         </div>
                     </div>
-                    <div v-else-if="transition == true" class="d-flex flex-wrap align-items-center">
+                    <div v-else-if="modalContent == true" class="d-flex flex-wrap align-items-center">
                         <div class="col-12 text-center">
-                            <h4 @click="transition = false">
+                            <h4 @click="modalContent = false">
                                 {{ chooseContentModalPossibility(choicePossibility) }} {{ differenceGk }} {{ differenceGk == 1 ? this.$t('modal.teamsSettings.gk') : this.$t('modal.teamsSettings.gks') }} {{ $t('modal.teamsSettings.toContinue') }}
                             </h4>
                         </div>
@@ -200,7 +200,7 @@ export default {
     },
     data() {
         return {
-            transition: false,
+            modalContent: false,
             possibility: null,
             choicePossibility: null,
             differenceGk: null,
@@ -269,9 +269,9 @@ export default {
                     }
                 )
                 .then((res) => {
-                    console.log("🚀 ~ file: ChoosePlayers.vue ~ line 272 ~ .then ~ res", res.data)
-                    // this.$store.state.all_goal_keepers = res.data
-                    // this.checkOnPossibility(this.possibility)
+                    this.$store.state.all_goal_keepers = res.data.all_gk_and_provisory
+                    this.$store.state.all_players_availables = res.data.all_players_availables_without_gk
+                    this.checkOnPossibility(this.possibility)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -281,9 +281,10 @@ export default {
             this.$http
                 .get(`${this.$store.getters.apiPath}/goalkeeper_provisory/clear`)
                 .then((res) => {
-                    this.$store.state.all_goal_keepers = res.data
+                    this.$store.state.all_goal_keepers = res.data.all_goal_keepers
+                    this.$store.state.all_players_availables = res.data.all_players_availables
                     this.$store.state.possibilityModal = false
-                    this.transition = false
+                    this.modalContent = false
                 })
                 .catch((err) => {
                     console.log(err);
@@ -311,15 +312,15 @@ export default {
         checkOnPossibility(possibility) {
             this.possibility = possibility
             if (possibility.teams > this.$store.state.all_goal_keepers.length) {
-                this.transition = true
+                this.modalContent = true
                 this.choicePossibility = 'add'
                 this.differenceGk = possibility.teams - this.$store.state.all_goal_keepers.length
             } else if (possibility.teams < this.$store.state.all_goal_keepers.length) {
-                this.transition = true
+                this.modalContent = true
                 this.choicePossibility = 'remove'
                 this.differenceGk = this.$store.state.all_goal_keepers.length - possibility.teams
             } else {
-                this.transition = null
+                this.modalContent = null
             }
         },
         dropdown(container) {

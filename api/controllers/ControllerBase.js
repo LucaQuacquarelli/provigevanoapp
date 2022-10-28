@@ -1,3 +1,5 @@
+const { Op } = require("sequelize")
+
 module.exports = (sequelize) => {
     var ModelBase = require('../models/ModelBase')(sequelize)
     
@@ -80,35 +82,33 @@ module.exports = (sequelize) => {
 
         all_gk_and_provisory(){
             return new Promise((resolve, reject) => {
-                resolve('pippo')
-                // ModelBase.Player.findAll({
-                //     where: {
-                //         [Op.or]: [
-                //             {
-                //                 goalkeeper_provisory: true
-                //             },
-                //             {
-                //                 role_id: 2
-                //             }
-                //         ]
-                //     },
-                //     order: [
-                //         ['role_id', 'DESC']
-                //     ],
-                //     attributes: { exclude: ['level_id', 'role_id'] },
-                //     include: [
-                //         {
-                //             model: ModelBase.Level
-                //         },
-                //         {
-                //             model: ModelBase.Role
-                //         }
-                //     ]
-                // })
-                // .then((pippo) => {
-                //     console.log("🚀 ~ file: ControllerBase.js ~ line 111 ~ Player ~ .then ~ pippo", pippo)
-                //     resolve(pippo);
-                // })
+                ModelBase.Player.findAll({
+                    where: {
+                        [Op.or]: [
+                            {
+                                goalkeeper_provisory: true
+                            },
+                            {
+                                role_id: 2
+                            }
+                        ]
+                    },
+                    order: [
+                        ['role_id', 'DESC']
+                    ],
+                    attributes: { exclude: ['level_id', 'role_id'] },
+                    include: [
+                        {
+                            model: ModelBase.Level
+                        },
+                        {
+                            model: ModelBase.Role
+                        }
+                    ]
+                })
+                .then((all_gk_and_provisory) => {
+                    resolve(all_gk_and_provisory);
+                })
             })
         }
 
@@ -116,12 +116,15 @@ module.exports = (sequelize) => {
             return new Promise((resolve, reject) => {
                 ModelBase.Player.findAll({
                     where: {
-                        [Op.or]: [
+                        [Op.and]: [
                             {
                                 goalkeeper_provisory: false
                             },
                             {
                                 role_id: 1
+                            },
+                            {
+                                available: true
                             }
                         ]
                     },
@@ -135,10 +138,8 @@ module.exports = (sequelize) => {
                         }
                     ]
                 })
-                .then((pippo) => {
-                    console.log('pippo');
-                    console.log("🚀 ~ file: ControllerBase.js ~ line 140 ~ Player ~ .then ~ pippo", pippo)
-                    resolve(pippo)
+                .then((all_players_availables_without_gk) => {
+                    resolve(all_players_availables_without_gk)
                 })
             })
         }
