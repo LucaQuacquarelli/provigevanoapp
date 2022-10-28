@@ -4,6 +4,10 @@
             <h3 class="fw-bolder">
                 {{ $t('players.availables') }} {{ counterPlayersAvailables }}
             </h3>
+            <router-link to="/teams">
+                <!-- TODO TRANSLATE -->
+                Sort Teams
+            </router-link>
         </div>
         <div class="col-12 d-flex justify-content-around flex-wrap">
             <div v-for="player in this.$store.state.all_players_availables" :key="player.id"

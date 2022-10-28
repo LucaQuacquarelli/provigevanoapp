@@ -201,7 +201,6 @@ export default {
     data() {
         return {
             modalContent: false,
-            possibility: null,
             choicePossibility: null,
             differenceGk: null,
             key: false
@@ -271,7 +270,7 @@ export default {
                 .then((res) => {
                     this.$store.state.all_goal_keepers = res.data.all_gk_and_provisory
                     this.$store.state.all_players_availables = res.data.all_players_availables_without_gk
-                    this.checkOnPossibility(this.possibility)
+                    this.checkOnPossibility(this.$store.state.possibility)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -310,7 +309,7 @@ export default {
             }
         },
         checkOnPossibility(possibility) {
-            this.possibility = possibility
+            this.$store.state.possibility = possibility
             if (possibility.teams > this.$store.state.all_goal_keepers.length) {
                 this.modalContent = true
                 this.choicePossibility = 'add'
