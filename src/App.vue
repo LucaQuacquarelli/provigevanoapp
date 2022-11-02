@@ -1,8 +1,9 @@
 <template>
     <Header/>
-    <div class="container">
+    <div class="container py-4">
         <router-view />
     </div>
+    <Footer/>
     <transition name="fade-modal">
         <modal v-if="this.$store.state.serverModal" @close="this.$store.state.serverModal = false">
             <template v-slot:header>
@@ -39,12 +40,14 @@
 
 <script>
 import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
 import Modal from './components/Modal.vue';
 export default {
     name: 'ProVigevanoApp',
     components: {
-        Modal,
-        Header
+        Header,
+        Footer,
+        Modal
     },
     data() {
         return {
@@ -69,6 +72,8 @@ export default {
 @import './style/general.scss';
 
 .container {
+    height: calc(100vh - 120px);
     margin-top: 60px;
+    // background-color: red;
 }
 </style>

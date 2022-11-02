@@ -1,15 +1,15 @@
 <template>
     <div class="d-flex justify-content-around flex-wrap">
         <div class="col-12 d-flex justify-content-between align-items-center">
-            <h2>
+            <h2 class="fw-bold">
                 {{ $t('players.all_players') }}
             </h2>
-            <h2 class="badge bg-dark">
+            <h2 class="badge border border-dark bg-white text-dark rounded-pill fs-4">
                 {{ this.$store.state.all_players.length }}
             </h2>
         </div>
         <div class="col-12 my-4">
-            <input type="text" class="form-control" :placeholder="$t('general.search')" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
+            <Search :playersFiltered="false"/>
         </div>
         <div v-for="player in this.$store.state.all_players" :key="player.id" class="col-5 mb-4 overflow-hidden">
             <PlayerCard :player="player" @click="activateEdit(player)"/>
@@ -85,11 +85,13 @@
 <script>
 import PlayerCard from '../components/PlayerCard.vue';
 import Modal from '../components/Modal.vue';
+import Search from '../components/Search.vue'
 export default {
     name: 'PlayersView',
     components: {
         PlayerCard,
-        Modal
+        Modal,
+        Search
     },
     data() {
         return {
@@ -142,7 +144,7 @@ export default {
         this.$http
             .get(`${this.$store.getters.apiPath}/players`)
             .then((res) => {
-                this.$store.state.all_players = res.data.all_players
+                this.$store.state.all_players = res.data
             })
             .catch((err) => {
                 this.$store.state.serverModal = true

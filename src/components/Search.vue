@@ -1,6 +1,6 @@
 <template>
     <div class="position-relative w-100">
-        <input type="text" class="pro-searchbar" :placeholder="$t('general.search')" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
+        <input type="text" class="pro-searchbar" :placeholder="$t('general.search')" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers', playersFiltered)">
         <i class="fa-solid fa-xmark fs-2 text-danger" v-if="this.$store.state.inputSearch.length > 0" @click="clear"></i>
     </div>
 </template>
@@ -9,11 +9,14 @@
 import $ from 'jquery'
 export default {
     name: 'Search',
+    props: {
+        playersFiltered: Boolean
+    },
     methods: {
         clear() {
             $('.pro-searchbar').blur()
             this.$store.state.inputSearch = ''
-            this.$store.dispatch('searchPlayers')
+            this.$store.dispatch('searchPlayers', this.playersFiltered)
         }
     }
 }

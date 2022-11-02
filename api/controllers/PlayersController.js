@@ -97,23 +97,27 @@ module.exports.searchPlayers = (req, res) => {
         ]
     })
     .then((players) => {
-        var all_players_availables = []
-        var all_players_unavailables = []
-        players.forEach(
-            player => {
-                if (player.available) {
-                    all_players_availables.push(player)
-                } else {
-                    all_players_unavailables.push(player)
+        if (req.body.playersFiltered) {
+            var all_players_availables = []
+            var all_players_unavailables = []
+            players.forEach(
+                player => {
+                    if (player.available) {
+                        all_players_availables.push(player)
+                    } else {
+                        all_players_unavailables.push(player)
+                    }
                 }
-            }
-        )
-        res.send(
-            {
-                all_players_availables,
-                all_players_unavailables
-            }
-        )
+            )
+            res.send(
+                {
+                    all_players_availables,
+                    all_players_unavailables
+                }
+            )
+        } else {
+            res.send(players)
+        }
     })
 }
 

@@ -1,12 +1,12 @@
 <template>
     <div class="d-flex flex-wrap">
-        <div class="col-12 py-2 text-center wrapper mt-4" v-if="this.$store.state.all_players_availables.length >= 10 && this.$store.state.allPossibilities.length != 0">
-            <button type="button" class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
-                {{ $t('general.confirm') }}
-            </button>
+        <div class="col-12">
+            <h2 class="fw-bold">
+                {{ $t('players.select_players') }}
+            </h2>
         </div>
         <div class="col-12 my-4">
-            <Search/>
+            <Search :playersFiltered="true"/>
         </div>
         <div class="col-12 d-flex flex-wrap align-items-start">
             <div class="col-12 players-availables-wrapper" v-if="this.$store.state.all_players_availables.length > 0">
@@ -74,6 +74,11 @@
                 </h2>
             </div>
         </div>
+        <div class="col-12 py-2 text-center wrapper mt-4" v-if="this.$store.state.all_players_availables.length >= 10 && this.$store.state.allPossibilities.length != 0">
+            <button type="button" class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
+                {{ $t('general.confirm') }}
+            </button>
+        </div>
     </div>
 
     <transition name="fade-modal">
@@ -108,7 +113,7 @@
                             </h4>
                         </div>
                         <div class="col-12 my-4">
-                            <input type="text" class="form-control" :placeholder="$t('general.search')" key="" v-model="this.$store.state.inputSearch" @keyup="this.$store.dispatch('searchPlayers')">
+                            <Search :playersFiltered="true"/>
                         </div>
                         <div class="col-12" v-if="this.$store.state.all_players_availables.length != 0">
                             <div class="availables-container">
@@ -397,18 +402,18 @@ export default {
         height: 86px;
         border: 2px solid green;
         border-bottom: 0;
-        overflow: hidden;
+        overflow-y: auto;
         transition: 0.3s;
 
         &.open {
-            height: 500px;
+            height: 250px;
         }
     }
 
     .unavailables-container, 
     .availables-container {
         min-height: 50px;
-        max-height: 480px;
+        // max-height: 480px;
         overflow-y: auto;
     }
 

@@ -1,11 +1,10 @@
 {
     "routes":{
-        "home" : "Home",
-        "players" : "Giocatori",
         "start" : "Gioca"
     },
     "players": {
         "all_players" : "Tutti i giocatori",
+        "select_players" : "Seleziona i giocatori",
         "no_players" : "Nessun giocatore trovato",
         "availables" : "Disponibili"
     },

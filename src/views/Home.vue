@@ -1,5 +1,7 @@
 <template>
-    <div class="text-center">WELCOME</div>
+    <div class="text-center">
+        Welcome
+    </div>
 </template>
 
 <script>

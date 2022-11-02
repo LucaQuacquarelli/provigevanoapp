@@ -33,16 +33,22 @@ export default createStore({
         }
     },
     actions: {
-        searchPlayers({ state, getters }) {
+        searchPlayers({ state, getters }, playersFiltered) {
             Axios
                 .post(`${getters.apiPath}/players/search`,
                     {
-                        inputSearch: state.inputSearch
+                        inputSearch: state.inputSearch,
+                        playersFiltered
                     }
                 )
                 .then((res) => {
-                    state.all_players_availables = res.data.all_players_availables
-                    state.all_players_unavailables = res.data.all_players_unavailables
+                    if (res.data.all_players_availables && res.data.all_players_unavailables) {
+                        state.all_players_availables = res.data.all_players_availables
+                        state.all_players_unavailables = res.data.all_players_unavailables
+                    } else {
+                        state.all_players = res.data
+                    }
+
                 })
                 .catch((err) => {
                     state.serverModal = true;
