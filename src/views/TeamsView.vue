@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import { mapState } from "vuex";
+import { mapState } from "vuex"
 export default {
     name: 'TeamsView',
     data() {
@@ -38,31 +38,67 @@ export default {
                         team.push(gk)
                     }
                     allTeams.push(team)
-                });
-                resolve(allTeams);
+                })
+                resolve(allTeams)
             })
         },
         setPlayersForTeams(allTeams){
-            allTeams.forEach(team => {
-                this.all_players_availables.forEach(player => {
-                    //1
-                    // const pushplayersNTimes = this.possibility.playersForTeam - team.length 
-                    // for (let i = 0; i < pushplayersNTimes; i++) {
-                    //     team.push(player)
-                    // }
+            return new Promise((resolve) => {
 
-                    //2
-                    // if (team.length < this.possibility.playersForTeam) {
-                        //     team.push(player)
-                    // }
+                var pippo = []
+                while (pippo.length < this.all_players_availables.length) {
+                    this.all_players_availables.forEach(
+                        player => {
+                            player = Math.floor(Math.random() * this.all_players_availables.length)
+                            if (!pippo.includes(player)) {
+                                pippo.push(player)
+                            }
+                        }
+                    )
+                }
+                console.log("🚀 ~ file: TeamsView.vue ~ line 49 ~ returnnewPromise ~ pippo", pippo)
+                
+                // const teams = [[1],[5],[9]]
+                const spliceLength = pippo.length/this.possibility.teams
 
-                    //3
-                    if (team.length <= this.possibility.playersForTeam-1 ){
-                        team.push(player)
-                    }
-                });
-                console.log("🚀 ~ file: TeamsView.vue ~ line 49 ~ setPlayersForTeams ~ team", team)
-            });
+                for(var i = 0; i < allTeams.length; i++){
+                    let team =  allTeams[i]
+                    var teamPlayers = pippo.slice(0,spliceLength)
+                    allTeams[i].push(...teamPlayers)
+                    pippo.splice(0,spliceLength)
+                    console.log(team, i)
+                }
+
+
+                // allTeams.forEach(
+                //     team => {
+                //         this.all_players_availables.forEach(
+                //             player => {
+                //                 if (team.length < this.possibility.playersForTeam) {
+                //                     team.push(player)
+                //                 }
+                //             }
+                //         )
+                //     }
+                // )
+                resolve(allTeams)
+            })
+        },
+        randomizeTeamsByAverage(allTeamsSorted) {
+            console.log("🚀 ~ file: TeamsView.vue ~ line 62 ~ randomizeTeamsByAverage ~ allTeamsSorted", allTeamsSorted)
+            var averages = []
+            allTeamsSorted.forEach(
+                team => {
+                    let average = 0
+                    team.forEach(
+                        player => {
+                            average += player.level.percentage
+                        }
+                    )
+                    averages.push(average)
+                }
+            )
+            console.log(averages);
         }
     },
     created() {
@@ -72,8 +108,10 @@ export default {
             this.setTeamsByGoalkeepers()
                 .then((allTeams) => {
                     this.setPlayersForTeams(allTeams)
-                }
-                )
+                        .then((allTeamsSorted) => {
+                            this.randomizeTeamsByAverage(allTeamsSorted)
+                        })
+                })
         }
     },
 }

@@ -4,7 +4,7 @@
 
         </div>
         <div class="card-body d-flex flex-wrap px-0" :class="backgroundColors(player.level.id)">
-            <div class="col-4 text-center">
+            <div class="col-5 text-center">
                 <h2 class="fw-bold">
                     {{ player.level.percentage }}
                 </h2>
@@ -16,7 +16,7 @@
                     🇮🇹
                 </h2>
             </div>
-            <div class="col-8 text-end overflow-hidden">
+            <div class="col-7 text-end overflow-hidden">
                 <img src="@/assets/img/player.svg" class="w-100">
             </div>
             <div class="col-12 text-center my-2">

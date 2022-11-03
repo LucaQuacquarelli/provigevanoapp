@@ -74,6 +74,6 @@ export default {
 .container {
     height: calc(100vh - 120px);
     margin-top: 60px;
-    // background-color: red;
+    overflow-y: auto;
 }
 </style>

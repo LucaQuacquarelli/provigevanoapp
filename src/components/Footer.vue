@@ -43,7 +43,7 @@ footer {
 
     a {
         text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-        font-size: 35px;
+        font-size: 30px;
     }
 }
 </style>
