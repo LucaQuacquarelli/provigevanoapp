@@ -1,6 +1,7 @@
 <template>
     <div>
         TeamsView
+        <span @click="setAgain">click</span>
     </div>
 </template>
 
@@ -32,84 +33,87 @@ export default {
              */
             return new Promise((resolve) => {
                 const allTeams = []
-                this.all_goal_keepers.forEach(gk => {
-                    var team = []
-                    if (!team.includes(gk)) {
-                        team.push(gk)
+                this.all_goal_keepers.forEach(
+                    gk => {
+                        var team = []
+                        if (!team.includes(gk)) {
+                            team.push(gk)
+                        }
+                        allTeams.push(team)
                     }
-                    allTeams.push(team)
-                })
+                )
                 resolve(allTeams)
             })
         },
         setPlayersForTeams(allTeams){
             return new Promise((resolve) => {
-
-                var pippo = []
-                while (pippo.length < this.all_players_availables.length) {
-                    this.all_players_availables.forEach(
-                        player => {
-                            player = Math.floor(Math.random() * this.all_players_availables.length)
-                            if (!pippo.includes(player)) {
-                                pippo.push(player)
-                            }
-                        }
-                    )
-                }
-                console.log("🚀 ~ file: TeamsView.vue ~ line 49 ~ returnnewPromise ~ pippo", pippo)
-                
-                // const teams = [[1],[5],[9]]
-                const spliceLength = pippo.length/this.possibility.teams
-
-                for(var i = 0; i < allTeams.length; i++){
-                    let team =  allTeams[i]
-                    var teamPlayers = pippo.slice(0,spliceLength)
-                    allTeams[i].push(...teamPlayers)
-                    pippo.splice(0,spliceLength)
-                    console.log(team, i)
-                }
-
-
-                // allTeams.forEach(
-                //     team => {
-                //         this.all_players_availables.forEach(
-                //             player => {
-                //                 if (team.length < this.possibility.playersForTeam) {
-                //                     team.push(player)
-                //                 }
-                //             }
-                //         )
-                //     }
-                // )
+                var oldAvailables = [...this.all_players_availables]
+                oldAvailables.sort(()=> Math.random() - 0.5)
+                const teamLength = oldAvailables.length/this.possibility.teams
+                allTeams.forEach(
+                    team => {
+                        var playersForTeam = oldAvailables.slice(0, teamLength)
+                        team.push(...playersForTeam)
+                        oldAvailables.splice(0, teamLength)
+                    }
+                )
                 resolve(allTeams)
             })
         },
-        randomizeTeamsByAverage(allTeamsSorted) {
-            console.log("🚀 ~ file: TeamsView.vue ~ line 62 ~ randomizeTeamsByAverage ~ allTeamsSorted", allTeamsSorted)
-            var averages = []
-            allTeamsSorted.forEach(
-                team => {
-                    let average = 0
-                    team.forEach(
-                        player => {
-                            average += player.level.percentage
-                        }
-                    )
-                    averages.push(average)
+        getTeamsAverages(allTeamsSorted) {
+            return new Promise((resolve) => {
+                var averages = []
+                allTeamsSorted.forEach(
+                    team => {
+                        let average = 0
+                        team.forEach(
+                            player => {
+                                average += player.level.percentage
+                            }
+                        )
+                        averages.push(average)
+                    }
+                )
+                resolve({
+                    allTeamsSorted,
+                    averages
+                })
+            } )
+        },
+        randomizeTeamsByAverage(getTeamsAveragesResponse) {
+            var sum = 0
+            getTeamsAveragesResponse.averages.forEach(
+                average => {
+                    sum += average
                 }
             )
-            console.log(averages);
+            console.log("🚀 ~ file: TeamsView.vue ~ line 85 ~ randomizeTeamsByAverage ~ sum", sum/this.possibility.teams)
+        },
+        setAgain() {
+            this.setTeamsByGoalkeepers()
+                .then((allTeams) => {
+                    this.setPlayersForTeams(allTeams)
+                        .then((allTeamsSorted) => {
+                            this.getTeamsAverages(allTeamsSorted)
+                                .then((results) => {
+                                    this.randomizeTeamsByAverage(results)
+                                })
+                        })
+                })
         }
     },
     created() {
-        if (this.$store.state.possibility == null) {
-            this.$router.replace('/selected_players')
+        if (this.$store.state.possibility == null || Object.keys(this.all_players_availables).length === 0) {
+            this.$router.replace('/choose_players')
         } else {
             this.setTeamsByGoalkeepers()
                 .then((allTeams) => {
                     this.setPlayersForTeams(allTeams)
                         .then((allTeamsSorted) => {
-                            this.randomizeTeamsByAverage(allTeamsSorted)
+                            this.getTeamsAverages(allTeamsSorted)
+                                .then((results) => {
+                                    this.randomizeTeamsByAverage(results)
+                                })
                         })
                 })
         }

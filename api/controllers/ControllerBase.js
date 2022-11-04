@@ -91,6 +91,11 @@ module.exports = (sequelize) => {
                             {
                                 role_id: 2
                             }
+                        ],
+                        [Op.and]: [
+                            {
+                                available: true
+                            }
                         ]
                     },
                     order: [

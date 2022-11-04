@@ -75,7 +75,7 @@
             </div>
         </div>
         <div class="col-12 py-2 text-center wrapper mt-4" v-if="this.$store.state.all_players_availables.length >= 10 && this.$store.state.allPossibilities.length != 0">
-            <button type="button" class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
+            <button class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
                 {{ $t('general.confirm') }}
             </button>
         </div>
@@ -108,7 +108,7 @@
                     </div>
                     <div v-else-if="modalContent == true" class="d-flex flex-wrap align-items-center">
                         <div class="col-12 text-center">
-                            <h4 @click="modalContent = false">
+                            <h4>
                                 {{ chooseContentModalPossibility(choicePossibility) }} {{ differenceGk }} {{ differenceGk == 1 ? this.$t('modal.teamsSettings.gk') : this.$t('modal.teamsSettings.gks') }} {{ $t('modal.teamsSettings.toContinue') }}
                             </h4>
                         </div>
@@ -285,7 +285,7 @@ export default {
             this.$http
                 .get(`${this.$store.getters.apiPath}/goalkeeper_provisory/clear`)
                 .then((res) => {
-                    this.$store.state.all_goal_keepers = res.data.all_goal_keepers
+                    this.$store.state.all_goal_keepers = []
                     this.$store.state.all_players_availables = res.data.all_players_availables
                     this.$store.state.possibilityModal = false
                     this.modalContent = false
@@ -314,6 +314,13 @@ export default {
             }
         },
         checkOnPossibility(possibility) {
+            this.$store.state.all_players_availables.forEach(
+                player => {
+                    if (player.role.id === 2) {
+                        this.$store.state.all_goal_keepers.push(player)
+                    }
+                }
+            )
             this.$store.state.possibility = possibility
             if (possibility.teams > this.$store.state.all_goal_keepers.length) {
                 this.modalContent = true
@@ -353,7 +360,6 @@ export default {
             .then((res) => {
                 this.$store.state.all_players_availables = res.data.all_players_availables
                 this.$store.state.all_players_unavailables = res.data.all_players_unavailables
-                this.$store.state.all_goal_keepers = res.data.all_goal_keepers
                 if (this.$store.state.allPossibilities.length == 0) {
                     this.setTeamsSettings(res.data.all_players_availables.length)
                 }

@@ -31,12 +31,11 @@ module.exports.index = (req, res) => {
 
 module.exports.available_unavailable = (req, res) => {
     var oPlayer = new ControllerBase
-    Promise.all([oPlayer.all_players_availables(), oPlayer.all_players_unavailables(), oPlayer.all_goal_keepers()])
+    Promise.all([oPlayer.all_players_availables(), oPlayer.all_players_unavailables()])
         .then((responses) => {
             const responsesObject = {
                 all_players_availables: responses[0],
-                all_players_unavailables: responses[1],
-                all_goal_keepers: responses[2]
+                all_players_unavailables: responses[1]
             }
             res.send(responsesObject)
         })
@@ -193,11 +192,10 @@ module.exports.clearGoalKeepersProvisory = (req, res) => {
     })
     .then(() => {
         var oPlayer = new ControllerBase;
-        Promise.all([oPlayer.all_goal_keepers(), oPlayer.all_players_availables()])
+        Promise.all([oPlayer.all_players_availables()])
             .then((responses) => {
                 const responsesObject = {
-                    all_goal_keepers: responses[0],
-                    all_players_availables: responses[1]
+                    all_players_availables: responses[0]
                 };
                 res.send(responsesObject);
             })

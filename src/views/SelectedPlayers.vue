@@ -30,25 +30,19 @@ import PlayerCard from '../components/PlayerCard.vue';
 export default {
     name: "SelectedPlayers",
     components: {
-    PlayerCard,
-},
-    data() {
-        return {
-        }
+        PlayerCard,
     },
     computed: {
         counterPlayersAvailables() {
             let counter = 0
-            if (Object.keys(this.$store.state.all_players_availables).length != 0 && this.$store.state.all_goal_keepers != undefined) {
+            if (Object.keys(this.$store.state.all_players_availables).length != 0 && this.$store.state.all_goal_keepers.length > 0) {
                 counter = this.$store.state.all_players_availables.length + this.$store.state.all_goal_keepers.length
             }
             return counter
         }
     },
-    methods: {
-    },
     created() {
-        if (Object.keys(this.$store.state.all_players_availables).length === 0 && this.$store.state.all_goal_keepers == undefined){
+        if (Object.keys(this.$store.state.all_players_availables).length === 0 && this.$store.state.all_goal_keepers.length == 0){
             this.$router.replace("/choose_players")
         }
     }
