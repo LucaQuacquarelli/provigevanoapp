@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
             return new Promise((resolve, reject) => {
                 ModelBase.Player.findAll({
                     where: {
-                        available: true
+                        available: true,
                     },
                     order: [
                         ['role_id', 'DESC']

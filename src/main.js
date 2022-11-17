@@ -5,7 +5,7 @@ import router from './router'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
-import "@fontsource/spartan/400.css"
+// import "@fontsource/spartan/400.css"
 import i18n from './i18n';
 
 const app = createApp(App)

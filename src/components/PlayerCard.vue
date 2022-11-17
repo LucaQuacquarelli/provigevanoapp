@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <div class="card-header p-3 bg-info">
+        <div class="card-header p-3 bg-info" :class="player.role.name == 'goalkeeper' ? 'bg-dark' : 'bg-info'">
 
         </div>
         <div class="card-body d-flex flex-wrap px-0" :class="backgroundColors(player.level.id)">
@@ -8,7 +8,7 @@
                 <h2 class="fw-bold">
                     {{ player.level.percentage }}
                 </h2>
-                <h2 class="badge" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                <h2 class="badge" :class="player.role.name == 'goalkeeper' ? 'bg-dark' : 'bg-info'">
                     {{ roleAbbreviation(player.role.name) }}
                 </h2>
                 <h2>
@@ -35,7 +35,7 @@
                 </span>
             </div>
         </div>
-        <div class="card-footer bg-info">
+        <div class="card-footer bg-info" :class="player.role.name == 'goalkeeper' ? 'bg-dark' : 'bg-info'">
 
         </div>
     </div>

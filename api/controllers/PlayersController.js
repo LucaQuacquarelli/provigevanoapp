@@ -232,7 +232,7 @@ module.exports.getByLevel = (req, res) => {
 
     const availables_players_counter = ModelBase.Player.count({
         where: {
-            available: true
+            available: true,
         }
     })
 

@@ -25,15 +25,12 @@ export default {
     },
     methods: {
         setTeamsByGoalkeepers() {
-            /**
-             * !Somma due array -> tutti i disponibili insiem ai portieri
-             ** Creerà n squadre (array) in base ai goalkeepers e alla length di possibility.players
-             ** Ottenere la media dei players.level per ogni squadra generata
-             * ? if ( media  )
-             */
             return new Promise((resolve) => {
                 const allTeams = []
-                this.all_goal_keepers.forEach(
+                const all_goal_keepers = this.all_players_availables.filter( player => {
+                    return  player.role.name == 'goalkeeper'
+                })
+                all_goal_keepers.forEach(
                     gk => {
                         var team = []
                         if (!team.includes(gk)) {
@@ -41,13 +38,15 @@ export default {
                         }
                         allTeams.push(team)
                     }
-                )
+                    )
                 resolve(allTeams)
             })
         },
         setPlayersForTeams(allTeams){
             return new Promise((resolve) => {
-                var oldAvailables = [...this.all_players_availables]
+                const oldAvailables = this.all_players_availables.filter(player => {
+                    return player.role.name == 'player';
+                })
                 oldAvailables.sort(()=> Math.random() - 0.5)
                 const teamLength = oldAvailables.length/this.possibility.teams
                 allTeams.forEach(
@@ -60,62 +59,53 @@ export default {
                 resolve(allTeams)
             })
         },
-        getTeamsAverages(allTeamsSorted) {
+        getSumPlayersPercentage(allTeamsSorted) {
             return new Promise((resolve) => {
-                var averages = []
-                allTeamsSorted.forEach(
-                    team => {
-                        let average = 0
-                        team.forEach(
-                            player => {
-                                average += player.level.percentage
-                            }
-                        )
-                        averages.push(average)
-                    }
-                )
+                let sum = 0
+                let averages = []
+                this.all_players_availables.forEach(player => {
+                    sum += player.level.percentage
+                })
+
+                allTeamsSorted.forEach( team => {
+                    let average = 0
+                    team.forEach(player=>{
+                        average += player.level.percentage
+                    })
+                    averages.push(average)
+                })
+
                 resolve({
                     allTeamsSorted,
+                    sum,
                     averages
                 })
-            } )
+            })
         },
-        randomizeTeamsByAverage(getTeamsAveragesResponse) {
-            var sum = 0
-            getTeamsAveragesResponse.averages.forEach(
-                average => {
-                    sum += average
-                }
-            )
-            console.log("🚀 ~ file: TeamsView.vue ~ line 85 ~ randomizeTeamsByAverage ~ sum", sum/this.possibility.teams)
-        },
-        setAgain() {
-            this.setTeamsByGoalkeepers()
-                .then((allTeams) => {
-                    this.setPlayersForTeams(allTeams)
-                        .then((allTeamsSorted) => {
-                            this.getTeamsAverages(allTeamsSorted)
-                                .then((results) => {
-                                    this.randomizeTeamsByAverage(results)
-                                })
-                        })
-                })
-        }
+        // setAgain() {
+        //     this.setTeamsByGoalkeepers().then((allTeams) => {
+        //         this.setPlayersForTeams(allTeams).then((allTeamsSorted) => {
+        //             this.getSumPlayersPercentage(allTeamsSorted).then((results) => {
+        //             console.log("🚀 ~ file: TeamsView.vue ~ line 88 ~ this.getSumPlayersPercentage ~ results", results)
+        //             })
+        //         })
+        //     })
+        // }
     },
     created() {
         if (this.$store.state.possibility == null || Object.keys(this.all_players_availables).length === 0) {
             this.$router.replace('/choose_players')
         } else {
-            this.setTeamsByGoalkeepers()
-                .then((allTeams) => {
-                    this.setPlayersForTeams(allTeams)
-                        .then((allTeamsSorted) => {
-                            this.getTeamsAverages(allTeamsSorted)
-                                .then((results) => {
-                                    this.randomizeTeamsByAverage(results)
-                                })
-                        })
+            this.setTeamsByGoalkeepers().then((allTeams) => {
+                this.setPlayersForTeams(allTeams).then((allTeamsSorted) => {
+                    this.getSumPlayersPercentage(allTeamsSorted).then((results) => {
+                    console.log("🚀 ~ file: TeamsView.vue ~ line 102 ~ this.getSumPlayersPercentage ~ results", results.averages)
+                    const avgForTeam = Math.round(results.sum/this.possibility.teams)
+                    const equal = results.averages.some(average => average > avgForTeam)
+                    console.log("🚀 ~ file: TeamsView.vue ~ line 104 ~ this.getSumPlayersPercentage ~ equal", equal ? 'non sono equilibrate' : 'sono equilibrate')
+                    })
                 })
+            })
         }
     },
 }
