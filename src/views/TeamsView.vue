@@ -11,17 +11,16 @@ export default {
     name: 'TeamsView',
     data() {
         return {
-            lastResult: null
-            // sumAvailablesAndGoalkeepers: this.all_players_availables.length + this.all_goal_keepers.length,
-            // numberOfTeams : this.possibility.teams,
-            // numberOfPlayersForTeam : this.possibility.players
+            teamsSorted: [],
+            lastAverages: []
         };
     },
     computed: {
         ...mapState([
             'all_players_availables',
             'all_goal_keepers',
-            'possibility'
+            'possibility',
+            'lastResult'
         ]),
     },
     methods: {
@@ -40,6 +39,7 @@ export default {
                         allTeams.push(team);
                     }
                 );
+                // console.log("🚀 ~ file: TeamsView.vue:45 ~ returnnewPromise ~ allTeams:", allTeams);
                 resolve(allTeams);
             });
         },
@@ -83,46 +83,43 @@ export default {
                 });
             });
         },
-        setFinalTeams() {
+        setComplete() {
             return new Promise((resolve) => {
-                this.setTeamsByGoalkeepers().then((allTeams) => {
-                    this.setPlayersForTeams(allTeams).then((allTeamsSorted) => {
-                        this.getSumPlayersPercentage(allTeamsSorted).then((results) => {
-                            const { sum, averages, allTeamsSorted } = results;
-                            console.log("🚀 ~ file: TeamsView.vue:92 ~ this.getSumPlayersPercentage ~ averages:", averages);
-                            const avgForTeam = Math.round(sum / allTeamsSorted.length);
-                            let areEqual = averages.every(average => average == avgForTeam);
-                            resolve(areEqual);
-                        });
+                this.setTeamsByGoalkeepers()
+                    .then(allTeams => { return this.setPlayersForTeams(allTeams); })
+                    .then(allTeamsSorted => { return this.getSumPlayersPercentage(allTeamsSorted); })
+                    .then(results => {
+                        const { sum, averages, allTeamsSorted } = results;
+                        const avgForTeam = Math.round(sum / allTeamsSorted.length);
+                        let areEqual = averages.every(average => average == avgForTeam);
+                        this.$store.state.lastResult = areEqual;
+                        this.teamsSorted = allTeamsSorted;
+                        this.lastAverages = averages;
+                        resolve(areEqual);
                     });
-                });
             });
+        },
+        async execute() {
+            var areEqual = await this.setComplete();
+            while (!areEqual) {
+                areEqual = await this.setComplete();
+                console.log("🚀 ~ file: TeamsView.vue:106 ~ execute ~ areEqual:", areEqual)
+            }
+            console.log('all done');
+            console.log("🚀 ~ file: TeamsView.vue:110 ~ execute ~ this.teamsSorted:", this.teamsSorted)
+            console.log("🚀 ~ file: TeamsView.vue:111 ~ execute ~ this.lastAverages:", this.lastAverages)
         }
     },
     created() {
         if (this.$store.state.possibility == null || Object.keys(this.all_players_availables).length === 0) {
             this.$router.replace('/choose_players');
-        } else {
-            this.setFinalTeams().then((result) => {
-                this.lastResult = result;
-                if (this.lastResult == false) {
-                    console.log("🚀 ~ file: TeamsView.vue:109 ~ this.setFinalTeams ~ this.lastResult:", this.lastResult);
-                    let counter = 0;
-                    while (this.lastResult == false) {
-                        counter++;
-                        console.log("🚀 ~ file: TeamsView.vue:113 ~ this.setFinalTeams ~ counter:", counter);
-                        this.setFinalTeams().then((result) => {
-                            if (result == true) {
-                                this.lastResult = result;
-                                console.log("🚀 ~ file: TeamsView.vue:117 ~ this.setFinalTeams ~ this.lastResult:", this.lastResult);
-                                return;
-                            }
-                        });
-                    }
-                }
-            });
-            console.log("🚀 ~ file: TeamsView.vue:117 ~ this.setFinalTeams ~ result:", this.lastResult);
-
+        }
+        this.$store.state.lastResult = false;
+    },
+    mounted() {
+        this.setComplete();
+        if (!this.lastResult) {
+            this.execute();
         }
     },
 };

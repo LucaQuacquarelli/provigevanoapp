@@ -19,7 +19,8 @@ export default createStore({
         successModal: false,
         modalSlide: false,
         possibilityModal: false,
-        inputSearch: ""
+        inputSearch: "",
+        lastResult : false,
     },
     mutations: {
         
