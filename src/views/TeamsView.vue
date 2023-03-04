@@ -24,23 +24,24 @@ export default {
         ]),
     },
     methods: {
+        /**
+         ** This function returns an array of n arrays, just with the goalkeeper for every single team.
+         ** Example: 2 teams, [[gk1],[gk2]]
+         * @return {Array} - array of arrays
+         */
         setTeamsByGoalkeepers() {
             return new Promise((resolve) => {
-                const allTeams = [];
-                const all_goal_keepers = this.all_players_availables.filter(player => {
-                    return player.role.name == 'goalkeeper';
-                });
-                all_goal_keepers.forEach(
-                    gk => {
+                const teamsByGoalkeepers = [];
+                this.all_goal_keepers.forEach(
+                    goalKeeper => {
                         var team = [];
-                        if (!team.includes(gk)) {
-                            team.push(gk);
+                        if (!team.includes(goalKeeper)) {
+                            team.push(goalKeeper);
                         }
-                        allTeams.push(team);
+                        teamsByGoalkeepers.push(team);
                     }
                 );
-                // console.log("🚀 ~ file: TeamsView.vue:45 ~ returnnewPromise ~ allTeams:", allTeams);
-                resolve(allTeams);
+                resolve(teamsByGoalkeepers);
             });
         },
         setPlayersForTeams(allTeams) {
@@ -90,8 +91,20 @@ export default {
                     .then(allTeamsSorted => { return this.getSumPlayersPercentage(allTeamsSorted); })
                     .then(results => {
                         const { sum, averages, allTeamsSorted } = results;
+                        console.log("🚀 ~ file: TeamsView.vue:94 ~ returnnewPromise ~ averages:", averages);
                         const avgForTeam = Math.round(sum / allTeamsSorted.length);
-                        let areEqual = averages.every(average => average == avgForTeam);
+                        console.log("🚀 ~ file: TeamsView.vue:96 ~ returnnewPromise ~ avgForTeam:", avgForTeam)
+                        let areEqual = averages.every(average => {
+                            if (average == avgForTeam) {
+                                console.log('sono equilibrate');
+                                return true;
+                            }
+                            else if (average > avgForTeam - 1) {
+                                console.log('ci sono squadre piu forti delle altre');
+                                return true;
+                            }
+                            return false
+                        });
                         this.$store.state.lastResult = areEqual;
                         this.teamsSorted = allTeamsSorted;
                         this.lastAverages = averages;
@@ -101,13 +114,10 @@ export default {
         },
         async execute() {
             var areEqual = await this.setComplete();
+            console.log("🚀 ~ file: TeamsView.vue:105 ~ execute ~ areEqual:", areEqual);
             while (!areEqual) {
                 areEqual = await this.setComplete();
-                console.log("🚀 ~ file: TeamsView.vue:106 ~ execute ~ areEqual:", areEqual)
             }
-            console.log('all done');
-            console.log("🚀 ~ file: TeamsView.vue:110 ~ execute ~ this.teamsSorted:", this.teamsSorted)
-            console.log("🚀 ~ file: TeamsView.vue:111 ~ execute ~ this.lastAverages:", this.lastAverages)
         }
     },
     created() {
@@ -124,5 +134,3 @@ export default {
     },
 };
 </script>
-
-<style></style>
