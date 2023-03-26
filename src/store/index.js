@@ -21,6 +21,7 @@ export default createStore({
         possibilityModal: false,
         inputSearch: "",
         lastResult : false,
+        teamsAndAverages: [],
     },
     mutations: {
         
