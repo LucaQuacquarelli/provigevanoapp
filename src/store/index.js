@@ -24,7 +24,6 @@ export default createStore({
         teamsAndAverages: [],
     },
     mutations: {
-        
     },
     getters: {
         apiPath(state) {
