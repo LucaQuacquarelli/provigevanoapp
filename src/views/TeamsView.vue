@@ -1,7 +1,24 @@
 <template>
-    <div>
-        TeamsView
-        <span @click="setAgain">click</span>
+    <div class="container-fluid">
+        <h1>
+            TeamsView
+            <span @click="controlTeamsEquiality">click</span>
+        </h1>
+        <!-- TODO make a table with name/nick_name/level.id -> points by player /level.name  -->
+        <div class="row">
+            <div v-for="teamObject, i in this.finalTeams" :key="i">
+                <h6>Squadra {{ i + 1 }}
+                    <span class="badge text-bg-primary mb-2">
+                        Media: {{ teamObject.average }}
+                    </span>
+                </h6>
+                <ul class="list-group mb-2">
+                    <li v-for="player, j in teamObject.team" :key="j" class="list-group-item">
+                        {{ player.name }}
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -21,6 +38,7 @@ export default {
             'all_goal_keepers',
             'possibility',
             'lastResult',
+            'finalTeams',
         ]),
     },
     methods: {
@@ -55,12 +73,14 @@ export default {
             let areEqual = this.teamsAndOwnAverages.every(c => { return c.average == idealAverage || c.average == idealAverage + 1 })
             return areEqual
         },
-        setFinal() {
+        controlTeamsEquiality() {
             var lastResult = this.setTeams()
             while (!lastResult) {
                 lastResult = this.setTeams()
             }
-            return this.teamsAndOwnAverages
+            this.$store.state.finalTeams = this.teamsAndOwnAverages
+            console.log("🚀 ~ file: TeamsView.vue:66 ~ controlTeamsEquiality ~ this.finalTeams:", this.finalTeams)
+            return this.finalTeams
         },
         sortRandomAllPlayersAvailables() {
             return this.all_players_availables.filter(player => {
@@ -73,7 +93,7 @@ export default {
             this.$router.replace('/choose_players')
         }
         this.$store.state.lastResult = false
-        this.setFinal()
+        this.controlTeamsEquiality()
     },
 }
 </script>
