@@ -7,8 +7,6 @@
 
 <script>
 import { mapState } from "vuex"
-// import { mapMutations } from "vuex";
-// import { mapActions } from 'vuex';
 
 export default {
     name: 'TeamsView',
@@ -26,11 +24,6 @@ export default {
         ]),
     },
     methods: {
-        /**
-         * TODO  choose the range by averages from generalAverage
-         * generalAverage % teams (3) -> 49 % 3 -> 1
-         * !the problem is now in the average by teams.
-         */
         setTeams() {
             const justPlayersNumber = this.possibility.playersForTeam - 1
             const sortedPlayers = [...this.sortRandomAllPlayersAvailables()]
@@ -56,24 +49,17 @@ export default {
             if (generalAverage % this.possibility.teams > 0) {
                 const differenceToBeEqual = generalAverage % this.possibility.teams
                 generalAverage = generalAverage - differenceToBeEqual
-                // console.log("🚀 ~ file: TeamsView.vue:58 ~ setTeams ~ generalAverage:", generalAverage)
             }
 
-            // console.log("🚀 ~ file: TeamsView.vue:57 ~ setTeams ~ recalcAverage:", recalcAverage)
             const idealAverage = Math.round(generalAverage / this.possibility.teams)
-            let areEqual = this.teamsAndOwnAverages.every(c => { return c.average == idealAverage })
+            let areEqual = this.teamsAndOwnAverages.every(c => { return c.average == idealAverage || c.average == idealAverage + 1 })
             return areEqual
         },
         setFinal() {
             var lastResult = this.setTeams()
-            var counter = 0
-            // while (!lastResult) {
-            for (let i = 0; i < 10; i++) {
+            while (!lastResult) {
                 lastResult = this.setTeams()
-                counter++
             }
-            console.log("🚀 ~ file: TeamsView.vue:58 ~ setFinal ~ lastResult:", lastResult)
-            console.log("🚀 ~ file: TeamsView.vue:60 ~ setFinal ~ counter:", counter)
             return this.teamsAndOwnAverages
         },
         sortRandomAllPlayersAvailables() {
