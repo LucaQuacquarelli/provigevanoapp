@@ -9,10 +9,10 @@
             </h2>
         </div>
         <div class="col-12 my-4">
-            <Search :playersFiltered="false"/>
+            <Search :playersFiltered="false" />
         </div>
         <div v-for="player in this.$store.state.all_players" :key="player.id" class="col-5 mb-4 overflow-hidden">
-            <PlayerCard :player="player" @click="activateEdit(player)"/>
+            <PlayerCard :player="player" @click="activateEdit(player)" />
             <!-- TODO -->
             <!-- <PlayerCard :player="player" @dblclick="editModal = true"/> -->
         </div>
@@ -36,19 +36,22 @@
                         <label class="form-label">
                             {{ $t('form.name') }}
                         </label>
-                        <input type="text" ref="name" class="form-control" :placeholder="activeEditPlayer.name" :value="activeEditPlayer.name">
+                        <input type="text" ref="name" class="form-control" :placeholder="activeEditPlayer.name"
+                            :value="activeEditPlayer.name">
                     </div>
                     <div class="col-12">
                         <label class="form-label mt-2">
                             {{ $t('form.surname') }}
                         </label>
-                        <input type="text" ref="surname" class="form-control" :placeholder="activeEditPlayer.surname" :value="activeEditPlayer.surname">
+                        <input type="text" ref="surname" class="form-control" :placeholder="activeEditPlayer.surname"
+                            :value="activeEditPlayer.surname">
                     </div>
                     <div class="col-12">
                         <label class="form-label mt-2">
                             {{ $t('form.nick_name') }}
                         </label>
-                        <input type="text" ref="nick_name" class="form-control" :placeholder="activeEditPlayer.nick_name" :value="activeEditPlayer.nick_name">
+                        <input type="text" ref="nick_name" class="form-control" :placeholder="activeEditPlayer.nick_name"
+                            :value="activeEditPlayer.nick_name">
                     </div>
                     <div class="col-5">
                         <label class="form-label mt-2">
@@ -61,7 +64,8 @@
                             {{ $t('form.level') }}
                         </label>
                         <select ref="level_id">
-                            <option v-for="level in this.$store.state.levels" :key="level.id" :value="level.id" :selected="level.id == activeEditPlayer.level.id">
+                            <option v-for="level in this.$store.state.levels" :key="level.id" :value="level.id"
+                                :selected="level.id == activeEditPlayer.level.id">
                                 {{ level.name }}
                             </option>
                         </select>
@@ -83,8 +87,8 @@
 </template>
 
 <script>
-import PlayerCard from '../components/PlayerCard.vue';
-import Modal from '../components/Modal.vue';
+import PlayerCard from '../components/PlayerCard.vue'
+import Modal from '../components/Modal.vue'
 import Search from '../components/Search.vue'
 export default {
     name: 'PlayersView',
@@ -121,7 +125,7 @@ export default {
                          *TODO add modal errors
                          */
                         console.log("🚀 ~ file: PlayersView.vue ~ line 134 ~ .then ~ res", res)
-                    }else{
+                    } else {
                         this.editModal = false
                         this.$store.state.successHeader = this.$t("modal.success.edited")
                         this.$store.state.successModal = true
@@ -131,8 +135,8 @@ export default {
                         }
                         setTimeout(() => {
                             this.$store.state.successModal = false
-                        }, 1500);
-                }
+                        }, 1500)
+                    }
                 })
                 .catch((err) => {
                     this.$store.state.serverModal = true
@@ -149,14 +153,13 @@ export default {
             .catch((err) => {
                 this.$store.state.serverModal = true
                 this.$store.state.errServer = err.message
-            }) 
+            })
     }
 }
 </script>
 
 <style lang="scss" scoped>
-    .rounded {
-        border-radius: 30px !important;
-        border: 2px solid red;
-    }
-</style>
+.rounded {
+    border-radius: 30px !important;
+    border: 2px solid red;
+}</style>

@@ -1,9 +1,9 @@
 <template>
-    <Header/>
+    <Header />
     <div class="container py-4">
         <router-view />
     </div>
-    <Footer/>
+    <Footer />
     <transition name="fade-modal">
         <modal v-if="this.$store.state.serverModal" @close="this.$store.state.serverModal = false">
             <template v-slot:header>
@@ -39,9 +39,9 @@
 </template>
 
 <script>
-import Header from './components/Header.vue';
-import Footer from './components/Footer.vue';
-import Modal from './components/Modal.vue';
+import Header from './components/Header.vue'
+import Footer from './components/Footer.vue'
+import Modal from './components/Modal.vue'
 export default {
     name: 'ProVigevanoApp',
     components: {
@@ -63,9 +63,9 @@ export default {
             .catch((err) => {
                 this.$store.state.serverModal = true
                 this.$store.state.errServer = err.message
-            }) 
+            })
     }
-};
+}
 </script>
 
 <style lang="scss">

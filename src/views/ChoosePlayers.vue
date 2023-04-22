@@ -6,7 +6,7 @@
             </h2>
         </div>
         <div class="col-12 my-4">
-            <Search :playersFiltered="true"/>
+            <Search :playersFiltered="true" />
         </div>
         <div class="col-12 d-flex flex-wrap align-items-start">
             <div class="col-12 players-availables-wrapper" v-if="this.$store.state.all_players_availables.length > 0">
@@ -23,8 +23,11 @@
                 </div>
                 <div class="availables-container px-2">
                     <div v-for="player in this.$store.state.all_players_availables" :key="player.id">
-                        <label v-if="player.available" class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill available" :for="player.id">
-                            <input class="d-none" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
+                        <label v-if="player.available"
+                            class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill available"
+                            :for="player.id">
+                            <input class="d-none" type="checkbox" :id="player.id" v-model="player.available"
+                                @change="setAvailability(player)" />
                             <span class="fs-3 fw-bold">
                                 {{ player.nick_name }}
                             </span>
@@ -32,7 +35,8 @@
                                 <span class="badge fs-6 bg-dark me-2">
                                     {{ player.level.percentage }}
                                 </span>
-                                <span class="badge fs-6" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                <span class="badge fs-6"
+                                    :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
                                     {{ roleAbbreviation(player.role.name) }}
                                 </span>
                             </span>
@@ -51,8 +55,10 @@
                 </div>
                 <div class="unavailables-container px-2">
                     <div v-for="player in this.$store.state.all_players_unavailables" :key="player.id">
-                        <label class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill unavailable" :for="player.id">
-                            <input class="d-none" type="checkbox" :id="player.id" v-model="player.available" @change="setAvailability(player)"/>
+                        <label class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill unavailable"
+                            :for="player.id">
+                            <input class="d-none" type="checkbox" :id="player.id" v-model="player.available"
+                                @change="setAvailability(player)" />
                             <span class="fs-3 fw-bold">
                                 {{ player.nick_name }}
                             </span>
@@ -60,7 +66,8 @@
                                 <span class="badge fs-6 bg-dark me-2">
                                     {{ player.level.percentage }}
                                 </span>
-                                <span class="badge fs-6" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                <span class="badge fs-6"
+                                    :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
                                     {{ roleAbbreviation(player.role.name) }}
                                 </span>
                             </span>
@@ -68,13 +75,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 text-center" v-if="this.$store.state.all_players_availables.length == 0 && this.$store.state.all_players_unavailables.length == 0">
+            <div class="col-12 text-center"
+                v-if="this.$store.state.all_players_availables.length == 0 && this.$store.state.all_players_unavailables.length == 0">
                 <h2>
                     {{ $t('players.no_players') }}
                 </h2>
             </div>
         </div>
-        <div class="col-12 py-2 text-center wrapper mt-4" v-if="this.$store.state.all_players_availables.length >= 10 && this.$store.state.allPossibilities.length != 0">
+        <div class="col-12 py-2 text-center wrapper mt-4"
+            v-if="this.$store.state.all_players_availables.length >= 10 && this.$store.state.allPossibilities.length != 0">
             <button class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
                 {{ $t('general.confirm') }}
             </button>
@@ -84,14 +93,16 @@
     <transition name="fade-modal">
         <modal-slide v-if="this.$store.state.possibilityModal">
             <template v-slot:header>
-                <div class="modal-header d-flex justify-content-between align-items-center py-2 px-4 border-bottom border-primary">
+                <div
+                    class="modal-header d-flex justify-content-between align-items-center py-2 px-4 border-bottom border-primary">
                     <span class="text-primary" @click="clearGoalKeepersProvisory">
                         {{ $t('general.cancel') }}
                     </span>
                     <h5 class="modal-title">
                         {{ $t('modal.teamsSettings.sort') }}
                     </h5>
-                    <button :disabled="modalContent != null" @click="this.$router.replace('/selected_players')" class="border-0 bg-transparent" :class="modalContent != null ? 'text-secondary' : 'text-primary'">
+                    <button :disabled="modalContent != null" @click="this.$router.replace('/selected_players')"
+                        class="border-0 bg-transparent" :class="modalContent != null ? 'text-secondary' : 'text-primary'">
                         {{ $t('general.end') }}
                     </button>
                 </div>
@@ -99,28 +110,33 @@
             <template v-slot:body>
                 <div class="modal-body p-4">
                     <div v-if="modalContent == false" class="d-flex justify-content-between align-items-center">
-                        <div v-for="(possibility, index) in this.$store.state.allPossibilities" :key="index" :class="this.$store.state.allPossibilities.length > 1 ? 'col-5' : 'col-12'">
+                        <div v-for="(possibility, index) in this.$store.state.allPossibilities" :key="index"
+                            :class="this.$store.state.allPossibilities.length > 1 ? 'col-5' : 'col-12'">
                             <button class="btn btn-success rounded-pill w-100" @click="checkOnPossibility(possibility)">
                                 {{ possibility.teams }} {{ $t('teams.teams') }} <br>
-                                {{ $t('teams.from')}} {{ possibility.playersForTeam }} {{ $t('teams.players') }}
+                                {{ $t('teams.from') }} {{ possibility.playersForTeam }} {{ $t('teams.players') }}
                             </button>
                         </div>
                     </div>
                     <div v-else-if="modalContent == true" class="d-flex flex-wrap align-items-center">
                         <div class="col-12 text-center">
                             <h4>
-                                {{ chooseContentModalPossibility(choicePossibility) }} {{ differenceGk }} {{ differenceGk == 1 ? this.$t('modal.teamsSettings.gk') : this.$t('modal.teamsSettings.gks') }} {{ $t('modal.teamsSettings.toContinue') }}
+                                {{ chooseContentModalPossibility(choicePossibility) }} {{ differenceGk }}
+                                {{ differenceGk == 1 ? this.$t('modal.teamsSettings.gk') : this.$t('modal.teamsSettings.gks') }}
+                                {{ $t('modal.teamsSettings.toContinue') }}
                             </h4>
                         </div>
                         <div class="col-12 my-4">
-                            <Search :playersFiltered="true"/>
+                            <Search :playersFiltered="true" />
                         </div>
                         <div class="col-12" v-if="this.$store.state.all_players_availables.length != 0">
                             <div class="availables-container">
                                 <div v-if="choicePossibility == 'add'">
                                     <div v-for="player in this.$store.state.all_players_availables" :key="player.id">
-                                        <label v-if="player.role.id == 1" class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill available">
-                                            <input class="d-none" type="checkbox" v-model="player.available" @change="setGoalKeepersProvisory(player)"/>
+                                        <label v-if="player.role.id == 1"
+                                            class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill available">
+                                            <input class="d-none" type="checkbox" v-model="player.available"
+                                                @change="setGoalKeepersProvisory(player)" />
                                             <span class="fs-3 fw-bold">
                                                 {{ player.nick_name }}
                                             </span>
@@ -128,7 +144,8 @@
                                                 <span class="badge fs-6 bg-dark me-2">
                                                     {{ player.level.percentage }}
                                                 </span>
-                                                <span class="badge fs-6" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                                <span class="badge fs-6"
+                                                    :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
                                                     {{ roleAbbreviation(player.role.name) }}
                                                 </span>
                                             </span>
@@ -137,8 +154,10 @@
                                 </div>
                                 <div v-else>
                                     <div v-for="player in this.$store.state.all_players_availables" :key="player.id">
-                                        <label v-if="player.role.id == 2" class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill available">
-                                            <input class="d-none" type="checkbox" v-model="player.available" @change="setGoalKeepersProvisory(player)"/>
+                                        <label v-if="player.role.id == 2"
+                                            class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill available">
+                                            <input class="d-none" type="checkbox" v-model="player.available"
+                                                @change="setGoalKeepersProvisory(player)" />
                                             <span class="fs-3 fw-bold">
                                                 {{ player.nick_name }}
                                             </span>
@@ -146,7 +165,8 @@
                                                 <span class="badge fs-6 bg-dark me-2">
                                                     {{ player.level.percentage }}
                                                 </span>
-                                                <span class="badge fs-6" :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                                <span class="badge fs-6"
+                                                    :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
                                                     {{ roleAbbreviation(player.role.name) }}
                                                 </span>
                                             </span>
@@ -169,10 +189,10 @@
                         </div>
                         <div class="col-12 text-center my-3">
                             <h2 v-for="goalkeeper in goalkeepersProvisoryFilter" :key="goalkeeper.id">
-                                {{ goalkeeper.nick_name }} 
+                                {{ goalkeeper.nick_name }}
                             </h2>
                             <span>
-                                {{ goalkeepersProvisoryFilter.length > 1 ?  $t('modal.teamsSettings.gks_provisory') : $t('modal.teamsSettings.gk_provisory') }}
+                                {{ goalkeepersProvisoryFilter.length > 1 ? $t('modal.teamsSettings.gks_provisory') : $t('modal.teamsSettings.gk_provisory') }}
                             </span>
                         </div>
                         <div class="col-12 text-center">
@@ -219,14 +239,14 @@ export default {
             }
             return role => abbreviation[role]
         },
-        chooseContentModalPossibility(){
+        chooseContentModalPossibility() {
             const possibilitiesChecked = {
                 'add': this.$t('modal.teamsSettings.addGk'),
                 'remove': this.$t('modal.teamsSettings.removeGk')
             }
             return possibility => possibilitiesChecked[possibility]
         },
-        goalkeepersProvisoryFilter(){
+        goalkeepersProvisoryFilter() {
             const goalkeepers_provisory = this.$store.state.all_goal_keepers.filter(
                 goalkeeper => {
                     return goalkeeper.goalkeeper_provisory
@@ -254,7 +274,7 @@ export default {
                     console.log(err)
                 })
         },
-        clearAvailability(){
+        clearAvailability() {
             this.$http
                 .get(`${this.$store.getters.apiPath}/players_availability/clear`)
                 .then((res) => {
@@ -262,7 +282,7 @@ export default {
                     this.$store.state.all_players_availables = []
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.log(err)
                 })
         },
         setGoalKeepersProvisory(player) {
@@ -278,10 +298,10 @@ export default {
                     this.checkOnPossibility(this.$store.state.possibility)
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.log(err)
                 })
         },
-        clearGoalKeepersProvisory(){
+        clearGoalKeepersProvisory() {
             this.$http
                 .get(`${this.$store.getters.apiPath}/goalkeeper_provisory/clear`)
                 .then((res) => {
@@ -291,15 +311,15 @@ export default {
                     this.modalContent = false
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.log(err)
                 })
         },
         between(x, min, max) {
-            return x >= min && x <= max;
+            return x >= min && x <= max
         },
         setTeamsSettings(players) {
             this.$store.state.allPossibilities = []
-            const minPlayers = 5;
+            const minPlayers = 5
             const maxPlayers = 9
             for (let i = 2; i < 5; i++) {
                 var playersForTeam = players / i
@@ -343,14 +363,14 @@ export default {
                     } else {
                         $('.players-availables-wrapper').removeClass('open')
                     }
-                    break;
+                    break
                 case 'unavailables':
                     if (this.key) {
                         $('.players-unavailables-wrapper').addClass('open')
                     } else {
                         $('.players-unavailables-wrapper').removeClass('open')
                     }
-                    break;
+                    break
             }
         }
     },
@@ -369,91 +389,90 @@ export default {
                 console.log(err)
             })
 
-            $(window).scroll(function() {    
-                var scroll = $(window).scrollTop();
+        $(window).scroll(function () {
+            var scroll = $(window).scrollTop()
 
-                if (scroll >= 60) {
-                    $(".wrapper").addClass("btn-set-wrapper");
-                } else {
-                    $(".wrapper").removeClass("btn-set-wrapper");
-                }
-            })
+            if (scroll >= 60) {
+                $(".wrapper").addClass("btn-set-wrapper")
+            } else {
+                $(".wrapper").removeClass("btn-set-wrapper")
+            }
+        })
     },
 }
 </script>
 
 <style lang="scss" scoped>
+.btn-set-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px;
+    backdrop-filter: blur(10px);
+    margin: 0 !important;
+    z-index: 999;
 
-    .btn-set-wrapper {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 60px;
-        backdrop-filter: blur(10px);
-        margin: 0 !important;
-        z-index: 999;
-
-        button {
-            transition: 0.3s;
-            width: 75% !important;
-            background-color: green;
-            box-shadow: 0 0 15px 10px green;
-            font-weight: bold;
-            color: white;
-        }
-    }
-
-    .players-availables-wrapper ,
-    .players-unavailables-wrapper {
-        height: 86px;
-        border: 2px solid green;
-        border-bottom: 0;
-        overflow-y: auto;
+    button {
         transition: 0.3s;
-
-        &.open {
-            height: 250px;
-        }
+        width: 75% !important;
+        background-color: green;
+        box-shadow: 0 0 15px 10px green;
+        font-weight: bold;
+        color: white;
     }
+}
 
-    .unavailables-container, 
-    .availables-container {
-        min-height: 50px;
-        // max-height: 480px;
-        overflow-y: auto;
+.players-availables-wrapper,
+.players-unavailables-wrapper {
+    height: 86px;
+    border: 2px solid green;
+    border-bottom: 0;
+    overflow-y: auto;
+    transition: 0.3s;
+
+    &.open {
+        height: 250px;
     }
+}
 
-    .unavailable {
-        box-shadow: inset 0 -10px 15px 5px rgba(0, 0, 0, 1);
-        filter: grayscale(100%);
-        background-image: url('../assets/img/soccer-bg.jpg');
-        background-size: cover;
-        background-position-y: center;
-        border-radius: 50em;
-        border: 3px solid transparent;
+.unavailables-container,
+.availables-container {
+    min-height: 50px;
+    // max-height: 480px;
+    overflow-y: auto;
+}
 
-        span.fs-3 {
-            text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
-        }
+.unavailable {
+    box-shadow: inset 0 -10px 15px 5px rgba(0, 0, 0, 1);
+    filter: grayscale(100%);
+    background-image: url('../assets/img/soccer-bg.jpg');
+    background-size: cover;
+    background-position-y: center;
+    border-radius: 50em;
+    border: 3px solid transparent;
+
+    span.fs-3 {
+        text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
     }
-    .available {
-        box-shadow: inset 0 0 15px 5px rgba(0, 0, 0, 0.8);
-        background-image: url('../assets/img/soccer-bg.jpg');
-        background-size: cover;
-        background-position-y: center;
-        border-radius: 50em;
-        border: 3px solid transparent;
-        
-        span.fs-3 {
-            text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
-        }
-    }
+}
 
-    .modal-body {
-        height: 600px;
+.available {
+    box-shadow: inset 0 0 15px 5px rgba(0, 0, 0, 0.8);
+    background-image: url('../assets/img/soccer-bg.jpg');
+    background-size: cover;
+    background-position-y: center;
+    border-radius: 50em;
+    border: 3px solid transparent;
 
-        .fa-circle-check {
-            font-size: 54px;
-        }
+    span.fs-3 {
+        text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;
     }
-</style>
+}
+
+.modal-body {
+    height: 600px;
+
+    .fa-circle-check {
+        font-size: 54px;
+    }
+}</style>

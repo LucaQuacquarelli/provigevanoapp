@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import PlayerCard from '../components/PlayerCard.vue';
+import PlayerCard from '../components/PlayerCard.vue'
 export default {
     name: "SelectedPlayers",
     components: { PlayerCard },
@@ -42,15 +42,15 @@ export default {
             //     counter = this.$store.state.all_players_availables.length + this.$store.state.all_goal_keepers.length
             // }
             // return counter
-            return this.$store.state.all_players_availables.length;
+            return this.$store.state.all_players_availables.length
         }
     },
     created() {
         if (Object.keys(this.$store.state.all_players_availables).length === 0 && this.$store.state.all_goal_keepers.length == 0) {
-            this.$router.replace("/choose_players");
+            this.$router.replace("/choose_players")
         }
     }
-};
+}
 </script>
 
 <style lang="scss" scoped>

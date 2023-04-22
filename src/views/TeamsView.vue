@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from "vuex"
 // import { mapMutations } from "vuex";
 // import { mapActions } from 'vuex';
 
@@ -15,7 +15,7 @@ export default {
     data() {
         return {
             teamsAndOwnAverages: null,
-        };
+        }
     },
     computed: {
         ...mapState([
@@ -32,62 +32,62 @@ export default {
          * !the problem is now in the average by teams.
          */
         setTeams() {
-            const justPlayersNumber = this.possibility.playersForTeam - 1;
-            const sortedPlayers = [...this.sortRandomAllPlayersAvailables()];
-            const completedTeams = [];
+            const justPlayersNumber = this.possibility.playersForTeam - 1
+            const sortedPlayers = [...this.sortRandomAllPlayersAvailables()]
+            const completedTeams = []
             for (let i = 0; i < this.possibility.teams; i++) {
-                var allPlayersForTeams = [];
-                var playersForTeam = sortedPlayers.splice(0, justPlayersNumber);
-                allPlayersForTeams.push(...playersForTeam);
-                allPlayersForTeams.push(this.all_goal_keepers[i]);
-                completedTeams.push(allPlayersForTeams);
+                var allPlayersForTeams = []
+                var playersForTeam = sortedPlayers.splice(0, justPlayersNumber)
+                allPlayersForTeams.push(...playersForTeam)
+                allPlayersForTeams.push(this.all_goal_keepers[i])
+                completedTeams.push(allPlayersForTeams)
             }
 
-            this.teamsAndOwnAverages = [];
+            this.teamsAndOwnAverages = []
             completedTeams.forEach(team => {
-                let singleTeamAverage = 0;
+                let singleTeamAverage = 0
                 team.forEach(player => {
-                    singleTeamAverage += player.level.percentage;
-                });
-                this.teamsAndOwnAverages.push({ team: team, average: singleTeamAverage });
-            });
+                    singleTeamAverage += player.level.percentage
+                })
+                this.teamsAndOwnAverages.push({ team: team, average: singleTeamAverage })
+            })
 
-            var generalAverage = this.teamsAndOwnAverages.reduce((acc, curr) => { return acc += curr.average; }, 0);
+            var generalAverage = this.teamsAndOwnAverages.reduce((acc, curr) => { return acc += curr.average }, 0)
             if (generalAverage % this.possibility.teams > 0) {
                 const differenceToBeEqual = generalAverage % this.possibility.teams
-                generalAverage = generalAverage - differenceToBeEqual 
+                generalAverage = generalAverage - differenceToBeEqual
                 // console.log("🚀 ~ file: TeamsView.vue:58 ~ setTeams ~ generalAverage:", generalAverage)
             }
-            
+
             // console.log("🚀 ~ file: TeamsView.vue:57 ~ setTeams ~ recalcAverage:", recalcAverage)
-            const idealAverage = Math.round(generalAverage / this.possibility.teams);
-            let areEqual = this.teamsAndOwnAverages.every(c => { return c.average == idealAverage; });
-            return areEqual;
+            const idealAverage = Math.round(generalAverage / this.possibility.teams)
+            let areEqual = this.teamsAndOwnAverages.every(c => { return c.average == idealAverage })
+            return areEqual
         },
         setFinal() {
-            var lastResult = this.setTeams();
-            var counter = 0;
+            var lastResult = this.setTeams()
+            var counter = 0
             // while (!lastResult) {
             for (let i = 0; i < 10; i++) {
-                lastResult = this.setTeams();
-                counter++;
+                lastResult = this.setTeams()
+                counter++
             }
-            console.log("🚀 ~ file: TeamsView.vue:58 ~ setFinal ~ lastResult:", lastResult);
-            console.log("🚀 ~ file: TeamsView.vue:60 ~ setFinal ~ counter:", counter);
-            return this.teamsAndOwnAverages;
+            console.log("🚀 ~ file: TeamsView.vue:58 ~ setFinal ~ lastResult:", lastResult)
+            console.log("🚀 ~ file: TeamsView.vue:60 ~ setFinal ~ counter:", counter)
+            return this.teamsAndOwnAverages
         },
         sortRandomAllPlayersAvailables() {
             return this.all_players_availables.filter(player => {
-                return player.role.name == 'player';
-            }).sort(() => Math.random() - 0.5);
+                return player.role.name == 'player'
+            }).sort(() => Math.random() - 0.5)
         },
     },
     created() {
         if (this.$store.state.possibility == null || Object.keys(this.all_players_availables).length === 0) {
-            this.$router.replace('/choose_players');
+            this.$router.replace('/choose_players')
         }
-        this.$store.state.lastResult = false;
-        this.setFinal();
+        this.$store.state.lastResult = false
+        this.setFinal()
     },
-};
+}
 </script>
