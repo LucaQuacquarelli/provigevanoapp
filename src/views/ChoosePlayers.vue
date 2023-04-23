@@ -475,4 +475,5 @@ export default {
     .fa-circle-check {
         font-size: 54px;
     }
-}</style>
+}
+</style>

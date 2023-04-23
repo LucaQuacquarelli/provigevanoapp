@@ -9,28 +9,37 @@
         </h1>
         <div class="row">
             <div v-for="teamObject, i in this.finalTeams" :key="i" class="py-3">
-                <div class="d-flex justify-content-between">
-                    <h6>{{ $t('teams.team') }} {{ i + 1 }}
-                    </h6>
+                <div class="d-flex justify-content-between mb-2">
+                    <h6>{{ $t('teams.team') }} {{ i + 1 }}</h6>
                     <span class="badge text-bg-primary">
                         {{ $t('teams.media') }}:&nbsp; {{ teamObject.average }}
                     </span>
                 </div>
-                <table class="table table-sm">
-                    <thead>
+                <table class="table">
+                    <thead class="table-light">
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">{{ $t('form.name') }}</th>
+                            <th scope="col">{{ $t('form.role') }}</th>
                             <th scope="col">{{ $t('form.nick_name') }}</th>
                             <th scope="col">{{ $t('form.level') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="player, j in teamObject.team" :key="j">
+                        <tr v-for="player, j in this.orderByLevel(teamObject.team)" :key="j">
                             <th scope="row">{{ j + 1 }}</th>
                             <td>{{ player.name }}</td>
+                            <td>
+                                <span class="badge" :class="player.role.name == 'goalkeeper' ? 'bg-dark' : 'bg-info'">
+                                    {{ roleAbbreviation(player.role.name) }}
+                                </span>
+                            </td>
                             <td>{{ player.nick_name }}</td>
-                            <td>{{ player.level.name }}</td>
+                            <td>
+                                <span class="badge" :class="this.badgeByLevel(player.level.name)">
+                                    {{ player.level.name }}
+                                </span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -57,6 +66,24 @@ export default {
             'lastResult',
             'finalTeams',
         ]),
+        badgeByLevel() {
+            const badgeClass = {
+                'basso': "bg-success",
+                'medio': "bg-warning",
+                'alto': "bg-danger",
+            }
+            return level => badgeClass[level]
+        },
+        orderByLevel() {
+            return team => team.sort((a, b) => a.level.percentage - b.level.percentage)
+        },
+        roleAbbreviation() {
+            const abbreviation = {
+                'goalkeeper': "PT",
+                'player': "PL",
+            }
+            return role => abbreviation[role]
+        },
     },
     methods: {
         setTeams() {
@@ -66,8 +93,8 @@ export default {
             for (let i = 0; i < this.possibility.teams; i++) {
                 var allPlayersForTeams = []
                 var playersForTeam = sortedPlayers.splice(0, justPlayersNumber)
-                allPlayersForTeams.push(...playersForTeam)
                 allPlayersForTeams.push(this.all_goal_keepers[i])
+                allPlayersForTeams.push(...playersForTeam)
                 completedTeams.push(allPlayersForTeams)
             }
 

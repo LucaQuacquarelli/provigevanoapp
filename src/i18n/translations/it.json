@@ -28,6 +28,7 @@
         "name": "Nome",
         "surname": "Cognome",
         "nick_name": "Sopranome",
+        "role": "Ruolo",
         "goalkeeper_provisory" : "Portiere provvisorio",
         "level": "Livello"
     },
