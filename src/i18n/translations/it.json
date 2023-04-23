@@ -10,9 +10,11 @@
     },
     "teams": {
         "options" : "Opzioni",
+        "team": "Squadra",
         "teams": "Squadre",
         "players": "Giocatori",
-        "from": "da"
+        "from": "da",
+        "media": "Media"
     },
     "general":{
         "edit" : "Modifica",
@@ -46,5 +48,8 @@
             "or": "o",
             "discard": "Premi Annulla per resettare le impostazioni"
         }
+    },
+    "buttons":{
+        "regenerate": "Ricrea le squadre"
     }
 }

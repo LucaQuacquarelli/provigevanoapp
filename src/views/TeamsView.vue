@@ -1,22 +1,39 @@
 <template>
     <div class="container-fluid">
-        <h1>
-            TeamsView
-            <span @click="controlTeamsEquiality">click</span>
+        <h1 class="d-flex justify-content-between align-items-center">
+            {{ $t('teams.teams') }}
+            <span class="btn btn-success" @click="controlTeamsEquiality">
+                <i class="fa-solid fa-repeat fa-xs"></i>
+                &nbsp;{{ $t('buttons.regenerate') }}
+            </span>
         </h1>
-        <!-- TODO make a table with name/nick_name/level.id -> points by player /level.name  -->
         <div class="row">
-            <div v-for="teamObject, i in this.finalTeams" :key="i">
-                <h6>Squadra {{ i + 1 }}
-                    <span class="badge text-bg-primary mb-2">
-                        Media: {{ teamObject.average }}
+            <div v-for="teamObject, i in this.finalTeams" :key="i" class="py-3">
+                <div class="d-flex justify-content-between">
+                    <h6>{{ $t('teams.team') }} {{ i + 1 }}
+                    </h6>
+                    <span class="badge text-bg-primary">
+                        {{ $t('teams.media') }}:&nbsp; {{ teamObject.average }}
                     </span>
-                </h6>
-                <ul class="list-group mb-2">
-                    <li v-for="player, j in teamObject.team" :key="j" class="list-group-item">
-                        {{ player.name }}
-                    </li>
-                </ul>
+                </div>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">{{ $t('form.name') }}</th>
+                            <th scope="col">{{ $t('form.nick_name') }}</th>
+                            <th scope="col">{{ $t('form.level') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="player, j in teamObject.team" :key="j">
+                            <th scope="row">{{ j + 1 }}</th>
+                            <td>{{ player.name }}</td>
+                            <td>{{ player.nick_name }}</td>
+                            <td>{{ player.level.name }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
