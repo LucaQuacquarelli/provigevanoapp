@@ -71,9 +71,9 @@ export default {
 <style lang="scss">
 @import './style/general.scss';
 
-.container {
-    height: calc(100vh - 120px);
-    margin-top: 60px;
-    overflow-y: auto;
-}
+// .container {
+//     height: calc(100vh - 120px);
+//     margin-top: 60px;
+//     overflow-y: auto;
+// }
 </style>

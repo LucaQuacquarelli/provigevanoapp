@@ -1,9 +1,9 @@
 <template>
-    <header class="d-flex py-2 px-4">
-        <div class="col-12 text-center">
-            <h1>
-                Pr⚽ Vigevan⚽
-            </h1>
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <h1>Pro Vigevano App</h1>
+            </div>
         </div>
     </header>
 </template>
@@ -14,24 +14,3 @@ export default {
 }
 
 </script>
-
-<style lang="scss" scoped>
-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    border-radius: 0 0 25px 25px;
-    z-index: 999;
-    box-shadow: 0 0 15px 5px black, inset 0 -4px 15px 5px black;
-    background-image: url('../assets/img/soccer-bg.jpg');
-    background-size: cover;
-
-    h1 {
-        font-size: 35px;
-        color: white;
-        text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-    }
-}
-</style>

@@ -6,7 +6,8 @@
         "all_players" : "Tutti i giocatori",
         "select_players" : "Seleziona i giocatori",
         "no_players" : "Nessun giocatore trovato",
-        "availables" : "Disponibili"
+        "availables" : "Disponibili",
+        "not_availables" : "Non Disponibili"
     },
     "teams": {
         "options" : "Opzioni",

@@ -24,19 +24,28 @@ export default createStore({
     finalTeams: []
   },
   mutations: {
+    setAllPlayersUnavailables(state, allPlayersUnavailables) {
+      state.all_players_unavailables = allPlayersUnavailables
+    },
+    setAllPlayersAvailables(state, allPlayersAvailables) {
+      state.all_players_availables = allPlayersAvailables
+    }
   },
   getters: {
-    apiPath (state) {
+    apiPath(state) {
       return `${state.config.api_protocol}${state.config.api_url}:${state.config.api_port}`
     },
-    randomSortedPlayers (state) {
+    randomSortedPlayers(state) {
       return state.all_players_availables.filter(player => {
         return player.role.name === 'player'
       }).sort(() => Math.random() - 0.5)
+    },
+    playerNotFound(state) {
+      return state.all_players_availables == 0 && state.all_players_unavailables == 0
     }
   },
   actions: {
-    searchPlayers ({ state, getters }, playersFiltered) {
+    searchPlayers({ state, getters }, playersFiltered) {
       Axios
         .post(`${getters.apiPath}/players/search`,
           {

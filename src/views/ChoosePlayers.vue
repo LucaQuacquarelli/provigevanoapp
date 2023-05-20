@@ -8,7 +8,7 @@
         <div class="col-12 my-4">
             <Search :playersFiltered="true" />
         </div>
-        <div class="col-12 d-flex flex-wrap align-items-start">
+        <!-- <div class="col-12 d-flex flex-wrap align-items-start">
             <div class="col-12 players-availables-wrapper" v-if="this.$store.state.all_players_availables.length > 0">
                 <div class="d-flex justify-content-between align-items-center p-4" @click="dropdown('availables')">
                     <h6 class="d-flex align-items-center fw-bold">
@@ -87,7 +87,95 @@
             <button class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
                 {{ $t('general.confirm') }}
             </button>
+        </div> -->
+    </div>
+
+    <div class="accordion" id="accordionPlayers">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="AvailablesPlayers">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#availables"
+                    aria-expanded="true" aria-controls="availables">
+                    {{ $t('players.availables') }}
+                    <span class="badge text-bg-success ms-2">
+                        {{ this.all_players_availables.length }}
+                    </span>
+                </button>
+            </h2>
+            <div id="availables" class="accordion-collapse collapse show" aria-labelledby="AvailablesPlayers"
+                data-bs-parent="#accordionPlayers">
+                <div class="accordion-body">
+                    <div v-for="player in this.all_players_availables" :key="player.id">
+                        <label v-if="player.available"
+                            class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill bg-success bg-gradient text-white"
+                            :for="player.id">
+                            <input class="d-none" type="checkbox" :id="player.id" v-model="player.available"
+                                @change="setAvailability(player)" />
+                            <span class="fs-5 fw-bold">
+                                {{ player.nick_name }}
+                            </span>
+                            <span class="d-flex align-items-center">
+                                <span class="badge fs-6 bg-dark me-2">
+                                    {{ player.level.percentage }}
+                                </span>
+                                <span class="badge fs-6"
+                                    :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                    {{ roleAbbreviation(player.role.name) }}
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="UnavailablesPlayers">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#unavailables"
+                    aria-expanded="true" aria-controls="unavailables">
+                    {{ $t('players.not_availables') }}
+                    <span class="badge text-bg-dark ms-2">
+                        {{ this.all_players_unavailables.length }}
+                    </span>
+                </button>
+            </h2>
+            <div id="unavailables" class="accordion-collapse collapse show" aria-labelledby="UnavailablesPlayers"
+                data-bs-parent="#accordionPlayers">
+                <div class="accordion-body">
+                    <div v-for="player in this.all_players_unavailables" :key="player.id">
+                        <label
+                            class="d-flex justify-content-between align-items-center p-4 mb-2 rounded-pill bg-secondary bg-gradient text-white"
+                            :for="player.id">
+                            <input class="d-none" type="checkbox" :id="player.id" v-model="player.available"
+                                @change="setAvailability(player)" />
+                            <span class="fs-5 fw-bold">
+                                {{ player.nick_name }}
+                            </span>
+                            <span class="d-flex align-items-center">
+                                <span class="badge fs-6 bg-dark me-2">
+                                    {{ player.level.percentage }}
+                                </span>
+                                <span class="badge fs-6"
+                                    :class="player.role.name == 'goalkeeper' ? 'bg-warning' : 'bg-info'">
+                                    {{ roleAbbreviation(player.role.name) }}
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 text-center my-3" v-if="this.playerNotFound">
+        <h2>
+            {{ $t('players.no_players') }}
+        </h2>
+    </div>
+
+    <div class="col-12 py-2 text-center wrapper mt-4">
+        <button class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
+            {{ $t('general.confirm') }}
+        </button>
     </div>
 
     <transition name="fade-modal">
@@ -214,32 +302,25 @@
 </template>
 
 <script>
-import $ from 'jquery'
-import { mapState } from "vuex"
+// import $ from 'jquery'
+import { mapGetters, mapMutations, mapState } from "vuex"
 import ModalSlide from '../components/ModalSlide.vue'
 import Search from '../components/Search.vue'
+import store from "../store"
 export default {
     name: "ChoosePlayers",
-    components: {
-        ModalSlide,
-        Search
-    },
+    components: { ModalSlide, Search },
     data() {
         return {
             modalContent: false,
             choicePossibility: null,
             differenceGk: null,
-            key: false
+            key: false,
         }
     },
     computed: {
-        ...mapState([
-            'all_players_availables',
-            'all_goal_keepers',
-            'possibility',
-            'lastResult',
-            'finalTeams',
-        ]),
+        ...mapGetters(['apiPath', 'playerNotFound']),
+        ...mapState(['all_players_availables', 'all_players_unavailables', 'all_goal_keepers', 'possibility', 'lastResult', 'finalTeams', 'allPossibilities']),
         roleAbbreviation() {
             const abbreviation = {
                 'goalkeeper': "PT",
@@ -255,23 +336,18 @@ export default {
             return possibility => possibilitiesChecked[possibility]
         },
         goalkeepersProvisoryFilter() {
-            const goalkeepers_provisory = this.$store.state.all_goal_keepers.filter(
-                goalkeeper => {
-                    return goalkeeper.goalkeeper_provisory
-                }
-            )
+            const goalkeepers_provisory = this.all_goal_keepers.filter(goalkeeper => { return goalkeeper.goalkeeper_provisory })
             return goalkeepers_provisory
         }
     },
     methods: {
+        ...mapMutations(['setAllPlayersUnavailables', 'setAllPlayersAvailables']),
         setAvailability(player) {
-            this.$http
-                .post(`${this.$store.getters.apiPath}/players_availability`,
-                    {
-                        id: player.id,
-                        available: player.available
-                    }
-                )
+            this.$http.post(`${this.apiPath}/players_availability`,
+                {
+                    id: player.id,
+                    available: player.available
+                })
                 .then((res) => {
                     this.$store.state.all_players_unavailables = res.data.all_players_unavailables
                     this.$store.state.all_players_availables = res.data.all_players_availables
@@ -279,7 +355,7 @@ export default {
                     this.$store.state.inputSearch = ''
                 })
                 .catch((err) => {
-                    // TODO modal errors
+                    // TODO modal errors 
                     console.log(err)
                 })
         },
@@ -363,51 +439,44 @@ export default {
                 this.modalContent = null
             }
         },
-        dropdown(container) {
-            this.key = !this.key
-            switch (container) {
-                case 'availables':
-                    if (this.key) {
-                        $('.players-availables-wrapper').addClass('open')
-                    } else {
-                        $('.players-availables-wrapper').removeClass('open')
-                    }
-                    break
-                case 'unavailables':
-                    if (this.key) {
-                        $('.players-unavailables-wrapper').addClass('open')
-                    } else {
-                        $('.players-unavailables-wrapper').removeClass('open')
-                    }
-                    break
-            }
-        }
+        /**
+         * @param {String} container 
+         */
+        // dropdown(container) {
+        //     this.key = !this.key
+        //     switch (container) {
+        //         case 'availables':
+        //             if (this.key) {
+        //                 console.log('availables')
+        //                 $('#availables').addClass('bg-danger')
+        //             } else {
+        //                 $('#availables').removeClass('bg-danger')
+        //             }
+        //             break
+        //         case 'unavailables':
+        //             if (this.key) {
+        //                 $('.players-unavailables-wrapper').addClass('active')
+        //             } else {
+        //                 $('.players-unavailables-wrapper').removeClass('active')
+        //             }
+        //             break
+        //     }
+        // }
     },
     created() {
+        console.log("🚀 ~ file: ChoosePlayers.vue:481 ~ created ~ this.playerNotFound:", this.playerNotFound)
         this.$http
-            .get(`${this.$store.getters.apiPath}/players/available_unavailable`)
+            .get(`${this.apiPath}/players/available_unavailable`)
             .then((res) => {
-                this.$store.state.all_players_availables = res.data.all_players_availables
-                this.$store.state.all_players_unavailables = res.data.all_players_unavailables
-                if (this.$store.state.allPossibilities.length == 0) {
+                store.commit('setAllPlayersAvailables', res.data.all_players_availables)
+                store.commit('setAllPlayersUnavailables', res.data.all_players_unavailables)
+                if (this.allPossibilities.length == 0) {
                     this.setTeamsSettings(res.data.all_players_availables.length)
                 }
                 this.clearGoalKeepersProvisory()
             })
-            .catch((err) => {
-                console.log(err)
-            })
-
-        $(window).scroll(function () {
-            var scroll = $(window).scrollTop()
-
-            if (scroll >= 60) {
-                $(".wrapper").addClass("btn-set-wrapper")
-            } else {
-                $(".wrapper").removeClass("btn-set-wrapper")
-            }
-        })
-    },
+            .catch((err) => { console.log(err) })
+    }
 }
 </script>
 

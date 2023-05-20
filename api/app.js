@@ -2,9 +2,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
+/* eslint-disable */
 const config = require('../config.json')
 const Config = require('./Config')
 const sequelize = Config.sequelize()
+/* eslint-disable */
 const ModelBase = require(`${__dirname}/models/ModelBase`)(sequelize.pro())
 
 const LanguagesController = require('./controllers/LanguagesController')
@@ -12,7 +14,7 @@ const RolesController = require('./controllers/RolesController')
 const LevelsController = require('./controllers/LevelsController')
 const PlayersController = require('./controllers/PlayersController')
 
-const { body, check } = require('express-validator')
+const { body, check } = require('express-validator') /* eslint-disable */
 const app = express()
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))

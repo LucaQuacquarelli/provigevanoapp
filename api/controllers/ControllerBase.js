@@ -110,8 +110,8 @@ module.exports = (sequelize) => {
             }
           ]
         })
-          .then((all_gk_and_provisory) => {
-            resolve(all_gk_and_provisory)
+          .then((AllGoalKeepersAndProvvisory) => {
+            resolve(AllGoalKeepersAndProvvisory)
           })
       })
     }
