@@ -24,6 +24,7 @@
     "mysql2": "^2.3.3",
     "sequelize": "^6.23.2",
     "sequelize-cli": "^6.5.1",
+    "standard": "^17.0.0",
     "uuidv4": "^6.2.13",
     "vue": "^3.0.0",
     "vue-axios": "^3.4.1",

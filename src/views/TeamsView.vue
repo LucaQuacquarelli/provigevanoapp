@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <h1 class="d-flex justify-content-between align-items-center">
             {{ $t('teams.teams') }}
-            <span class="btn btn-success" @click="controlTeamsEquiality">
+            <span class="btn btn-success" @click="controlBalancedTeams">
                 <i class="fa-solid fa-repeat fa-xs"></i>
                 &nbsp;{{ $t('buttons.regenerate') }}
             </span>
@@ -69,7 +69,9 @@ export default {
         badgeByLevel() {
             const badgeClass = {
                 'basso': "bg-success",
+                'medio-basso': "bg-success",
                 'medio': "bg-warning",
+                'medio-alto': "bg-warning",
                 'alto': "bg-danger",
             }
             return level => badgeClass[level]
@@ -117,13 +119,13 @@ export default {
             let areEqual = this.teamsAndOwnAverages.every(c => { return c.average == idealAverage || c.average == idealAverage + 1 })
             return areEqual
         },
-        controlTeamsEquiality() {
+        controlBalancedTeams() {
             var lastResult = this.setTeams()
             while (!lastResult) {
                 lastResult = this.setTeams()
             }
             this.$store.state.finalTeams = this.teamsAndOwnAverages
-            console.log("🚀 ~ file: TeamsView.vue:66 ~ controlTeamsEquiality ~ this.finalTeams:", this.finalTeams)
+            console.log("🚀 ~ file: TeamsView.vue:66 ~ controlBalancedTeams ~ this.finalTeams:", this.finalTeams)
             return this.finalTeams
         },
         sortRandomAllPlayersAvailables() {
@@ -137,7 +139,7 @@ export default {
             this.$router.replace('/choose_players')
         }
         this.$store.state.lastResult = false
-        this.controlTeamsEquiality()
+        this.controlBalancedTeams()
     },
 }
 </script>

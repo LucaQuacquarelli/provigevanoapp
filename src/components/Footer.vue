@@ -2,7 +2,7 @@
     <footer class="d-flex py-2 px-4">
         <div class="col-12 d-flex align-items-center">
             <div class="col-4 text-center text-white">
-                <router-link class="nav-link" to="/" >
+                <router-link class="nav-link" to="/">
                     <i class="fa-solid fa-house"></i>
                 </router-link>
             </div>

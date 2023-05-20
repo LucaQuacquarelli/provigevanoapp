@@ -27,7 +27,7 @@ header {
     box-shadow: 0 0 15px 5px black, inset 0 -4px 15px 5px black;
     background-image: url('../assets/img/soccer-bg.jpg');
     background-size: cover;
-    
+
     h1 {
         font-size: 35px;
         color: white;

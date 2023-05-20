@@ -6,12 +6,12 @@ import store from './store'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.js'
 // import "@fontsource/spartan/400.css"
-import i18n from './i18n';
+import i18n from './i18n'
 
 const app = createApp(App)
 app.config.globalProperties.$http = Axios
 
 app.use(router)
-app.use(store);
-app.use(i18n);
+app.use(store)
+app.use(i18n)
 app.mount('#app')

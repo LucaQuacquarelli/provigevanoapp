@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
-import ChoosePlayers from '../views/ChoosePlayers.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from '../views/Home.vue'
+import ChoosePlayers from '../views/ChoosePlayers.vue'
 
 const routes = [
   {
@@ -12,7 +12,7 @@ const routes = [
     path: '/players',
     name: 'PlayersView',
     props: true,
-    component: () => import("../views/PlayersView.vue"),
+    component: () => import('../views/PlayersView.vue')
   },
   {
     path: '/choose_players',
@@ -22,19 +22,19 @@ const routes = [
   {
     path: '/teams',
     name: 'TeamsView',
-    component: () => import("../views/TeamsView.vue")
+    component: () => import('../views/TeamsView.vue')
   },
   {
     path: '/selected_players',
     name: 'SelectedPlayers',
     props: true,
-    component: () => import("../views/SelectedPlayers.vue"),
+    component: () => import('../views/SelectedPlayers.vue')
   }
-];
+]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-});
+})
 
-export default router;
+export default router

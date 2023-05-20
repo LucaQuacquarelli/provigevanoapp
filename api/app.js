@@ -4,8 +4,8 @@ const cors = require('cors')
 
 const config = require('../config.json')
 const Config = require('./Config')
-var sequelize = Config.sequelize()
-var ModelBase = require(`${__dirname}/models/ModelBase`)(sequelize.pro())
+const sequelize = Config.sequelize()
+const ModelBase = require(`${__dirname}/models/ModelBase`)(sequelize.pro())
 
 const LanguagesController = require('./controllers/LanguagesController')
 const RolesController = require('./controllers/RolesController')
@@ -23,12 +23,12 @@ app.use(bodyParser.json())
  */
 app.get('/players', PlayersController.index)
 app.post('/player/update',
-    body('name').not().isEmpty().trim().escape(),
-    body('surname').not().isEmpty().trim().escape(),
-    body('nick_name').not().isEmpty().trim().escape(),
-    // [check('date-of-birth').isISO8601().toDate()],
-    // [check("language_id", "language not supported").isIn(config.app_lang_supported)],
-PlayersController.update)
+  body('name').not().isEmpty().trim().escape(),
+  body('surname').not().isEmpty().trim().escape(),
+  body('nick_name').not().isEmpty().trim().escape(),
+  // [check('date-of-birth').isISO8601().toDate()],
+  // [check("language_id", "language not supported").isIn(config.app_lang_supported)],
+  PlayersController.update)
 
 /**
  ** Players endPoints

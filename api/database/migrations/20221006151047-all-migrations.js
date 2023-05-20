@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /** @type {import('sequelize-cli').Migration} */
 
@@ -59,7 +59,7 @@ module.exports = {
       },
       name: {
         type: Sequelize.CHAR(50),
-        allowNull: false,
+        allowNull: false
       },
       surname: {
         type: Sequelize.CHAR(50),
@@ -80,48 +80,48 @@ module.exports = {
         defaultValue: false
       },
       level_id: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-            model: 'levels',
-            key: 'id'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'levels',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       role_id: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-          references: {
-            model: 'roles',
-            key: 'id'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'roles',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       language_id: {
-          type: Sequelize.CHAR(2),
-          allowNull: false,
-          references: {
-            model: 'languages',
-            key: 'id'
-          },
-          onUpdate: 'CASCADE',
-          onDelete: 'CASCADE'
+        type: Sequelize.CHAR(2),
+        allowNull: false,
+        references: {
+          model: 'languages',
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       },
       available: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: false
       },
       created: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: false
       },
       updated: {
         type: Sequelize.DATE,
         allowNull: false
-      },
+      }
     })
   },
 
@@ -137,4 +137,4 @@ module.exports = {
     await queryInterface.dropTable('languages')
     await queryInterface.dropTable('players')
   }
-};
+}

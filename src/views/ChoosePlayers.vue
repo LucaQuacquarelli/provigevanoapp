@@ -215,6 +215,7 @@
 
 <script>
 import $ from 'jquery'
+import { mapState } from "vuex"
 import ModalSlide from '../components/ModalSlide.vue'
 import Search from '../components/Search.vue'
 export default {
@@ -232,6 +233,13 @@ export default {
         }
     },
     computed: {
+        ...mapState([
+            'all_players_availables',
+            'all_goal_keepers',
+            'possibility',
+            'lastResult',
+            'finalTeams',
+        ]),
         roleAbbreviation() {
             const abbreviation = {
                 'goalkeeper': "PT",
@@ -268,6 +276,7 @@ export default {
                     this.$store.state.all_players_unavailables = res.data.all_players_unavailables
                     this.$store.state.all_players_availables = res.data.all_players_availables
                     this.setTeamsSettings(res.data.all_players_availables.length)
+                    this.$store.state.inputSearch = ''
                 })
                 .catch((err) => {
                     // TODO modal errors
@@ -424,21 +433,21 @@ export default {
 
 .players-availables-wrapper,
 .players-unavailables-wrapper {
-    height: 86px;
-    border: 2px solid green;
-    border-bottom: 0;
+    height: 100px;
+    border: 1px solid green;
+    // border-bottom: 0;
     overflow-y: auto;
     transition: 0.3s;
 
     &.open {
-        height: 250px;
+        height: 300px;
     }
 }
 
 .unavailables-container,
 .availables-container {
     min-height: 50px;
-    // max-height: 480px;
+    max-height: 480px;
     overflow-y: auto;
 }
 
