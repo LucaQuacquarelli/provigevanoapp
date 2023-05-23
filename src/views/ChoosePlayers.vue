@@ -172,8 +172,8 @@
         </h2>
     </div>
 
-    <div class="col-12 py-2 text-center wrapper mt-4">
-        <button class="btn btn-outline-success rounded-pill w-50" @click="this.$store.state.possibilityModal = true">
+    <div class="col-12 py-2 text-center wrapper mt-4" v-if="this.showConfirmButton">
+        <button class="btn btn-outline-success rounded-pill w-50" @click="this.possibilityModalChange">
             {{ $t('general.confirm') }}
         </button>
     </div>
@@ -186,9 +186,9 @@
                     <span class="text-primary" @click="clearGoalKeepersProvisory">
                         {{ $t('general.cancel') }}
                     </span>
-                    <h5 class="modal-title">
+                    <h6 class="modal-title">
                         {{ $t('modal.teamsSettings.sort') }}
-                    </h5>
+                    </h6>
                     <button :disabled="modalContent != null" @click="this.$router.replace('/selected_players')"
                         class="border-0 bg-transparent" :class="modalContent != null ? 'text-secondary' : 'text-primary'">
                         {{ $t('general.end') }}
@@ -306,7 +306,7 @@
 import { mapGetters, mapMutations, mapState } from "vuex"
 import ModalSlide from '../components/ModalSlide.vue'
 import Search from '../components/Search.vue'
-import store from "../store"
+// import store from "../store"
 export default {
     name: "ChoosePlayers",
     components: { ModalSlide, Search },
@@ -319,7 +319,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['apiPath', 'playerNotFound']),
+        ...mapGetters(['apiPath', 'playerNotFound', 'showConfirmButton']),
         ...mapState(['all_players_availables', 'all_players_unavailables', 'all_goal_keepers', 'possibility', 'lastResult', 'finalTeams', 'allPossibilities']),
         roleAbbreviation() {
             const abbreviation = {
@@ -341,7 +341,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations(['setAllPlayersUnavailables', 'setAllPlayersAvailables']),
+        ...mapMutations(['setAllPlayersUnavailables', 'setAllPlayersAvailables', 'possibilityModalChange', 'resetInputSearch']),
         setAvailability(player) {
             this.$http.post(`${this.apiPath}/players_availability`,
                 {
@@ -349,10 +349,10 @@ export default {
                     available: player.available
                 })
                 .then((res) => {
-                    this.$store.state.all_players_unavailables = res.data.all_players_unavailables
-                    this.$store.state.all_players_availables = res.data.all_players_availables
+                    this.setAllPlayersAvailables(res.data.all_players_availables)
+                    this.setAllPlayersUnavailables(res.data.all_players_unavailables)
                     this.setTeamsSettings(res.data.all_players_availables.length)
-                    this.$store.state.inputSearch = ''
+                    this.resetInputSearch()
                 })
                 .catch((err) => {
                     // TODO modal errors 
@@ -464,12 +464,13 @@ export default {
         // }
     },
     created() {
-        console.log("🚀 ~ file: ChoosePlayers.vue:481 ~ created ~ this.playerNotFound:", this.playerNotFound)
         this.$http
             .get(`${this.apiPath}/players/available_unavailable`)
             .then((res) => {
-                store.commit('setAllPlayersAvailables', res.data.all_players_availables)
-                store.commit('setAllPlayersUnavailables', res.data.all_players_unavailables)
+                this.setAllPlayersAvailables(res.data.all_players_availables)
+                this.setAllPlayersUnavailables(res.data.all_players_unavailables)
+                // store.commit('setAllPlayersAvailables', res.data.all_players_availables)
+                // store.commit('setAllPlayersUnavailables', res.data.all_players_unavailables)
                 if (this.allPossibilities.length == 0) {
                     this.setTeamsSettings(res.data.all_players_availables.length)
                 }

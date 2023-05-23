@@ -8,7 +8,7 @@
 
 <script>
 import $ from 'jquery'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 export default {
     name: 'Search',
     props: {
@@ -20,9 +20,10 @@ export default {
         ]),
     },
     methods: {
+        ...mapMutations(['resetInputSearch']),
         clear() {
             $('.pro-searchbar').blur()
-            this.$store.state.inputSearch = ''
+            this.resetInputSearch()
             this.$store.dispatch('searchPlayers', this.playersFiltered)
         }
     }

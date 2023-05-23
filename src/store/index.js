@@ -29,6 +29,12 @@ export default createStore({
     },
     setAllPlayersAvailables(state, allPlayersAvailables) {
       state.all_players_availables = allPlayersAvailables
+    },
+    possibilityModalChange(state) {
+      state.possibilityModal = !state.possibilityModal
+    },
+    resetInputSearch(state) {
+      state.inputSearch = ''
     }
   },
   getters: {
@@ -42,10 +48,13 @@ export default createStore({
     },
     playerNotFound(state) {
       return state.all_players_availables == 0 && state.all_players_unavailables == 0
+    },
+    showConfirmButton({ all_players_availables, allPossibilities }) {
+      return all_players_availables.length >= 10 && allPossibilities.length != 0
     }
   },
   actions: {
-    searchPlayers({ state, getters }, playersFiltered) {
+    searchPlayers({ state, getters, commit }, playersFiltered) {
       Axios
         .post(`${getters.apiPath}/players/search`,
           {
@@ -55,8 +64,8 @@ export default createStore({
         )
         .then((res) => {
           if (res.data.all_players_availables && res.data.all_players_unavailables) {
-            state.all_players_availables = res.data.all_players_availables
-            state.all_players_unavailables = res.data.all_players_unavailables
+            commit('setAllPlayersAvailables', res.data.all_players_availables)
+            commit('setAllPlayersUnavailables', res.data.all_players_unavailables)
           } else {
             state.all_players = res.data
           }

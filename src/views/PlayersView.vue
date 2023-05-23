@@ -162,4 +162,5 @@ export default {
 .rounded {
     border-radius: 30px !important;
     border: 2px solid red;
-}</style>
+}
+</style>
