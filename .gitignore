@@ -3,6 +3,7 @@ node_modules
 /dist
 /config.sh
 /config.json
+.node-version
 
 
 # local env files
