@@ -16,13 +16,15 @@ export default {
     },
     computed: {
         ...mapState([
-            'inputSearch',
-        ]),
+            'inputSearch'
+        ])
     },
     methods: {
-        ...mapMutations(['resetInputSearch']),
+        ...mapMutations([
+            'resetInputSearch'
+        ]),
         clear() {
-            $('.pro-searchbar').blur()
+            $('.pro-searchbar').css('blur')
             this.resetInputSearch()
             this.$store.dispatch('searchPlayers', this.playersFiltered)
         }

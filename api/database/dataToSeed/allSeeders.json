@@ -3,7 +3,7 @@
         {
         "id":"1",
         "name": "Alfredo",
-        "surname": "Cognome",
+        "surname": "Chanta",
         "nick_name": "Alfre",
         "birth_date": "1995-06-15",
         "goalkeeper_provisory": false,
@@ -16,8 +16,8 @@
     },
     {
         "id":"2",
-        "name": "Luca Quacquarelli",
-        "surname": "Cognome",
+        "name": "Luca",
+        "surname": "Quacquarelli",
         "nick_name": "Luca",
         "birth_date": "2000-01-31",
         "goalkeeper_provisory": false,
@@ -30,8 +30,8 @@
     },
     {
         "id":"3",
-        "name": "Antonio Marrujo",
-        "surname": "Cognome",
+        "name": "Antonio",
+        "surname": "Marrujo",
         "nick_name": "Toño",
         "birth_date": "1983-12-27",
         "goalkeeper_provisory": false,
@@ -44,8 +44,8 @@
     },
     {
         "id":"4",
-        "name": "Juan Paredes",
-        "surname": "Cognome",
+        "name": "Juan",
+        "surname": "Paredes",
         "nick_name": "Cabezòn",
         "birth_date": null,
         "goalkeeper_provisory": false,
@@ -58,8 +58,8 @@
     },
     {
         "id":" 5",
-        "name": "Jason Farfàn",
-        "surname": "Cognome",
+        "name": "Jason",
+        "surname": "Farfàn",
         "nick_name": "Chucky",
         "birth_date": null,
         "goalkeeper_provisory": false,
@@ -72,8 +72,8 @@
     },
     {
         "id":"6",
-        "name": "Alex Anticona",
-        "surname": "Cognome",
+        "name": "Alex",
+        "surname": "Anticona",
         "nick_name": "Alex",
         "birth_date": null,
         "goalkeeper_provisory": false,

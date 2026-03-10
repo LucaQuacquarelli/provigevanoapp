@@ -30,11 +30,42 @@ export default createStore({
     setAllPlayersAvailables(state, allPlayersAvailables) {
       state.all_players_availables = allPlayersAvailables
     },
+    setAllGoalKeepers(state, goalkeepers) {
+      state.all_goal_keepers = goalkeepers
+    },
     possibilityModalChange(state) {
       state.possibilityModal = !state.possibilityModal
     },
+    setPossibilityModal(state, value) {
+      state.possibilityModal = value
+    },
     resetInputSearch(state) {
       state.inputSearch = ''
+    },
+    setAllPossibilities(state, payload) {
+      if (Array.isArray(payload)) {
+        state.allPossibilities = payload
+      } else {
+        state.allPossibilities.push(payload)
+      }
+    },
+    setTeamsSettings(state, playersCount) {
+      state.allPossibilities = []
+      const minPlayers = 5
+      const maxPlayers = 9
+      for (let i = 2; i < 5; i++) {
+        const playersForTeam = playersCount / i
+        const teams = playersCount / playersForTeam
+        if (Number.isInteger(teams) && Number.isInteger(playersForTeam) && playersForTeam >= minPlayers && playersForTeam <= maxPlayers) {
+          state.allPossibilities.push({ teams, playersForTeam })
+        }
+      }
+    },
+    setPossibility(state, possibility) {
+      state.possibility = possibility
+    },
+    checkOnPossibility(state, possibility) {
+      state.possibility = possibility
     }
   },
   getters: {
@@ -54,6 +85,20 @@ export default createStore({
     }
   },
   actions: {
+    setAvailability({ getters }, player) {
+      return Axios.post(`${getters.apiPath}/players_availability`, {
+        id: player.id,
+        available: player.available
+      })
+    },
+    setGoalKeepersProvisory({ getters }, player) {
+      return Axios.post(`${getters.apiPath}/goalkeeper_provisory`, {
+        id: player.id
+      })
+    },
+    clearGoalKeepersProvisory({ getters }) {
+      return Axios.get(`${getters.apiPath}/goalkeeper_provisory/clear`)
+    },
     searchPlayers({ state, getters, commit }, playersFiltered) {
       Axios
         .post(`${getters.apiPath}/players/search`,

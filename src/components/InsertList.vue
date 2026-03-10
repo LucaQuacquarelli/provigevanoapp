@@ -2,17 +2,13 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1>Home</h1>
+                <h1>Insert List</h1>
             </div>
-        </div>
-        <div class="row">
-            <InsertList class="col-12" />
         </div>
     </div>
 </template>
 
 <script setup>
-import InsertList from '@/components/InsertList.vue'
 </script>
 
 <style lang="scss" scoped></style>
