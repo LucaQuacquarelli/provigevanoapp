@@ -1,28 +1,25 @@
 <template>
-    <div class="d-flex flex-wrap">
-        <div class="d-flex col-12 p-2 justify-content-between align-items-center">
-            <h3 class="fw-bolder">
-                {{ $t('players.availables') }} {{ counterPlayersAvailables }}
-            </h3>
-            <router-link to="/teams">
-                <!-- TODO TRANSLATE -->
-                Sort Teams
+    <div class="selected-view">
+        <div class="view-topbar">
+            <div>
+                <h2 class="section-title">{{ $t('players.availables') }}</h2>
+                <span class="player-count">{{ counterPlayersAvailables }} giocatori</span>
+            </div>
+            <router-link to="/teams" class="btn-cta sort-btn">
+                <i class="fa-solid fa-shuffle"></i>
+                Crea Squadre
             </router-link>
         </div>
-        <div class="col-12 d-flex justify-content-around flex-wrap ">
-            <div v-for="player in this.$store.state.all_players_availables" :key="player.id"
-                class="col-5 d-flex my-3 justify-content-center">
+
+        <div class="players-grid">
+            <div
+                v-for="player in this.$store.state.all_players_availables"
+                :key="player.id"
+                class="player-grid-item"
+            >
                 <PlayerCard :player="player" />
             </div>
         </div>
-        <!-- ?Comment this container for the gks, because those are included in the first v-for. -->
-        <!-- <div class="col-12 d-flex align-items-center flex-wrap mb-4 p-4 bg-dark bg-gradient rounded-4">
-            <div class="col-12 d-flex justify-content-around flex-wrap">
-                <div v-for="goalkeeper in this.$store.state.all_goal_keepers" :key="goalkeeper.id" class="col-5 d-flex my-3 justify-content-center">
-                    <PlayerCard :player="goalkeeper"/>
-                </div>
-            </div>
-        </div> -->
     </div>
 </template>
 
@@ -33,15 +30,6 @@ export default {
     components: { PlayerCard },
     computed: {
         counterPlayersAvailables() {
-            /**
-             ** add wrong data, in this.$store.state.all_players_availables we found ALL, not just players, gks too.
-             *  TODO make another query to divive the players and the goalkeepers availables.
-             */
-            // let counter = 0
-            // if (Object.keys(this.$store.state.all_players_availables).length != 0 && this.$store.state.all_goal_keepers.length > 0) {
-            //     counter = this.$store.state.all_players_availables.length + this.$store.state.all_goal_keepers.length
-            // }
-            // return counter
             return this.$store.state.all_players_availables.length
         }
     },
@@ -54,8 +42,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rounded {
-    border-radius: 30px !important;
-    border: 2px solid red;
+.selected-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.view-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.player-count {
+    font-size: 0.85rem;
+    color: var(--t2);
+    margin-top: 0.15rem;
+    display: block;
+}
+
+.sort-btn {
+    flex-shrink: 0;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.25rem;
+}
+
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.player-grid-item {
+    min-height: 160px;
 }
 </style>

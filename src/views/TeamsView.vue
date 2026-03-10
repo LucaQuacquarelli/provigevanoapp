@@ -1,48 +1,35 @@
 <template>
-    <div class="container-fluid">
-        <h1 class="d-flex justify-content-between align-items-center">
-            {{ $t('teams.teams') }}
-            <span class="btn btn-success" @click="controlBalancedTeams">
-                <i class="fa-solid fa-repeat fa-xs"></i>
-                &nbsp;{{ $t('buttons.regenerate') }}
-            </span>
-        </h1>
-        <div class="row">
-            <div v-for="(teamObject, i) in finalTeams" :key="i" class="py-3">
-                <div class="d-flex justify-content-between mb-2">
-                    <h6>{{ $t('teams.team') }} {{ i + 1 }}</h6>
-                    <span class="badge text-bg-primary">
-                        {{ $t('teams.media') }}:&nbsp; {{ teamObject.average }}
-                    </span>
+    <div class="teams-view">
+        <div class="view-topbar">
+            <h2 class="section-title">{{ $t('teams.teams') }}</h2>
+            <button class="btn-regen" @click="controlBalancedTeams">
+                <i class="fa-solid fa-repeat"></i>
+                {{ $t('buttons.regenerate') }}
+            </button>
+        </div>
+
+        <div class="teams-list">
+            <div v-for="(teamObject, i) in finalTeams" :key="i" class="team-card">
+                <div class="team-card-header">
+                    <span class="team-label">{{ $t('teams.team') }} {{ i + 1 }}</span>
+                    <span class="team-avg">Ø {{ teamObject.average }}</span>
                 </div>
-                <table class="table">
-                    <thead class="table-light">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">{{ $t('form.name') }}</th>
-                            <th scope="col">{{ $t('form.role') }}</th>
-                            <th scope="col">{{ $t('form.nick_name') }}</th>
-                            <th scope="col">{{ $t('form.level') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(player, j) in orderByLevel(teamObject.team)" :key="j">
-                            <th scope="row">{{ j + 1 }}</th>
-                            <td>{{ player.name }}</td>
-                            <td>
-                                <span class="badge" :class="player.role.name == 'goalkeeper' ? 'bg-dark' : 'bg-info'">
-                                    {{ roleAbbreviation(player.role.name) }}
-                                </span>
-                            </td>
-                            <td>{{ player.nick_name }}</td>
-                            <td>
-                                <span class="badge" :class="badgeByLevel(player.level.name)">
-                                    {{ player.level.name }}
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="team-players">
+                    <div
+                        v-for="(player, j) in orderByLevel(teamObject.team)"
+                        :key="j"
+                        class="team-player-row"
+                    >
+                        <span class="player-num">{{ j + 1 }}</span>
+                        <span class="role-tag" :class="player.role.name === 'goalkeeper' ? 'gk' : 'pl'">
+                            {{ roleAbbreviation(player.role.name) }}
+                        </span>
+                        <span class="player-name-full">{{ player.nick_name }}</span>
+                        <span class="level-pill" :class="`lv-${getLevelClass(player.level.name)}`">
+                            {{ player.level.percentage }}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -59,140 +46,123 @@ const router = useRouter()
 const all_players_availables = computed(() => store.state.all_players_availables)
 const all_goal_keepers = computed(() => store.state.all_goal_keepers)
 const possibility = computed(() => store.state.possibility)
-
-// Reactive state for the teams to be displayed
 const finalTeams = ref([])
-// let teamsAndOwnAverages = []
 
-const badgeByLevel = (level) => {
-    const badgeClass = {
-        'basso': "bg-success",
-        'medio-basso': "bg-success",
-        'medio': "bg-warning",
-        'medio-alto': "bg-warning",
-        'alto': "bg-danger",
-    }
-    return badgeClass[level]
+const getLevelClass = (name) => {
+    const map = { basso: 1, 'medio-basso': 2, medio: 3, 'medio-alto': 4, alto: 5 }
+    return map[name] || 3
 }
 
-const orderByLevel = (team) => {
-    // Clone array to avoid mutating the original reference if needed, and sort
-    return [...team].sort((a, b) => a.level.percentage - b.level.percentage)
-}
+const orderByLevel = (team) => [...team].sort((a, b) => a.level.percentage - b.level.percentage)
 
-const roleAbbreviation = (role) => {
-    const abbreviation = {
-        'goalkeeper': "PT",
-        'player': "PL",
-    }
-    return abbreviation[role]
-}
+const roleAbbreviation = (role) => ({ goalkeeper: 'PT', player: 'PL' }[role])
 
-// Helper for proper shuffling (Fisher-Yates)
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [array[i], array[j]] = [array[j], array[i]]
     }
-    return array;
+    return array
 }
 
 function generateBalancedTeamsAttempt() {
     if (!possibility.value) return []
-
-    // 1. Prepare Players
-    // Filter field players
-    let players = all_players_availables.value
-        .filter(player => player.role.name == 'player')
-    
-    // Shuffle them to ensure variety in every attempt
-    // We clone the array to avoid mutating the original store data
-    players = shuffleArray([...players])
-
-    // 2. Initialize Teams structure
+    let players = shuffleArray([...all_players_availables.value.filter(p => p.role.name === 'player')])
     const teams = []
     const playersPerTeam = possibility.value.playersForTeam
 
     for (let i = 0; i < possibility.value.teams; i++) {
         const teamRoster = []
-        let currentScore = 0
-
-        // Assign Goalkeeper if available for this team index
+        let score = 0
         if (all_goal_keepers.value[i]) {
             teamRoster.push(all_goal_keepers.value[i])
-            currentScore += all_goal_keepers.value[i].level.percentage
+            score += all_goal_keepers.value[i].level.percentage
         }
-
-        teams.push({
-            team: teamRoster,
-            average: currentScore // This tracks the Sum of levels
-        })
+        teams.push({ team: teamRoster, average: score })
     }
 
-    // 3. Greedy Distribution
-    // Assign each player to the team with the LOWEST current score that isn't full.
-    // This helps balance the teams dynamically as we fill them.
     for (const player of players) {
-        // Find teams that are not full
-        const eligibleTeams = teams.filter(t => t.team.length < playersPerTeam)
-        
-        if (eligibleTeams.length === 0) break // All teams full
-
-        // Sort eligible teams by current score (Ascending) -> Weakest first
-        eligibleTeams.sort((a,b) => a.average - b.average)
-        
-        // Pick the weakest
-        const targetTeam = eligibleTeams[0]
-        
-        targetTeam.team.push(player)
-        targetTeam.average += player.level.percentage
+        const eligible = teams.filter(t => t.team.length < playersPerTeam)
+        if (!eligible.length) break
+        eligible.sort((a, b) => a.average - b.average)
+        eligible[0].team.push(player)
+        eligible[0].average += player.level.percentage
     }
-    
+
     return teams
 }
 
 function controlBalancedTeams() {
-    let bestConfiguration = []
+    let best = []
     let bestDiff = Infinity
-    
-    // Attempt to generate teams multiple times and pick the most balanced result.
-    // Since we use a greedy distribution on shuffled input, we get good "Local Optima".
-    // Picking the best of 50 attempts usually yields the Global Optimum or very close to it.
-    const iterations = 50
-    
-    for (let i = 0; i < iterations; i++) {
-        const candidateTeams = generateBalancedTeamsAttempt()
-        
-        if (!candidateTeams || candidateTeams.length === 0) continue
-
-        const scores = candidateTeams.map(t => t.average)
-        const maxScore = Math.max(...scores)
-        const minScore = Math.min(...scores)
-        const diff = maxScore - minScore
-        
-        // Update best found so far
-        if (diff < bestDiff) {
-            bestDiff = diff
-            bestConfiguration = candidateTeams
-        }
-        
-        // Optimization: If the difference is 0 or 1, it's as balanced as mathematically possible.
-        // Stop early to save resources and avoid unnecessary loops.
-        if (diff <= 1) {
-            break
-        }
+    for (let i = 0; i < 50; i++) {
+        const candidate = generateBalancedTeamsAttempt()
+        if (!candidate?.length) continue
+        const scores = candidate.map(t => t.average)
+        const diff = Math.max(...scores) - Math.min(...scores)
+        if (diff < bestDiff) { bestDiff = diff; best = candidate }
+        if (diff <= 1) break
     }
-    
-    console.log(`Generated teams with Max Difference: ${bestDiff}`)
-    
-    finalTeams.value = bestConfiguration
+    finalTeams.value = best
 }
 
 onMounted(() => {
-    if (possibility.value == null || !all_players_availables.value || Object.keys(all_players_availables.value).length === 0) {
+    if (!possibility.value || !all_players_availables.value?.length) {
         router.replace('/choose_players')
         return
     }
     controlBalancedTeams()
 })
 </script>
+
+<style lang="scss" scoped>
+.teams-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.view-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-regen {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-md);
+    color: var(--green);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--r-pill);
+    cursor: pointer;
+    transition: background var(--t-fast), border-color var(--t-fast);
+
+    &:hover {
+        background: var(--bg-hover);
+        border-color: var(--green);
+    }
+
+    i { font-size: 0.75rem; }
+}
+
+.teams-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Level-colored level-pill variants in team rows */
+.level-pill {
+    &.lv-1 { color: var(--lv1); border-color: rgba(239,68,68,0.3); }
+    &.lv-2 { color: var(--lv2); border-color: rgba(249,115,22,0.3); }
+    &.lv-3 { color: var(--lv3); border-color: rgba(234,179,8,0.3); }
+    &.lv-4 { color: var(--lv4); border-color: rgba(34,197,94,0.3); }
+    &.lv-5 { color: var(--lv5); border-color: rgba(129,140,248,0.3); }
+}
+</style>
