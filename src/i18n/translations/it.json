@@ -23,19 +23,31 @@
         "save": "Salva",
         "search": "Cerca Nome o Nickname",
         "confirm":"Conferma",
-        "end":"Fine"
+        "end":"Fine",
+        "delete": "Elimina"
+    },
+    "roles": {
+        "goalkeeper": "Portiere",
+        "player": "Giocatore",
+        "difensore": "Difensore",
+        "centrocampo": "Centrocampo",
+        "attaccante": "Attaccante"
     },
     "form": {
         "name": "Nome",
         "surname": "Cognome",
         "nick_name": "Sopranome",
         "role": "Ruolo",
+        "tactical_roles": "Ruoli tattici",
         "goalkeeper_provisory" : "Portiere provvisorio",
-        "level": "Livello"
+        "level": "Livello",
+        "create_player": "Nuovo giocatore"
     },
     "modal":{
         "success":{
-            "edited" : "Modifiche applicate con successo!"
+            "edited" : "Modifiche applicate con successo!",
+            "created": "Giocatore creato!",
+            "deleted": "Giocatore eliminato!"
         },
         "teamsSettings": {
             "sort": "Impostazioni squadre",
@@ -53,5 +65,19 @@
     },
     "buttons":{
         "regenerate": "Ricrea le squadre"
+    },
+    "insert_list": {
+        "title": "Incolla lista giocatori",
+        "placeholder": "1 Elvis\n2 Alfredo\n3 Toño",
+        "analyze": "Analizza",
+        "confirm": "Conferma disponibilità",
+        "reset": "Ricomincia",
+        "matched": "Trovati",
+        "unmatched": "Non trovati",
+        "ambiguous": "Scelta richiesta",
+        "ambiguous_hint": "Scegli quale giocatore usare",
+        "assign": "Assegna",
+        "assign_search": "Cerca giocatore...",
+        "create": "Crea"
     }
 }

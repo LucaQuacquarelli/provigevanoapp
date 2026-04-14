@@ -7,10 +7,10 @@ module.exports = (sequelize) => {
 
   Player.init({
     id: {
-      type: Sequelize.CHAR(36),
+      type: Sequelize.INTEGER,
       primaryKey: true,
-      allowNull: false,
-      unique: true
+      autoIncrement: true,
+      allowNull: false
     },
     name: {
       type: Sequelize.CHAR(50),

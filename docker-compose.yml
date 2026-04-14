@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+
+  db:
+    container_name: db
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pro
+    ports:
+      - "3307:3306"   # Esposta su 3307 per non confliggere con eventuale MySQL locale
+    volumes:
+      - mysql_data:/var/lib/mysql   # I dati persistono anche se il container viene spento
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy   # Aspetta che MySQL sia pronto prima di avviare Express
+    restart: unless-stopped
+
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:   # Volume nominato: i dati sopravvivono ai "docker-compose down"

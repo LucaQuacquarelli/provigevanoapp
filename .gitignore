@@ -25,3 +25,11 @@ pnpm-debug.log*
 *.sln
 *.sw?
 config.json
+.env
+
+#claude
+.agent
+.agents
+.claude
+.claudeignore
+.windsurf

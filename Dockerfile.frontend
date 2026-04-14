@@ -1,0 +1,57 @@
+# ─────────────────────────────────────────────
+# STAGE 1: "builder" — compila il frontend Vue
+# ─────────────────────────────────────────────
+FROM node:16-alpine AS builder
+# node:16-alpine = Node.js 16 su Alpine Linux (~50MB vs ~900MB di ubuntu).
+# Il tag "AS builder" assegna un nome allo stage: verrà referenziato dopo.
+
+WORKDIR /app
+# Crea la directory /app dentro il container e la imposta come cwd.
+# Tutti i COPY e RUN successivi operano qui.
+
+COPY package*.json ./
+# Copia package.json e package-lock.json PRIMA del codice sorgente.
+# Motivo: Docker fa cache dei layer. Se package.json non cambia,
+# il layer "npm install" viene riusato dalla cache → build molto più veloci.
+
+COPY config.json ./
+# config.json serve al build Vue: src/store/index.js lo importa
+# per costruire l'apiPath (api_protocol + api_url + api_port).
+# Questo valore viene baked nel bundle JS finale.
+
+RUN npm install
+# Installa tutte le dipendenze (incluse devDependencies come Vue CLI,
+# Babel, Sass) necessarie per eseguire "npm run build".
+
+COPY . .
+# Copia tutto il sorgente. Va DOPO npm install: così se cambiano
+# solo i file sorgente ma non package.json, il layer npm install
+# viene letto dalla cache invece di essere rieseguito.
+
+RUN npm run build
+# Esegue la build Vue di produzione → genera dist/
+# con HTML, CSS e JS minificati, ottimizzati e con hash nei nomi file.
+
+# ─────────────────────────────────────────────
+# STAGE 2: "runner" — serve i file statici con nginx
+# ─────────────────────────────────────────────
+FROM nginx:alpine AS runner
+# Immagine nginx su Alpine: ~23MB totali.
+# Questo stage NON eredita nulla da "builder": niente Node.js,
+# niente node_modules, niente sorgenti. Solo nginx + dist/.
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+# Prende la cartella dist/ compilata nello stage builder
+# e la copia nella directory che nginx serve di default.
+
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Configurazione custom nginx per Vue Router (history mode):
+# tutte le route sconosciute vengono reindirizzate a index.html,
+# altrimenti un refresh su /teams darebbe 404.
+
+EXPOSE 80
+# Documenta che il container ascolta sulla porta 80.
+
+CMD ["nginx", "-g", "daemon off;"]
+# Avvia nginx in foreground. "daemon off" è necessario nei container
+# perché Docker deve monitorare il processo principale.

@@ -18,12 +18,10 @@ module.exports = (sequelize) => {
           attributes: {
             exclude: ['level_id', 'role_id']
           },
-          include: [{
-              model: ModelBase.Level
-            },
-            {
-              model: ModelBase.Role
-            }
+          include: [
+            { model: ModelBase.Level },
+            { model: ModelBase.Role },
+            { model: ModelBase.Role, as: 'roles', through: { attributes: [] } }
           ]
         }).then((players) => {
           resolve(players)
@@ -43,12 +41,10 @@ module.exports = (sequelize) => {
           attributes: {
             exclude: ['level_id', 'role_id']
           },
-          include: [{
-              model: ModelBase.Level
-            },
-            {
-              model: ModelBase.Role
-            }
+          include: [
+            { model: ModelBase.Level },
+            { model: ModelBase.Role },
+            { model: ModelBase.Role, as: 'roles', through: { attributes: [] } }
           ]
         }).then((players) => {
           resolve(players)
@@ -65,13 +61,10 @@ module.exports = (sequelize) => {
           where: {
             role_id: 2
           },
-          include: [{
-              model: ModelBase.Level,
-              attributes: ['percentage']
-            },
-            {
-              model: ModelBase.Role
-            }
+          include: [
+            { model: ModelBase.Level, attributes: ['percentage'] },
+            { model: ModelBase.Role },
+            { model: ModelBase.Role, as: 'roles', through: { attributes: [] } }
           ]
         }).then((players) => {
           resolve(players)
@@ -84,10 +77,10 @@ module.exports = (sequelize) => {
         ModelBase.Player.findAll({
           where: {
             [Op.or]: [
-              {goalkeeper_provisory: true},
-              {role_id: 2}
+              { goalkeeper_provisory: true },
+              { role_id: 2 }
             ],
-            [Op.and]: [{available: true}]
+            [Op.and]: [{ available: true }]
           },
           order: [
             ['role_id', 'DESC']
@@ -96,12 +89,13 @@ module.exports = (sequelize) => {
             exclude: ['level_id', 'role_id']
           },
           include: [
-            {model: ModelBase.Level},
-            {model: ModelBase.Role}
+            { model: ModelBase.Level },
+            { model: ModelBase.Role },
+            { model: ModelBase.Role, as: 'roles', through: { attributes: [] } }
           ]
         }).then((AllGoalKeepersAndProvvisory) => {
           resolve(AllGoalKeepersAndProvvisory)
-        }).catch((error) => {reject(error)})
+        }).catch((error) => { reject(error) })
       })
     }
 
@@ -110,21 +104,22 @@ module.exports = (sequelize) => {
         ModelBase.Player.findAll({
           where: {
             [Op.and]: [
-              {goalkeeper_provisory: false},
-              {role_id: 1},
-              {available: true}
+              { goalkeeper_provisory: false },
+              { role_id: 1 },
+              { available: true }
             ]
           },
           attributes: {
             exclude: ['level_id', 'role_id']
           },
           include: [
-            {model: ModelBase.Level},
-            {model: ModelBase.Role}
+            { model: ModelBase.Level },
+            { model: ModelBase.Role },
+            { model: ModelBase.Role, as: 'roles', through: { attributes: [] } }
           ]
         }).then((all_players_availables_without_gk) => {
           resolve(all_players_availables_without_gk)
-        }).catch((error) => {reject(error)})
+        }).catch((error) => { reject(error) })
       })
     }
   }

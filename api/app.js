@@ -22,18 +22,23 @@ app.use(bodyParser.json())
  ** Players CRUD
  */
 app.get('/players', PlayersController.index)
+app.post('/player/create',
+  body('name').not().isEmpty().trim().escape(),
+  body('level_id').isInt(),
+  PlayersController.create)
+app.delete('/player/:id', PlayersController.destroy)
 app.post('/player/update',
   body('name').not().isEmpty().trim().escape(),
-  body('surname').not().isEmpty().trim().escape(),
-  body('nick_name').not().isEmpty().trim().escape(),
-  // [check('date-of-birth').isISO8601().toDate()],
-  // [check("language_id", "language not supported").isIn(config.app_lang_supported)],
+  body('surname').optional({ checkFalsy: true }).trim().escape(),
+  body('nick_name').optional({ checkFalsy: true }).trim().escape(),
   PlayersController.update)
 
 /**
  ** Players endPoints
  */
 app.post('/players/search', PlayersController.searchPlayers)
+app.post('/players/match_names', PlayersController.matchNames)
+app.post('/players/set_available_by_names', PlayersController.setAvailableByNames)
 app.get('/players/get_by_level', PlayersController.getByLevel)
 app.get('/players/available_unavailable', PlayersController.available_unavailable)
 app.post('/players_availability', PlayersController.setAvailability)

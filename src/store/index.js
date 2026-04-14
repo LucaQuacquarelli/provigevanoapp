@@ -11,6 +11,7 @@ export default createStore({
     all_goal_keepers: [],
     players_by_level: [],
     levels: [],
+    roles: [],
     allPossibilities: [],
     possibility: null,
     serverModal: false,
@@ -52,7 +53,7 @@ export default createStore({
     setTeamsSettings(state, playersCount) {
       state.allPossibilities = []
       const minPlayers = 5
-      const maxPlayers = 9
+      const maxPlayers = 11
       for (let i = 2; i < 5; i++) {
         const playersForTeam = playersCount / i
         const teams = playersCount / playersForTeam
@@ -66,6 +67,9 @@ export default createStore({
     },
     checkOnPossibility(state, possibility) {
       state.possibility = possibility
+    },
+    setRoles(state, roles) {
+      state.roles = roles
     }
   },
   getters: {
@@ -74,7 +78,7 @@ export default createStore({
     },
     randomSortedPlayers(state) {
       return state.all_players_availables.filter(player => {
-        return player.role.name === 'player'
+        return player.role.name !== 'goalkeeper'
       }).sort(() => Math.random() - 0.5)
     },
     playerNotFound(state) {
@@ -98,6 +102,10 @@ export default createStore({
     },
     clearGoalKeepersProvisory({ getters }) {
       return Axios.get(`${getters.apiPath}/goalkeeper_provisory/clear`)
+    },
+    fetchRoles({ getters, commit }) {
+      return Axios.get(`${getters.apiPath}/roles`)
+        .then((res) => { commit('setRoles', res.data) })
     },
     searchPlayers({ state, getters, commit }, playersFiltered) {
       Axios

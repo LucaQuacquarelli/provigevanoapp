@@ -36,8 +36,8 @@
                             <span class="player-name">{{ player.nick_name }}</span>
                             <span class="player-badges">
                                 <span class="level-pill">{{ player.level.percentage }}</span>
-                                <span class="role-tag" :class="player.role.name === 'goalkeeper' ? 'gk' : 'pl'">
-                                    {{ roleAbbreviation(player.role.name) }}
+                                <span class="role-tag" :class="roleTagClass(player)">
+                                    {{ roleAbbreviation(player) }}
                                 </span>
                             </span>
                         </label>
@@ -70,8 +70,8 @@
                             <span class="player-name">{{ player.nick_name }}</span>
                             <span class="player-badges">
                                 <span class="level-pill">{{ player.level.percentage }}</span>
-                                <span class="role-tag" :class="player.role.name === 'goalkeeper' ? 'gk' : 'pl'">
-                                    {{ roleAbbreviation(player.role.name) }}
+                                <span class="role-tag" :class="roleTagClass(player)">
+                                    {{ roleAbbreviation(player) }}
                                 </span>
                             </span>
                         </label>
@@ -234,8 +234,23 @@ const all_players_availables = computed(() => store.state.all_players_availables
 const all_players_unavailables = computed(() => store.state.all_players_unavailables)
 
 const roleAbbreviation = computed(() => {
-    const map = { goalkeeper: 'PT', player: 'PL' }
-    return role => map[role]
+    const abbr = { goalkeeper: 'PT', player: 'PL', difensore: 'DEF', centrocampo: 'CEN', attaccante: 'ATT' }
+    return player => {
+        if (player.role.name === 'goalkeeper') return 'PT'
+        const firstTactical = player.roles && player.roles[0]
+        if (firstTactical) return abbr[firstTactical.name] || 'PL'
+        return 'PL'
+    }
+})
+
+const roleTagClass = computed(() => {
+    return player => {
+        if (player.role.name === 'goalkeeper') return 'gk'
+        const firstTactical = player.roles && player.roles[0]
+        if (!firstTactical) return 'pl'
+        const map = { difensore: 'def', centrocampo: 'mid', attaccante: 'att' }
+        return map[firstTactical.name] || 'pl'
+    }
 })
 
 const translate = i18n.global.t.bind(i18n.global)
@@ -262,6 +277,8 @@ function setAvailability(player) {
         .then(({ data }) => {
             store.commit('setAllPlayersAvailables', data.all_players_availables)
             store.commit('setAllPlayersUnavailables', data.all_players_unavailables)
+            const gks = data.all_players_availables.filter(p => p.role.id === 2 || p.goalkeeper_provisory)
+            store.commit('setAllGoalKeepers', gks)
             store.commit('setTeamsSettings', data.all_players_availables.length)
             store.commit('resetInputSearch')
         })
@@ -281,7 +298,8 @@ function setGoalKeepersProvisory(player) {
 function clearGoalKeepersProvisory() {
     store.dispatch('clearGoalKeepersProvisory')
         .then(({ data }) => {
-            store.commit('setAllGoalKeepers', [])
+            const realGks = data.all_players_availables.filter(p => p.role.id === 2)
+            store.commit('setAllGoalKeepers', realGks)
             store.commit('setAllPlayersAvailables', data.all_players_availables)
             store.commit('setPossibilityModal', false)
             modalContent.value = false
@@ -296,7 +314,7 @@ function setTeamsSettings(players) {
     for (let i = 2; i < 5; i++) {
         const playersForTeam = players / i
         const teams = players / playersForTeam
-        if (Number.isInteger(teams) && Number.isInteger(playersForTeam) && between(playersForTeam, 5, 9)) {
+        if (Number.isInteger(teams) && Number.isInteger(playersForTeam) && between(playersForTeam, 5, 11)) {
             store.commit('setAllPossibilities', { teams, playersForTeam })
         }
     }

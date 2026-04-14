@@ -19,11 +19,16 @@
                 <i class="fa-solid fa-users"></i>
                 Gestisci Rosa
             </router-link>
+            <div class="home-separator">
+                <span>o incolla la lista</span>
+            </div>
+            <InsertList />
         </div>
     </div>
 </template>
 
 <script setup>
+import InsertList from '../components/InsertList.vue'
 </script>
 
 <style lang="scss" scoped>
@@ -125,5 +130,21 @@
     width: 100%;
     justify-content: center;
     padding: 0.85rem;
+}
+
+.home-separator {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    color: var(--t3);
+    font-size: 0.8rem;
+
+    &::before, &::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--border-sm);
+    }
 }
 </style>

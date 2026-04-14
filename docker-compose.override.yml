@@ -1,0 +1,10 @@
+services:
+
+  backend:
+    # Monta il codice locale dentro il container invece di copiarlo
+    # → le modifiche ai file sono visibili immediatamente senza rebuild
+    volumes:
+      - ./api:/app/api
+      - ./config.json:/app/config.json
+    # Usa nodemon per riavviare il server automaticamente quando un file cambia
+    command: ["node_modules/.bin/nodemon", "--watch", "api", "api/start.js"]

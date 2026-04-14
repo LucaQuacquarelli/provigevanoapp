@@ -4,8 +4,8 @@
         <div class="pcard-body">
             <div class="pcard-left">
                 <span class="pcard-level mono">{{ player.level.percentage }}</span>
-                <span class="role-tag" :class="player.role.name === 'goalkeeper' ? 'gk' : 'pl'">
-                    {{ roleAbbreviation(player.role.name) }}
+                <span class="role-tag" :class="roleTagClass(player)">
+                    {{ roleAbbreviation(player) }}
                 </span>
                 <span class="pcard-flag">🇮🇹</span>
             </div>
@@ -26,8 +26,22 @@ export default {
     props: { player: Object },
     computed: {
         roleAbbreviation() {
-            const map = { goalkeeper: 'PT', player: 'PL' }
-            return role => map[role]
+            const abbr = { goalkeeper: 'PT', player: 'PL', difensore: 'DEF', centrocampo: 'CEN', attaccante: 'ATT' }
+            return player => {
+                if (player.role.name === 'goalkeeper') return 'PT'
+                const firstTactical = player.roles && player.roles[0]
+                if (firstTactical) return abbr[firstTactical.name] || 'PL'
+                return 'PL'
+            }
+        },
+        roleTagClass() {
+            return player => {
+                if (player.role.name === 'goalkeeper') return 'gk'
+                const firstTactical = player.roles && player.roles[0]
+                if (!firstTactical) return 'pl'
+                const map = { difensore: 'def', centrocampo: 'mid', attaccante: 'att' }
+                return map[firstTactical.name] || 'pl'
+            }
         }
     }
 }

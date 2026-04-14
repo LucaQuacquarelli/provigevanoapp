@@ -1,0 +1,29 @@
+FROM node:16-alpine
+# Immagine Node.js 16 su Alpine Linux (~50MB).
+# Non serve multi-stage build: il backend è JS interpretato,
+# non ha una fase di compilazione separata.
+
+WORKDIR /app
+# Crea /app e la imposta come directory di lavoro.
+
+COPY package*.json ./
+# Copiato PRIMA del codice sorgente per sfruttare la cache Docker:
+# se package.json non cambia, "npm install" viene saltato nelle build successive.
+
+COPY config.json ./
+# config.json serve ad api/Config.js per la connessione Sequelize/MySQL.
+# Il campo dbms.host deve essere "host.docker.internal" per raggiungere MAMP.
+
+RUN npm install --omit=dev && npm install nodemon --save-dev
+# Installa SOLO le dipendenze di produzione (Express, Sequelize, mysql2, cors...).
+# --omit=dev esclude Vue CLI, Babel, Sass → container più leggero.
+
+COPY api/ ./api/
+# Copia solo la cartella api/ (backend Express).
+# Il sorgente Vue non serve qui: il frontend gira in un container separato.
+
+EXPOSE 3000
+# Porta su cui Express ascolta (definita in config.json → api_port).
+
+CMD ["node", "api/start.js"]
+# Avvia il server Express.
